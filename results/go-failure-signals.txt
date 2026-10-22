@@ -1,0 +1,26 @@
+=== RUN   TestCacheFilter_RevalidationError_MetricIncremented
+time="2000-01-01T01:00:00+01:00" level=warning msg="cache: background revalidation fetch failed" error="upstream down" url="http://localhost:9090/spaces/abc/entries/reval-err"
+--- PASS: TestCacheFilter_RevalidationError_MetricIncremented (0.00s)
+=== RUN   TestCacheFilter_RevalDropped_WhenQueueFull
+time="2026-10-22T14:07:04+02:00" level=warning msg="cache: background revalidation fetch failed" error="blocked fetch" url="http://localhost:9090/dummy"
+--- PASS: TestCacheFilter_RevalDropped_WhenQueueFull (0.00s)
+=== RUN   TestValkeyStorage_LabeledMetrics_L2GetError
+time="2026-10-22T14:07:04+02:00" level=error msg="cache: L2 Get failed, treating as miss" error="stub: broken"
+--- PASS: TestValkeyStorage_LabeledMetrics_L2GetError (0.00s)
+=== RUN   TestValkeyStorage_LabeledMetrics_L2SetFallback
+time="2026-10-22T14:07:04+02:00" level=error msg="cache: L2 Set failed, falling back to L1" error="stub: broken"
+--- PASS: TestValkeyStorage_LabeledMetrics_L2SetFallback (0.00s)
+=== RUN   TestValkeyStorage_LabeledMetrics_StorageErrorOnDelete
+time="2026-10-22T14:07:04+02:00" level=error msg="cache: L2 Delete failed" error="stub: broken"
+--- PASS: TestValkeyStorage_LabeledMetrics_StorageErrorOnDelete (0.00s)
+=== RUN   TestL2Storage_Get_CorruptJSON_ReturnsError
+--- PASS: TestL2Storage_Get_CorruptJSON_ReturnsError (0.00s)
+=== RUN   TestLRUStorage_Get_CorruptJSON_RecordsStorageError
+--- PASS: TestLRUStorage_Get_CorruptJSON_RecordsStorageError (0.00s)
+=== RUN   TestLRUStorage_EvictionCallbackDoesNotDeadlock
+--- PASS: TestLRUStorage_EvictionCallbackDoesNotDeadlock (0.01s)
+=== RUN   TestLRUStorage_OversizedEntry
+time="2026-10-22T14:07:04+02:00" level=warning msg="cache: entry exceeds shard capacity and will not be stored" key=oversized shard_max=4 size_bytes=1630
+--- PASS: TestLRUStorage_OversizedEntry (0.00s)
+PASS
+ok  	github.com/zalando/skipper/filters/cache	2.053s

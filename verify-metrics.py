@@ -31,10 +31,11 @@ if __name__ == "__main__":
     uid = datasources[0]["uid"]
     results = []
     for panel in dashboard["panels"]:
-        for target in panel["targets"]:
-            expr = target["expr"].replace("${instance:regex}", ".*")
+        for target in panel.get("targets", []):
+            expr = (target["expr"].replace("${instance:regex}", ".*")
+                    .replace("$__rate_interval", "1m"))
             deadline = time.monotonic() + 45
-            optional = "storage_error_total" in expr
+            optional = panel["fieldConfig"]["defaults"].get("noValue") == "Not exercised / no samples"
             while True:
                 query = urllib.parse.urlencode({"query": expr})
                 direct = get("http://127.0.0.1:9090/api/v1/query?" + query)
@@ -64,7 +65,18 @@ if __name__ == "__main__":
     report = {"utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
               "skipper_sha": args.sha,
               "units": "per-panel: req/s for outcome rates, seconds for latency, bytes for L1",
+              "resolved_rate_interval": "1m (4 x configured 5s scrape interval minimum exceeded)",
               "panels": results}
+    flat_query = urllib.parse.urlencode({
+        "query": 'skipper_custom_total{job="skipper-local",key=~"cache\\\\.(hit|miss|stale|l2_get_error|l2_set_fallback|coalesce_error|coalesce_bypass_error|reval_error|reval_dropped|lru_eviction|lru_oversized)"}'})
+    report["flat_counter_samples"] = get(
+        "http://127.0.0.1:9090/api/v1/query?" + flat_query)["data"]["result"]
+    expected_keys = {"cache." + key for key in (
+        "hit", "miss", "stale", "l2_get_error", "l2_set_fallback",
+        "coalesce_error", "coalesce_bypass_error", "reval_error", "reval_dropped",
+        "lru_eviction", "lru_oversized")}
+    observed_keys = {s["metric"]["key"] for s in report["flat_counter_samples"]}
+    report["absent_flat_counters_not_exercised"] = sorted(expected_keys - observed_keys)
     label_query = urllib.parse.urlencode({
         "query": 'skipper_cache_result_total{job="skipper-local",instance=~".*"}'})
     labels = get("http://127.0.0.1:9090/api/v1/query?" + label_query)["data"]["result"]

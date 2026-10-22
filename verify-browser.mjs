@@ -75,7 +75,9 @@ try {
   await call("Page.enable");
   await call("Network.enable");
   await call("Emulation.setDeviceMetricsOverride", {
-    width: 1800, height: 2500, deviceScaleFactor: 1, mobile: false,
+    width: 1800, height: Math.max(2500,
+      Math.ceil(dashboard.panels.filter(p => p.targets).length / 2) * 330 + 300),
+    deviceScaleFactor: 1, mobile: false,
   });
   await call("Page.navigate", {
     url: "http://127.0.0.1:3000/d/ag1x69aba3qpse/skipper-cache-verification",
@@ -85,7 +87,8 @@ try {
       expression: "document.body.innerText", returnByValue: true,
     });
     const value = result.result.value || "";
-    return completedQueries >= dashboard.panels.length && queries.size === 0 &&
+    return completedQueries >= dashboard.panels.filter(p => p.targets).length &&
+      queries.size === 0 &&
       dashboard.panels.every(panel => value.includes(panel.title)) &&
       value.includes("Prometheus") &&
       !value.includes("Loading") && value;
@@ -100,7 +103,7 @@ try {
   });
   const image = await call("Page.captureScreenshot", { format: "png" });
   await writeFile(resolve(runtime, "dashboard.png"), Buffer.from(image.data, "base64"));
-  console.log(`PASS: dashboard rendered, datasource selected, ${dashboard.panels.length} panel titles loaded`);
+  console.log(`PASS: dashboard rendered, datasource selected, ${dashboard.panels.length} panel/row titles loaded`);
   console.log("Inspect .runtime/dashboard.png for visual confirmation; storage faults may have no data.");
 } finally {
   socket?.close();

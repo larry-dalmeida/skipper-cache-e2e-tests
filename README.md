@@ -76,7 +76,8 @@ cover every HTTP cache policy, Vary variant, stale behavior or cache deployment.
 - [Raw Skipper metrics](http://localhost:9911/metrics)
 - Mock origin: `http://localhost:8080/get`; Valkey: `localhost:6379`.
 
-`dashboard.json` is a provisioned, exportable twelve-panel dashboard. Regenerate
+`dashboard.json` is a provisioned, exportable dashboard with nineteen data panels
+and one failure/fallback row. Regenerate
 it with `python3 dashboard.py`. Every panel and query uses the `datasource`
 variable rather than a hardcoded datasource UID. A multi-select `instance`
 variable scopes every query together with `job="skipper-local"`.
@@ -95,7 +96,7 @@ node verify-browser.mjs
 ```
 
 The metric verifier executes every dashboard expression against both Prometheus
-and the Grafana datasource proxy. The browser waits for all twelve panel queries,
+and the Grafana datasource proxy. The browser waits for all nineteen panel queries,
 captures a screenshot, and checks datasource/title loading.
 
 ### Overall versus tier results
@@ -104,16 +105,56 @@ captures a screenshot, and checks datasource/title loading.
   `result,code_class`. No stale/error/tier outcomes are included.
 - **L1 Hits by Status Code Class**: `l1_hit` only, grouped by `code_class`.
 - **L2 Hits by Status Code Class**: `l2_hit` only, grouped by `code_class`.
-- **Cache Hit vs Miss Rate (lines)** and **(stacked)** use identical overall
-  `hit|miss` expressions grouped by result. The stacked view uses normal stacking,
+- **Cache Hit vs Miss Rate (lines)** and **(stacked)** use identical flat
+  `cache.hit|cache.miss` expressions grouped by key. The stacked view uses normal stacking,
   not 100%, so it retains traffic volume. Tier hits are never extra outcomes.
 
-All five charts use the same five-minute rate window, req/s units and scope.
+All five charts use the same `$__rate_interval` window, req/s units and scope.
 The exporter supports code-class labels on both tier counters. Live checks
 verified `hit/2xx`, `l1_hit/2xx`, and `l2_hit/2xx`; other hit code classes are
 unexercised. Exact PR4364 still lacks a live overall `miss` sample because its
-coalescing fetch fails before that instrumentation. The charts **do not**
-substitute `l2_miss` or `coalesce_error`, and never fabricate a zero miss series.
+coalescing fetch fails before that instrumentation. The status-class chart is
+explicitly incomplete on that head. The flat `cache.miss` counter *does* cover
+those fallback requests, so the line/stack composition views use the complete
+flat schema. They never substitute `l2_miss` or `coalesce_error`.
+
+### Fresh hit percentage and failure signals
+
+Fresh hit percentage uses flat request-outcome counters because the labeled
+schema omits real fallback misses on exact PR4364:
+
+```promql
+100 * sum(rate(skipper_custom_total{key="cache.hit", ...}[$__rate_interval]))
+    / sum(rate(skipper_custom_total{key=~"cache\\.(hit|miss|stale)", ...}[$__rate_interval]))
+```
+
+The full production expression is in `dashboard.py` / `dashboard.json`: its
+numerator zero-fills absent hits only against an existing request denominator,
+filters denominator `> 0`, and requires all selected Skipper scrapes to be up.
+No traffic, absent outcomes or failed/absent scrape yields **No traffic / no data**,
+not 0% or 100%. A real miss-only denominator with a lazy absent hit counter yields
+0%. No errors or tier counters enter this denominator. Stale responses have a
+separate req/s panel and are not fresh hits. No offload-ratio substitute is used.
+`python3 verify-ratio.py` checks eight semantic cases with isolated synthetic
+vectors evaluated by the real Prometheus engine, without modifying live counters.
+
+The failure/fallback row groups compatible event rates:
+
+- L2 get errors / set fallbacks.
+- Storage faults by `backend,op`.
+- Coalesce errors / bypass errors, explicitly **per waiter**, not origin failure
+  or client-5xx rates.
+- Revalidation errors / dropped jobs.
+- LRU evictions / oversized entries.
+- Current revalidation queue depth, a **gauge**, not a rate.
+
+All rate panels use `$__rate_interval`; Grafana calculates this from its query
+step and scrape cadence. The CLI metric check resolves it explicitly to `1m`
+for reproducibility. Lazy absent counters display **Not exercised / no samples**,
+not invented zeros. The scrape-health panel distinguishes unreachable targets.
+A queue depth sample of 0 is a real observed empty queue. Controlled failure Go
+tests verify selected paths without clearing/disrupting shared Valkey; most live
+failure counters remain unexercised. See the results for that distinction.
 
 For a controlled real L1-to-L2 check (no shared-store flush):
 
@@ -135,8 +176,8 @@ Exported units are **seconds**. Histogram p95s are bucket estimates; the first
 5 ms bucket is too coarse to infer precise microsecond waits. Coalesce wait
 includes the leader's work, not just a follower queue wait.
 
-Storage error expression:
-`sum by (backend, op) (skipper_cache_storage_error_total)`. **Absent is not a
+Storage error expression uses `sum by (backend, op) (rate(
+skipper_cache_storage_error_total{...}[$__rate_interval]))`. **Absent is not a
 verified zero**: the dashboard and results explicitly mark this case not
 exercised. Controlled fault-injection Go tests cover error paths without
 disrupting the running Valkey instance.

@@ -1,0 +1,47 @@
+{
+  "utc": "2026-10-22T12:07:30.633050+00:00",
+  "method": "Real Prometheus evaluates exact dashboard ratio algebra with synthetic vectors replacing input rates only; not live fault injection.",
+  "exact_dashboard_query": "(100 * ((sum (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(hit)\"}[$__rate_interval]))) or (0 * (sum (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(hit|miss|stale)\"}[$__rate_interval]))))) / ((sum (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(hit|miss|stale)\"}[$__rate_interval]))) > 0)) and on() (min(up{job=\"skipper-local\",instance=~\"${instance:regex}\"}) == 1)",
+  "cases": [
+    {
+      "case": "fresh 2, miss 1, stale 1",
+      "status": "PASS",
+      "observed": 50.0
+    },
+    {
+      "case": "misses only, lazy hit counter absent",
+      "status": "PASS",
+      "observed": 0.0
+    },
+    {
+      "case": "stale only, lazy hit counter absent",
+      "status": "PASS",
+      "observed": 0.0
+    },
+    {
+      "case": "hits only",
+      "status": "PASS",
+      "observed": 100.0
+    },
+    {
+      "case": "zero requests",
+      "status": "PASS",
+      "observed": "NO DATA"
+    },
+    {
+      "case": "all outcome counters absent",
+      "status": "PASS",
+      "observed": "NO DATA"
+    },
+    {
+      "case": "scrape down despite previous data",
+      "status": "PASS",
+      "observed": "NO DATA"
+    },
+    {
+      "case": "scrape absent despite previous data",
+      "status": "PASS",
+      "observed": "NO DATA"
+    }
+  ]
+}

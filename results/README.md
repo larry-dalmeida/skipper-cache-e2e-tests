@@ -108,8 +108,8 @@ panel queries. A screenshot was inspected visually: scrape health is 1; result,
 L1-byte, histogram-count and all three latency plots contain data; the storage
 fault plot explicitly says **No data**. No missing-datasource error.
 
-The screenshot below is the newer twelve-panel dashboard described in the
-follow-up section; the original eight-panel numeric snapshot above is retained.
+The screenshot below is the current fresh-hit/failure dashboard described in the
+follow-up sections; the original eight-panel numeric snapshot above is retained.
 
 ![Rendered local Grafana dashboard](dashboard.png)
 
@@ -200,3 +200,85 @@ tier hit classes `4xx`, `5xx`, `other`; storage error backend/op live samples.
 The hit/miss views therefore currently show hit-only data. They deliberately
 do not substitute L2 misses or error counters and cannot claim a complete
 hit/miss composition until the overall miss instrumentation is exercised.
+
+## Fresh hit ratio and failure/fallback update — 12:07 UTC onward
+
+**This supersedes the hit-only composition limitation above:** line/stack rate
+views now use the actual complete flat request-outcome schema:
+`skipper_custom_total{key=~"cache\\.(hit|miss)"}`. Both flat hit and miss samples
+are present. Status-code-class panels retain the labeled schema and explicitly
+remain incomplete for labeled misses on PR4364.
+
+The exact source SHA is still `6a217f4f65e9966c4e18d9c3cad2e069fc5893b1`;
+no Skipper source changes, production dashboard edits or shared-store flushes.
+Inspection confirmed flat `cache.miss` increments in normal backend fallback
+while labeled `result="miss"` only increments on the successful coalesce path.
+Using labeled outcomes for the ratio would incorrectly show 100% hits here.
+
+The portable and local dashboards now have nineteen data panels and one expanded
+failure/fallback row. The fresh ratio uses **hit / (hit + miss + stale)**, excludes
+error/tier counters, and has positive-denominator and scrape-health guards.
+It never replaces fresh hit% with a cache-served/offload ratio.
+
+All rate charts share `$__rate_interval`; all request-rate charts use req/s.
+Failure event charts use operations/s; queue depth is a current gauge.
+See [the exact ratio expression and eight semantic cases](ratio-semantics.json).
+The real Prometheus engine evaluated the exact ratio algebra with isolated
+synthetic input vectors (not live fault injection):
+
+| Case | Actual result |
+|---|---|
+| hit=2, miss=1, stale=1 | 50% |
+| lazy absent hit, miss=3 | 0% |
+| lazy absent hit, stale=2 | 0% |
+| hit=3, no miss/stale | 100% |
+| zero request rate | NO DATA |
+| all outcome counters absent | NO DATA |
+| scrape down with historical outcomes | NO DATA |
+| scrape absent with historical outcomes | NO DATA |
+
+No unconditional `or vector(0)` is used. Zero filling is possible only through an
+existing request-denominator vector, which must then be positive. Current
+hit/miss samples and the actual fresh ratio are recorded in
+[fresh-hit/failure query results](fresh-hit-failure-metrics.json).
+
+Failure row coverage:
+
+| Signal | Live state |
+|---|---|
+| `cache.coalesce_error` | Present, nonzero rate; per-waiter/fallback error, **not** origin failure or client 5xx |
+| `cache.coalesce_bypass_error` | NOT EXERCISED |
+| `cache.l2_get_error`, `cache.l2_set_fallback` | NOT EXERCISED |
+| storage fault `backend,op` | NOT EXERCISED |
+| `cache.reval_error`, `cache.reval_dropped` | NOT EXERCISED |
+| `cache.lru_eviction`, `cache.lru_oversized` | NOT EXERCISED |
+| `cache.reval_queue_depth` | Present gauge, observed numeric 0 |
+| `cache.stale` | NOT EXERCISED, separate panel |
+| selected Skipper scrape | `up=1` |
+
+Absent lazy counters are displayed as **Not exercised / no samples**, never
+healthy zero. The independent scrape panel distinguishes a failed scrape from
+unexercised instrumentation. Grouped charts do not claim every constituent key
+was exercised merely because one series is present.
+
+Nine targeted controlled-fault/capacity Go tests passed with `-race` at exact
+PR4364. These use bounded mock/collector fixtures, not live Valkey disruption:
+
+```bash
+go test -race ./filters/cache \
+  -run '^(TestCacheFilter_RevalidationError_MetricIncremented|TestCacheFilter_RevalDropped_WhenQueueFull|TestLRUStorage_OversizedEntry|TestLRUStorage_EvictionCallbackDoesNotDeadlock|TestValkeyStorage_LabeledMetrics_L2GetError|TestValkeyStorage_LabeledMetrics_L2SetFallback|TestValkeyStorage_LabeledMetrics_StorageErrorOnDelete|TestL2Storage_Get_CorruptJSON_ReturnsError|TestLRUStorage_Get_CorruptJSON_RecordsStorageError)$' \
+  -count=1 -v
+python3 verify-ratio.py
+python3 -m unittest -v test_dashboard test_harness
+python3 verify-metrics.py \
+  --sha 6a217f4f65e9966c4e18d9c3cad2e069fc5893b1 \
+  --output results/fresh-hit-failure-metrics.json
+```
+
+[Controlled Go output](go-failure-signals.txt); twelve Python contract/harness
+tests passed. Nineteen PromQL targets executed successfully against Prometheus
+and Grafana's datasource proxy (CLI rate interval explicitly `1m`). Fourteen
+panels returned samples; five were correctly marked not exercised. Headless
+Chrome completed all nineteen queries and verified all twenty panel/row titles.
+The screenshot was refreshed after rendering, with separate L1/L2 legends and
+both flat `cache.hit` / `cache.miss` composition series visible.
