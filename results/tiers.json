@@ -1,0 +1,46 @@
+{
+  "utc": "2026-10-22T12:03:29Z",
+  "skipper_sha": "6a217f4f65e9966c4e18d9c3cad2e069fc5893b1",
+  "run_id": "95bbc0420f8c45d7865c70af18ec0e2f-tiers",
+  "status": "PASS",
+  "origin_calls": 1,
+  "http_status": 200,
+  "body_path_query": "matched",
+  "l1_ttl_seconds": 2,
+  "observed_labels": [
+    {
+      "result": "coalesce_error",
+      "code_class": "n/a",
+      "count": 3.0
+    },
+    {
+      "result": "hit",
+      "code_class": "2xx",
+      "count": 12.0
+    },
+    {
+      "result": "l1_hit",
+      "code_class": "2xx",
+      "count": 11.0
+    },
+    {
+      "result": "l2_hit",
+      "code_class": "2xx",
+      "count": 1.0
+    },
+    {
+      "result": "l2_miss",
+      "code_class": "n/a",
+      "count": 3.0
+    }
+  ],
+  "verified": [
+    "hit/2xx",
+    "l1_hit/2xx",
+    "l2_hit/2xx"
+  ],
+  "not_exercised": [
+    "miss (absent on exact PR4364)",
+    "tier hit code classes 4xx/5xx/other"
+  ]
+}

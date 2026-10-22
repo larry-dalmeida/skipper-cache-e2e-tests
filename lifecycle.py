@@ -145,6 +145,7 @@ if __name__ == "__main__":
                     "-enable-l2-cache", "-swarm-valkey-urls=127.0.0.1:6379",
                     "-swarm-valkey-dial-timeout=2s",
                     "-swarm-valkey-conn-timeout=2s",
+                    "-cache-l1-ttl=2s",
                     "-wait-for-healthcheck-interval=0",
                     "-routes-file=" + str(ROOT / "routes.eskip")]],
                   ["http://127.0.0.1:9999/get?readiness=" + sha,

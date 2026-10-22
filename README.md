@@ -76,9 +76,11 @@ cover every HTTP cache policy, Vary variant, stale behavior or cache deployment.
 - [Raw Skipper metrics](http://localhost:9911/metrics)
 - Mock origin: `http://localhost:8080/get`; Valkey: `localhost:6379`.
 
-`dashboard.json` is a provisioned, exportable eight-panel dashboard. Regenerate
+`dashboard.json` is a provisioned, exportable twelve-panel dashboard. Regenerate
 it with `python3 dashboard.py`. Every panel and query uses the `datasource`
-variable rather than a hardcoded datasource UID. Provisioning creates its own
+variable rather than a hardcoded datasource UID. A multi-select `instance`
+variable scopes every query together with `job="skipper-local"`.
+Provisioning creates its own
 Prometheus datasource; Grafana reaches the Kubernetes Prometheus service.
 go-httpbin **does not export `/metrics`** and is deliberately not scraped.
 
@@ -93,8 +95,39 @@ node verify-browser.mjs
 ```
 
 The metric verifier executes every dashboard expression against both Prometheus
-and the Grafana datasource proxy. The browser waits for all eight panel queries,
+and the Grafana datasource proxy. The browser waits for all twelve panel queries,
 captures a screenshot, and checks datasource/title loading.
+
+### Overall versus tier results
+
+- **Overall Cache Result by Status Code Class**: `hit|miss` only, grouped by
+  `result,code_class`. No stale/error/tier outcomes are included.
+- **L1 Hits by Status Code Class**: `l1_hit` only, grouped by `code_class`.
+- **L2 Hits by Status Code Class**: `l2_hit` only, grouped by `code_class`.
+- **Cache Hit vs Miss Rate (lines)** and **(stacked)** use identical overall
+  `hit|miss` expressions grouped by result. The stacked view uses normal stacking,
+  not 100%, so it retains traffic volume. Tier hits are never extra outcomes.
+
+All five charts use the same five-minute rate window, req/s units and scope.
+The exporter supports code-class labels on both tier counters. Live checks
+verified `hit/2xx`, `l1_hit/2xx`, and `l2_hit/2xx`; other hit code classes are
+unexercised. Exact PR4364 still lacks a live overall `miss` sample because its
+coalescing fetch fails before that instrumentation. The charts **do not**
+substitute `l2_miss` or `coalesce_error`, and never fabricate a zero miss series.
+
+For a controlled real L1-to-L2 check (no shared-store flush):
+
+```bash
+python3 verify-tiers.py \
+  --sha "$(git -C "$SKIPPER_CHECKOUT" rev-parse HEAD)"
+```
+
+The launcher sets `-cache-l1-ttl=2s`, below the route's 30-second fresh lifetime.
+The tier check requests a UUID-scoped key, observes an immediate L1-hit increment,
+then polls until L1 expires and an L2-hit increment appears, while requiring
+identical HTTP 200 bodies and exactly one origin request in matching access logs.
+The demo traffic sends an additional post-expiry request to keep tier plots active.
+Use `python3 -m unittest -v test_dashboard test_harness` for panel contract tests.
 
 `skipper_custom_duration_seconds_{bucket,sum,count}` has the exact `key` values
 `cache.coalesce_wait_duration`, `cache.l2_get_duration`, `cache.l2_set_duration`.

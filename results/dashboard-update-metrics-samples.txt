@@ -1,0 +1,12 @@
+skipper_cache_lru_bytes{route="r0"} 10533
+skipper_cache_result_total{code_class="2xx",result="hit"} 22
+skipper_cache_result_total{code_class="2xx",result="l1_hit"} 16
+skipper_cache_result_total{code_class="2xx",result="l2_hit"} 6
+skipper_cache_result_total{code_class="n/a",result="coalesce_error"} 9
+skipper_cache_result_total{code_class="n/a",result="l2_miss"} 9
+skipper_custom_duration_seconds_sum{key="cache.coalesce_wait_duration"} 0.00030158300000000007
+skipper_custom_duration_seconds_count{key="cache.coalesce_wait_duration"} 9
+skipper_custom_duration_seconds_sum{key="cache.l2_get_duration"} 0.26455537399999995
+skipper_custom_duration_seconds_count{key="cache.l2_get_duration"} 46
+skipper_custom_duration_seconds_sum{key="cache.l2_set_duration"} 0.034873376
+skipper_custom_duration_seconds_count{key="cache.l2_set_duration"} 9

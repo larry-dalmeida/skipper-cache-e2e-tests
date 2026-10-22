@@ -32,7 +32,7 @@ if __name__ == "__main__":
     results = []
     for panel in dashboard["panels"]:
         for target in panel["targets"]:
-            expr = target["expr"]
+            expr = target["expr"].replace("${instance:regex}", ".*")
             deadline = time.monotonic() + 45
             optional = "storage_error_total" in expr
             while True:
@@ -58,11 +58,24 @@ if __name__ == "__main__":
         exposition = response.read().decode()
     wanted = ("skipper_cache_", "skipper_custom_duration_seconds_count{key=\"cache.",
               "skipper_custom_duration_seconds_sum{key=\"cache.")
-    output.with_name("metrics-samples.txt").write_text(
+    output.with_name(output.stem + "-samples.txt").write_text(
         "\n".join(line for line in exposition.splitlines()
                   if line.startswith(wanted)) + "\n")
     report = {"utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
               "skipper_sha": args.sha,
-              "units": "seconds", "panels": results}
+              "units": "per-panel: req/s for outcome rates, seconds for latency, bytes for L1",
+              "panels": results}
+    label_query = urllib.parse.urlencode({
+        "query": 'skipper_cache_result_total{job="skipper-local",instance=~".*"}'})
+    labels = get("http://127.0.0.1:9090/api/v1/query?" + label_query)["data"]["result"]
+    report["observed_result_code_classes"] = [
+        {"result": sample["metric"]["result"],
+         "code_class": sample["metric"]["code_class"]}
+        for sample in labels]
+    present = {sample["metric"]["result"] for sample in labels}
+    report["missing_outcomes"] = sorted({"hit", "miss", "l1_hit", "l2_hit"} - present)
+    if report["missing_outcomes"]:
+        print("NOT EXERCISED / MISSING (never synthesized as zero): " +
+              ", ".join(report["missing_outcomes"]))
     output.write_text(json.dumps(report, indent=2) + "\n")
     raise SystemExit(1 if any(r["status"] == "FAIL" for r in results) else 0)

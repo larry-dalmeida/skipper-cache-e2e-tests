@@ -108,6 +108,9 @@ panel queries. A screenshot was inspected visually: scrape health is 1; result,
 L1-byte, histogram-count and all three latency plots contain data; the storage
 fault plot explicitly says **No data**. No missing-datasource error.
 
+The screenshot below is the newer twelve-panel dashboard described in the
+follow-up section; the original eight-panel numeric snapshot above is retained.
+
 ![Rendered local Grafana dashboard](dashboard.png)
 
 The datasource is templated in the export. The local dashboard remains
@@ -128,9 +131,72 @@ Prometheus scrape job was removed, not disguised as a healthy exporter.
 - Live L2 hits after eviction, true follower waiting on a successful
   metrics+fix build, storage exporter backend/op samples under failure,
   nginx parity, production traffic and production readiness are **not verified**.
+  **Update:** L2 hits following bounded L1 expiry are now verified below.
 - A control startup hit a Valkey connection deadline with the 25 ms defaults.
   The supervised launcher uses 2-second dial/connection timeouts; retry then
   succeeded. No Valkey flush was used or inferred to be necessary.
 - A first Grafana forward raced container readiness. Explicit HTTP readiness
   probes were added to Grafana and Prometheus; the successful final stack
   was launched and checked through the reusable scripts.
+
+## Dashboard composition and tier update — 12:03 UTC onward
+
+The same provisioned dashboard UID now has **twelve panels**. The former combined
+outcome panel is separated into:
+
+1. **Overall Cache Result by Status Code Class** — only `result=~"hit|miss"`,
+   `sum by (result, code_class)`.
+2. **L1 Hits by Status Code Class** — only `result="l1_hit"`,
+   `sum by (code_class)`.
+3. **L2 Hits by Status Code Class** — only `result="l2_hit"`,
+   `sum by (code_class)`.
+
+**Cache Hit vs Miss Rate (lines)** retains precise line comparison;
+**Cache Hit vs Miss Rate (stacked)** uses the identical query, normal stacking
+and a fill rather than 100% stacking. All five panels use `rate(...[5m])` in req/s.
+Every query is scoped by the Skipper job and shared instance variable; datasource
+panel/target references remain templated. No tier outcomes are counted as extra
+overall hit/miss outcomes.
+
+Before testing, raw metrics had `hit/2xx` and `l1_hit/2xx`, with `coalesce_error`
+and `l2_miss` under `code_class="n/a"`. Neither `l2_hit` nor overall `miss`
+was present. Exporter/storage code inspection confirmed both tier hits actually
+support `code_class`; no labels were inferred or invented.
+
+The exact unmodified PR4364 SHA was restarted with **`-cache-l1-ttl=2s`**.
+The route still keeps L2 entries fresh for 30 seconds. At **12:03:29 UTC**,
+`verify-tiers.py` requested a unique cold key and its immediate warm response,
+verified an L1 hit, then polled until an L2 hit appeared after L1 expiry. Every
+response was HTTP 200 with identical JSON/path/query. The origin log contained
+**exactly one** matching request, including the L2 retrieval. No Valkey flush,
+key deletion, process-cache eviction storm or Skipper source modification.
+
+Observed counter snapshot: `hit/2xx=12`, `l1_hit/2xx=11`, `l2_hit/2xx=1`,
+`coalesce_error/n/a=3`, `l2_miss/n/a=3`.
+[Controlled tier assertions and labels](tiers.json).
+
+```bash
+python3 verify-tiers.py \
+  --sha 6a217f4f65e9966c4e18d9c3cad2e069fc5893b1 --output results/tiers.json
+python3 verify-metrics.py \
+  --sha 6a217f4f65e9966c4e18d9c3cad2e069fc5893b1 \
+  --output results/dashboard-update-metrics.json
+python3 -m unittest -v test_dashboard test_harness
+CHROME=/path/to/chrome node verify-browser.mjs
+```
+
+All twelve expressions succeeded both directly and through Grafana's datasource
+proxy. Eleven populated panels returned finite samples; storage faults remained
+**NOT EXERCISED**. Local provisioned titles matched the portable JSON. Headless
+Chrome completed all twelve queries; visible legends included overall `hit 2xx`,
+separate L1 `2xx`, separate L2 `2xx`, and hit on both composition views.
+[Query samples and missing-label inventory](dashboard-update-metrics.json).
+Nine unit tests passed, including exact overall selectors, tier grouping,
+scope/datasource consistency, identical line/stack queries and normal stacking.
+
+**Verified labels:** `hit/2xx`, `l1_hit/2xx`, `l2_hit/2xx`.
+**Missing/unexercised:** overall `miss` (absent on this unfixed PR4364 head),
+tier hit classes `4xx`, `5xx`, `other`; storage error backend/op live samples.
+The hit/miss views therefore currently show hit-only data. They deliberately
+do not substitute L2 misses or error counters and cannot claim a complete
+hit/miss composition until the overall miss instrumentation is exercised.

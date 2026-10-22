@@ -1,0 +1,241 @@
+{
+  "utc": "2026-10-22T12:04:55.311740+00:00",
+  "skipper_sha": "6a217f4f65e9966c4e18d9c3cad2e069fc5893b1",
+  "units": "per-panel: req/s for outcome rates, seconds for latency, bytes for L1",
+  "panels": [
+    {
+      "panel": "Skipper scrape health",
+      "query": "up{job=\"skipper-local\",instance=~\".*\"}",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "host.minikube.internal:9911",
+            "job": "skipper-local"
+          },
+          "value": [
+            1792670695.175,
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "Overall Cache Result by Status Code Class",
+      "query": "sum by (result, code_class) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".*\",result=~\"hit|miss\"}[5m]))",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "code_class": "2xx",
+            "result": "hit"
+          },
+          "value": [
+            1792670695.193,
+            "0.13568521031207598"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "L1 Hits by Status Code Class",
+      "query": "sum by (code_class) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".*\",result=\"l1_hit\"}[5m]))",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "code_class": "2xx"
+          },
+          "value": [
+            1792670695.21,
+            "0.11533242876526459"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "L2 Hits by Status Code Class",
+      "query": "sum by (code_class) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".*\",result=\"l2_hit\"}[5m]))",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "code_class": "2xx"
+          },
+          "value": [
+            1792670695.23,
+            "0.017723795369211516"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "Cache Hit vs Miss Rate (lines)",
+      "query": "sum by (result) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".*\",result=~\"hit|miss\"}[5m]))",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "result": "hit"
+          },
+          "value": [
+            1792670695.248,
+            "0.13568521031207598"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "Cache Hit vs Miss Rate (stacked)",
+      "query": "sum by (result) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".*\",result=~\"hit|miss\"}[5m]))",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "result": "hit"
+          },
+          "value": [
+            1792670695.263,
+            "0.13568521031207598"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "L1 cache bytes by route",
+      "query": "skipper_cache_lru_bytes{job=\"skipper-local\",instance=~\".*\"}",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "__name__": "skipper_cache_lru_bytes",
+            "instance": "host.minikube.internal:9911",
+            "job": "skipper-local",
+            "route": "r0"
+          },
+          "value": [
+            1792670695.279,
+            "10533"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "Duration observations (cumulative)",
+      "query": "skipper_custom_duration_seconds_count{job=\"skipper-local\",instance=~\".*\",key=~\"cache\\\\.(coalesce_wait|l2_get|l2_set)_duration\"}",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "__name__": "skipper_custom_duration_seconds_count",
+            "instance": "host.minikube.internal:9911",
+            "job": "skipper-local",
+            "key": "cache.coalesce_wait_duration"
+          },
+          "value": [
+            1792670695.294,
+            "9"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "skipper_custom_duration_seconds_count",
+            "instance": "host.minikube.internal:9911",
+            "job": "skipper-local",
+            "key": "cache.l2_get_duration"
+          },
+          "value": [
+            1792670695.294,
+            "46"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "skipper_custom_duration_seconds_count",
+            "instance": "host.minikube.internal:9911",
+            "job": "skipper-local",
+            "key": "cache.l2_set_duration"
+          },
+          "value": [
+            1792670695.294,
+            "9"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "Coalesce wait p95 (5 minute rate)",
+      "query": "histogram_quantile(0.95, sum by (le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\".*\",key=\"cache.coalesce_wait_duration\"}[5m])))",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1792670695.31,
+            "0.00475"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "L2 get p95 (5 minute rate)",
+      "query": "histogram_quantile(0.95, sum by (le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\".*\",key=\"cache.l2_get_duration\"}[5m])))",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1792670695.325,
+            "0.031785714285714285"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "L2 set p95 (5 minute rate)",
+      "query": "histogram_quantile(0.95, sum by (le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\".*\",key=\"cache.l2_set_duration\"}[5m])))",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1792670695.34,
+            "0.014500000000000004"
+          ]
+        }
+      ]
+    },
+    {
+      "panel": "Storage faults (absent means NOT EXERCISED)",
+      "query": "sum by (backend, op) (skipper_cache_storage_error_total{job=\"skipper-local\",instance=~\".*\"})",
+      "status": "NOT EXERCISED",
+      "samples": []
+    }
+  ],
+  "observed_result_code_classes": [
+    {
+      "result": "hit",
+      "code_class": "2xx"
+    },
+    {
+      "result": "l1_hit",
+      "code_class": "2xx"
+    },
+    {
+      "result": "coalesce_error",
+      "code_class": "n/a"
+    },
+    {
+      "result": "l2_miss",
+      "code_class": "n/a"
+    },
+    {
+      "result": "l2_hit",
+      "code_class": "2xx"
+    }
+  ],
+  "missing_outcomes": [
+    "miss"
+  ]
+}
