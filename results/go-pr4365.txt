@@ -1,0 +1,12 @@
+=== RUN   TestProxy_L1Cache_VaryStar_NeverCached
+2026/10/22 13:42:00 route settings, reset, route: vary-star-route: PathRegexp(/.*/) -> cache("5m", "15s", "30s") -> "http://127.0.0.1:63648"
+2026/10/22 13:42:00 route settings received, id: 1
+2026/10/22 13:42:00 route settings applied, id: 1
+--- PASS: TestProxy_L1Cache_VaryStar_NeverCached (0.01s)
+=== RUN   TestProxy_Coalesce_RealFetch_ConcurrentColdMiss_SingleBackendCall
+2026/10/22 13:42:00 route settings, reset, route: coalesce-real-fetch-route: PathRegexp(/.*/) -> cache("5m", "15s", "30s") -> "http://127.0.0.1:63654"
+2026/10/22 13:42:00 route settings received, id: 1
+2026/10/22 13:42:00 route settings applied, id: 1
+--- PASS: TestProxy_Coalesce_RealFetch_ConcurrentColdMiss_SingleBackendCall (0.06s)
+PASS
+ok  	github.com/zalando/skipper/filters/cache	2.019s

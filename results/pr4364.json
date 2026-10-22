@@ -1,0 +1,29 @@
+{
+  "label": "pr4364-without-pr4365",
+  "skipper_sha": "6a217f4f65e9966c4e18d9c3cad2e069fc5893b1",
+  "utc": "2026-10-22T11:47:16Z",
+  "run_id": "256462ae785749c99b8b39c551685b66",
+  "cases": [
+    {
+      "name": "single cold then warm",
+      "status": "PASS",
+      "responses": 2,
+      "origin_calls": 1,
+      "http_status": 200,
+      "body_path_query": "matched"
+    },
+    {
+      "name": "synchronized 10-request cold burst then warm",
+      "status": "FAIL",
+      "error": "origin cold=10, after warm=10; expected 1,1"
+    },
+    {
+      "name": "Vary star never cached",
+      "status": "PASS",
+      "responses": 3,
+      "origin_calls": 3,
+      "http_status": 200
+    }
+  ],
+  "success": false
+}

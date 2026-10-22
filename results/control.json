@@ -1,0 +1,29 @@
+{
+  "label": "unfixed-parent-control",
+  "skipper_sha": "790d827ec18f7ecbb560e43cfa99e91949de0a4b",
+  "utc": "2026-10-22T11:46:48Z",
+  "run_id": "7f13b95d42744750b782e0ff5b6b63dd",
+  "cases": [
+    {
+      "name": "single cold then warm",
+      "status": "PASS",
+      "responses": 2,
+      "origin_calls": 1,
+      "http_status": 200,
+      "body_path_query": "matched"
+    },
+    {
+      "name": "synchronized 10-request cold burst then warm",
+      "status": "FAIL",
+      "error": "origin cold=10, after warm=10; expected 1,1"
+    },
+    {
+      "name": "Vary star never cached",
+      "status": "PASS",
+      "responses": 3,
+      "origin_calls": 3,
+      "http_status": 200
+    }
+  ],
+  "success": false
+}
