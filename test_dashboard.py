@@ -22,6 +22,7 @@ class DashboardTests(unittest.TestCase):
     def test_composition_preserves_volume_and_line_comparison(self):
         line, stacked = [p for p in dashboard["panels"]
                          if p["title"].startswith("Cache Hit vs Miss")]
+        self.assertEqual(line["title"], "Cache Hit vs Miss Rate")
         self.assertEqual(line["targets"], stacked["targets"])
         self.assertEqual(line["fieldConfig"]["defaults"]["custom"]["stacking"]["mode"],
                          "none")

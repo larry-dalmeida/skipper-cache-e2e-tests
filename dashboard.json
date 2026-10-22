@@ -307,7 +307,7 @@
     },
     {
       "id": 6,
-      "title": "Cache Hit vs Miss Rate (lines)",
+      "title": "Cache Hit vs Miss Rate",
       "description": "Identical adaptive rate window and scope. Flat cache.hit/cache.miss cover fallback misses; normal stacking retains volume, not percentages. Errors and tier hits are excluded.",
       "type": "timeseries",
       "datasource": {

@@ -80,7 +80,7 @@ for tier in ("L1", "L2"):
        "Absent status classes are unexercised, not zero.", legend="{{code_class}}")
 composition = outcome_rate("hit|miss", grouped=True)
 for stacked in (False, True):
-    panel("Cache Hit vs Miss Rate" + (" (stacked)" if stacked else " (lines)"),
+    panel("Cache Hit vs Miss Rate" + (" (stacked)" if stacked else ""),
           [composition], "reqps",
           "Identical adaptive rate window and scope. Flat cache.hit/cache.miss cover "
           "fallback misses; normal stacking retains volume, not percentages. "

@@ -105,7 +105,7 @@ captures a screenshot, and checks datasource/title loading.
   `result,code_class`. No stale/error/tier outcomes are included.
 - **L1 Hits by Status Code Class**: `l1_hit` only, grouped by `code_class`.
 - **L2 Hits by Status Code Class**: `l2_hit` only, grouped by `code_class`.
-- **Cache Hit vs Miss Rate (lines)** and **(stacked)** use identical flat
+- **Cache Hit vs Miss Rate** and **Cache Hit vs Miss Rate (stacked)** use identical flat
   `cache.hit|cache.miss` expressions grouped by key. The stacked view uses normal stacking,
   not 100%, so it retains traffic volume. Tier hits are never extra outcomes.
 
