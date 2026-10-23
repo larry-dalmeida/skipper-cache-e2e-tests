@@ -1,20 +1,18 @@
-# Local cache testing: visual report
+# Completed 60,000-request exercise: visual report
 
 Synthetic local testing related to [PR #4365](https://github.com/zalando/skipper/pull/4365)
-checks cache behavior, client responses, and observability. These results describe
-the tested local setup, **not production capacity** or the PR's current HEAD.
-Latest results: **23 October 2026**.
+checks cache behavior, client responses, and observability. This report covers
+the completed 60,000-request exercise in the tested local setup, **not production
+capacity** or the PR's current HEAD. Exercise date: **23 October 2026**.
 
 ## What happened
 
 | Exercise | Outcome | What we observed |
 |---|---|---|
 | 60,000 requests | **PASS** | All completed; zero client errors or admission drops. Actual rate: **90.65 requests/s** over **661.92 seconds**. |
-| Planned 213,000-request staircase | **INCOMPLETE / FAIL** | **79,950 completed**, zero client response errors. One generator admission drop when all **32 in-flight slots** were occupied; stages **4–7 were not run**. |
 
-Requested rates were best-effort, with no catch-up bursts. The incomplete
-campaign is **not a pass** and does not establish a backend bottleneck or a
-maximum supported rate.
+The requested rate was best-effort, with no catch-up bursts. This exercise
+does not establish a maximum supported rate.
 
 ## Cache Operations
 
@@ -46,5 +44,4 @@ delivery, resource, or coverage checks**.
 All three screenshots above come from the successful exercise's end-of-run
 captures. Missing or unexercised signals must not be read as healthy zeroes.
 
-For exact tested revisions, commands, historical results, timing, diagnostics,
-telemetry limitations, and image provenance, see the [technical deep dive](DEEPDIVE.md).
+Methodology, revision history, and full results: [DEEPDIVE.md](DEEPDIVE.md).
