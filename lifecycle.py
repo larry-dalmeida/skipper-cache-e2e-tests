@@ -41,7 +41,8 @@ def supervise(commands, probes, name):
     if record.exists():
         raise RuntimeError(f"{record} exists; use teardown.sh first")
     ports = {"skipper": (9999, 9911),
-             "forwards": (3000, 8080, 6379, 9090)}.get(name, ())
+             "forwards": (3000, 8080, 6379, 9090),
+             "locust": (8089,)}.get(name, ())
     for port in ports:
         with socket.socket() as listener:
             listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -81,10 +82,13 @@ def supervise(commands, probes, name):
         record.unlink(missing_ok=True)
 
 
-def teardown(names=("traffic", "skipper", "forwards")):
+STOP_TARGETS = ("locust", "traffic", "skipper", "forwards")
+
+
+def teardown(names=STOP_TARGETS):
     for name in names:
-        if name not in ("traffic", "skipper", "forwards"):
-            raise ValueError("Stop target must be traffic, skipper, or forwards")
+        if name not in STOP_TARGETS:
+            raise ValueError("Stop target must be locust, traffic, skipper, or forwards")
         record = STATE / (name + ".json")
         if not record.exists():
             continue
@@ -115,7 +119,16 @@ def teardown(names=("traffic", "skipper", "forwards")):
 
 if __name__ == "__main__":
     if sys.argv[1] == "stop":
-        teardown(sys.argv[2:] or ("traffic", "skipper", "forwards"))
+        teardown(sys.argv[2:] or STOP_TARGETS)
+    elif sys.argv[1] == "locust":
+        try:
+            urllib.request.urlopen("http://127.0.0.1:9999/get?locust-precheck=1", timeout=3)
+        except OSError as error:
+            raise SystemExit(f"Skipper is not reachable on 127.0.0.1:9999 ({error}); start it first")
+        supervise([[sys.executable, "-m", "locust", "-f", str(ROOT / "locustfile.py"),
+                    "--web-host", "127.0.0.1", "--web-port", "8089",
+                    "--host", "http://127.0.0.1:9999", "--stop-timeout", "10"]],
+                  ["http://127.0.0.1:8089/"], "locust")
     elif sys.argv[1] == "traffic":
         supervise([[sys.executable, "-u", str(ROOT / "traffic.py")]],
                   ["http://127.0.0.1:9999/get?traffic-readiness=1"], "traffic")

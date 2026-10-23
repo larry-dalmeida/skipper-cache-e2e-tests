@@ -14,7 +14,7 @@ histogram samples and a dashboard screenshot.
 - A clean, separate checkout of the desired [Skipper](https://github.com/zalando/skipper)
   revision; Go version matching its `go.mod`.
 - Python 3.9+, Bash, Git, curl, kubectl and minikube with a working driver.
-  `jq` is useful for inspecting saved JSON. No Python packages are needed.
+  `jq` is useful for inspecting saved JSON. The core harness needs no Python packages; only the optional Locust load needs `requirements-locust.txt`.
 - Optional browser verification: Node.js 22+ (built-in WebSocket) and Chrome/Chromium.
 - Free host ports: `3000`, `8080`, `6379`, `9090`, `9999`, `9911`.
 - A disposable **minikube** context and namespace **cache-e2e**. Scripts own the
@@ -186,6 +186,49 @@ disrupting the running Valkey instance.
 additions. #4364 alone still produces ten origin calls and `coalesce_error`
 on the cold burst. This is an expected negative control, not proof of a
 metrics regression. No combined revision is used in the recorded results.
+
+## Interactive Locust load (optional)
+
+Requires a running Skipper (`lifecycle.py skipper`). Locust is pinned in
+`requirements-locust.txt`; install it in a virtualenv:
+
+```bash
+python3 -m venv .venv-locust && .venv-locust/bin/pip install -r requirements-locust.txt
+.venv-locust/bin/python lifecycle.py locust   # UI at http://127.0.0.1:8089
+```
+
+Use the UI to Start/Stop the swarm; `--max-vus` (default 5, max 50) caps concurrent
+users. Users alternate between two cohorts (`en-US`, `de-DE` Accept-Language, so two
+cache identities) and pick keys 70% primary, 20% related, 10% cooler from 53 keys.
+The run latches stopped on the first identity mismatch (response path, query or echoed
+headers differ) or when more than 5% of at least 50 requests fail. Restart the driver
+to clear the latch. Stop with `./teardown.sh locust`.
+
+Not covered: Locust metrics export to Prometheus, expiry-boundary preflight, or
+multi-replica checks; this stack has one Skipper and the route TTLs are 30s/10s/15s.
+Header echo matching assumes the mock backend echoes `Host`, `Authorization`, and
+`Accept-Language` as arrays; that was verified only against a stand-in origin.
+
+## Single entry point: `cachectl.py`
+
+Every action below is also runnable on its own; `cachectl.py` only composes the existing scripts. kubectl is pinned to context `minikube` and namespace `cache-e2e`.
+
+```sh
+python3 cachectl.py stack up                  # start-stack.sh
+python3 cachectl.py stack down                # teardown.sh (stops local processes, keeps namespace)
+python3 cachectl.py skipper start -- ~/src/skipper
+python3 cachectl.py skipper restart -- ~/src/skipper
+python3 cachectl.py skipper stop
+python3 cachectl.py fault origin down         # scale mock-backend to 0
+python3 cachectl.py fault origin up           # back to 1 and wait for rollout
+python3 cachectl.py fault valkey down         # scale valkey to 0
+python3 cachectl.py fault valkey up
+python3 cachectl.py load                      # Locust web UI on 127.0.0.1:8089
+python3 cachectl.py check unit                # offline unit tests
+python3 cachectl.py check verify -- --label X --sha Y   # also: tiers, ratio, metrics, coalescing, browser
+```
+
+Run `python3 test_cachectl.py` to check the argument mapping without touching the cluster.
 
 ## Stop, switch revision, and validate the harness
 
