@@ -1,0 +1,3753 @@
+{
+  "uid": "cache-performance-local",
+  "title": "Cache Operations",
+  "tags": [
+    "local-only",
+    "synthetic",
+    "combined-local-runs",
+    "owned:contentful-acceptance-generic-v1"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "graphTooltip": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "instance",
+        "label": "Skipper instance",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "local-prometheus"
+        },
+        "definition": "label_values(up{job=\"skipper-local\"}, instance)",
+        "query": {
+          "query": "label_values(up{job=\"skipper-local\"}, instance)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "sort": 1,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".+",
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "options": [],
+        "hide": 0
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "name": "Origin availability changes (synthetic controller)",
+        "enable": true,
+        "hide": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "local-prometheus"
+        },
+        "iconColor": "orange",
+        "titleFormat": "{{origin}} availability change",
+        "textFormat": "Controller change epoch {{value}}; run {{run_id}}",
+        "tagKeys": "origin",
+        "expr": "mock_origin_state_changed_seconds{job=\"mock-origin\"} and (changes(mock_origin_state_changed_seconds{job=\"mock-origin\"}[5s]) > 0)"
+      }
+    ]
+  },
+  "description": "Operator incident view with merged cache diagnostics for the LOCAL cache test stack. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+  "links": [
+    {
+      "type": "link",
+      "title": "Cache Diagnostics (legacy duplicate; all panels merged here)",
+      "url": "/d/cache-diagnostics-local",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "icon": "dashboard",
+      "tags": []
+    },
+    {
+      "type": "link",
+      "title": "Retail Application",
+      "url": "/d/retail-application-local",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "icon": "dashboard",
+      "tags": []
+    },
+    {
+      "type": "link",
+      "title": "Raw Prometheus (Explore)",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22local-prometheus%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22up%7Bjob%3D~%5C%22skipper-local%7Cmock-origin%5C%22%7D%22%2C%22datasource%22%3A%7B%22type%22%3A%22prometheus%22%2C%22uid%22%3A%22local-prometheus%22%7D%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-30m%22%2C%22to%22%3A%22now%22%7D%7D%7D",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": true,
+      "asDropdown": false,
+      "icon": "bolt",
+      "tags": []
+    },
+    {
+      "type": "link",
+      "title": "Skipper logs (Loki Explore)",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22acceptance-local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D~%5C%22skipper-a%7Cskipper-b%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": true,
+      "asDropdown": false,
+      "icon": "bolt",
+      "tags": []
+    },
+    {
+      "type": "link",
+      "title": "Skipper traces (Tempo Explore; Skipper spans only)",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-tempo%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22tempo%22%2C%22uid%22%3A%22acceptance-local-tempo%22%7D%2C%22queryType%22%3A%22traceql%22%2C%22limit%22%3A20%2C%22tableType%22%3A%22traces%22%2C%22query%22%3A%22%7Bresource.service.name%3D~%5C%22skipper-a%7Cskipper-b%5C%22%7D%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": true,
+      "asDropdown": false,
+      "icon": "bolt",
+      "tags": []
+    },
+    {
+      "type": "link",
+      "title": "Mock origin + nginx logs (Loki Explore; no traces exist)",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22acceptance-local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D~%5C%22mock%7Cnginx%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": true,
+      "asDropdown": false,
+      "icon": "bolt",
+      "tags": []
+    },
+    {
+      "type": "link",
+      "title": "Single-run evidence (run-scoped history)",
+      "url": "/d/retail-local-history",
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "icon": "doc",
+      "tags": []
+    }
+  ],
+  "panels": [
+    {
+      "type": "row",
+      "title": "Client impact and scrape health",
+      "collapsed": false,
+      "id": 1,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 0
+      },
+      "panels": []
+    },
+    {
+      "type": "text",
+      "title": "Scope",
+      "gridPos": {
+        "w": 24,
+        "h": 3,
+        "x": 0,
+        "y": 1
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "**Cache Operations** \u2014 health, performance and fault diagnostics in incident-priority rows: client impact and scrape health first, then cache effectiveness and all-caller origin, origin/refresh health and resources (expanded); deep storage/eviction, queue/coalescing and instrumentation rows are collapsed below. Family/locale views are in *Retail Application*. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero."
+      },
+      "id": 2
+    },
+    {
+      "type": "stat",
+      "title": "Skipper scrape health",
+      "description": "1 = last scrape succeeded, 0 = registered target failing (kept while any target of its run is up). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 6,
+        "h": 4,
+        "x": 0,
+        "y": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "gray"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "OK",
+                  "color": "green"
+                },
+                "0": {
+                  "text": "Error",
+                  "color": "red"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "text": "Offline / Unknown",
+                  "color": "gray"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "gray",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value_and_name",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "min by (instance) (up{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 3
+    },
+    {
+      "type": "stat",
+      "title": "Origin scrape health",
+      "description": "1 = last scrape succeeded, 0 = registered target failing (kept while any target of its run is up). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 6,
+        "h": 4,
+        "x": 6,
+        "y": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "gray"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "OK",
+                  "color": "green"
+                },
+                "0": {
+                  "text": "Error",
+                  "color": "red"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "text": "Offline / Unknown",
+                  "color": "gray"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "gray",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value_and_name",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "min by (instance) (up{job=\"mock-origin\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 4
+    },
+    {
+      "type": "stat",
+      "title": "Skipper scrape health",
+      "description": "1 = last scrape succeeded, 0 = registered target failing (kept while any target of its run is up). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 6,
+        "h": 4,
+        "x": 12,
+        "y": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "gray"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "OK",
+                  "color": "green"
+                },
+                "0": {
+                  "text": "Error",
+                  "color": "red"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "text": "Offline / Unknown",
+                  "color": "gray"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "gray",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value_and_name",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "min by (instance) (up{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 5
+    },
+    {
+      "type": "stat",
+      "title": "Origin scrape health",
+      "description": "1 = last scrape succeeded, 0 = registered target failing (kept while any target of its run is up). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 6,
+        "h": 4,
+        "x": 18,
+        "y": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "gray"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "OK",
+                  "color": "green"
+                },
+                "0": {
+                  "text": "Error",
+                  "color": "red"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "text": "Offline / Unknown",
+                  "color": "gray"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "gray",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value_and_name",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "min by (instance) (up{job=\"mock-origin\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 6
+    },
+    {
+      "type": "timeseries",
+      "title": "Request rate",
+      "description": "Requests served by Skipper ingress, per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (instance) (rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 7
+    },
+    {
+      "type": "timeseries",
+      "title": "Responses by route and status",
+      "description": "Skipper ingress responses per route and HTTP code. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (instance, route, code) (rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}} {{route}} {{code}}"
+        }
+      ],
+      "id": 8
+    },
+    {
+      "type": "timeseries",
+      "title": "Latency p95 by route",
+      "description": "Skipper ingress p95 from the route duration histogram. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 16
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "histogram_quantile(0.95, sum by (instance, route, le) (rate(skipper_serve_route_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+          "legendFormat": "{{instance}} {{route}}"
+        }
+      ],
+      "id": 9
+    },
+    {
+      "type": "row",
+      "title": "Traffic, cache effectiveness and all-caller origin",
+      "collapsed": false,
+      "id": 10,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 24
+      },
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "Fresh hit ratio",
+      "description": "hit / (hit + miss + stale) per instance; no data when the denominator is zero or the target is down. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 25
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "100 * ((sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(hit)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))) or on (instance) (0 * sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(hit|miss|stale)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))) / (sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(hit|miss|stale)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 11
+    },
+    {
+      "type": "timeseries",
+      "title": "Hit / miss / stale rate",
+      "description": "Lazy cache decisions per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 25
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(hit|miss|stale)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}} {{key}}"
+        }
+      ],
+      "id": 12
+    },
+    {
+      "type": "timeseries",
+      "title": "Cache result by status class",
+      "description": "Partial instrumentation: hit and miss outcomes by status class. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 33
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (instance, result, code_class) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",result=~\"hit|miss\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}} {{result}} {{code_class}}"
+        }
+      ],
+      "id": 13
+    },
+    {
+      "type": "timeseries",
+      "title": "L1 / L2 hit rate",
+      "description": "Tier hits per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 33
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (instance, result, code_class) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",result=~\"l1_hit|l2_hit\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}} {{result}} {{code_class}}"
+        }
+      ],
+      "id": 14
+    },
+    {
+      "type": "timeseries",
+      "title": "Origin request rate (all callers)",
+      "description": "Aggregate origin, ALL callers (nginx, Skipper A and B, background refresh): the mock origin cannot attribute requests to a caller, so this is an adjacent context panel, not a Skipper-only overlay. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 41
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (origin) (rate(mock_origin_requests_total{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+          "legendFormat": "{{origin}}"
+        }
+      ],
+      "id": 15
+    },
+    {
+      "type": "timeseries",
+      "title": "Origin responses by status (all callers)",
+      "description": "Aggregate origin, ALL callers (nginx, Skipper A and B, background refresh): the mock origin cannot attribute requests to a caller, so this is an adjacent context panel, not a Skipper-only overlay. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 41
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (origin, status) (rate(mock_origin_requests_total{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+          "legendFormat": "{{origin}} {{status}}"
+        }
+      ],
+      "id": 16
+    },
+    {
+      "type": "row",
+      "title": "Origin latency, errors and refresh health",
+      "collapsed": false,
+      "id": 17,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 49
+      },
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "Origin latency p95 (all callers)",
+      "description": "Aggregate origin, ALL callers (nginx, Skipper A and B, background refresh): the mock origin cannot attribute requests to a caller, so this is an adjacent context panel, not a Skipper-only overlay. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 50
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "histogram_quantile(0.95, sum by (origin, status, le) (rate(mock_origin_request_duration_seconds_bucket{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)))",
+          "legendFormat": "{{origin}} {{status}}"
+        }
+      ],
+      "id": 18
+    },
+    {
+      "type": "timeseries",
+      "title": "Refresh errors / dropped jobs",
+      "description": "Revalidation failures and dropped jobs. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 50
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(reval_error|reval_dropped)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}} {{key}}"
+        }
+      ],
+      "id": 19
+    },
+    {
+      "type": "timeseries",
+      "title": "Refresh job duration p95",
+      "description": "Revalidation job duration. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 58
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "histogram_quantile(0.95, sum by (instance, le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"cache.reval_duration\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 20
+    },
+    {
+      "type": "row",
+      "title": "Saturation and resources",
+      "collapsed": false,
+      "id": 21,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 66
+      },
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "Resident memory",
+      "description": "Process RSS per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 67
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "max by (instance) (process_resident_memory_bytes{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 22
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU (cores)",
+      "description": "Process CPU seconds per second per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 67
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "cores",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (instance) (rate(process_cpu_seconds_total{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 23
+    },
+    {
+      "type": "timeseries",
+      "title": "L1 cache bytes (whole cache)",
+      "description": "Serialized bytes of the shared L1 cache per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 75
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "max by (instance) (skipper_custom_gauges{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"cache.lru_bytes\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 24
+    },
+    {
+      "type": "timeseries",
+      "title": "L1 bytes (whole cache, de-duplicated)",
+      "description": "max over route labels per instance; equals the whole shared L1 size. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 75
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-a:9911",
+            "renamePattern": "Skipper A"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "skipper-b:9911",
+            "renamePattern": "Skipper B"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bcatalogs\\b",
+            "renamePattern": "Catalogs"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bapi\\b",
+            "renamePattern": "Content gateway"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "\\bfooter\\b",
+            "renamePattern": "Retail footer"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "mock:9091",
+            "renamePattern": "Mock origins"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^cms( |$)",
+            "renamePattern": "CMS HTTPS$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^gateway( |$)",
+            "renamePattern": "Content gateway HTTP$1"
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "max by (instance) (skipper_cache_lru_bytes{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 25
+    },
+    {
+      "type": "row",
+      "title": "Deep cache tiers, storage and eviction",
+      "collapsed": true,
+      "id": 26,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 83
+      },
+      "panels": [
+        {
+          "type": "timeseries",
+          "title": "L1 / L2 storage faults",
+          "description": "Storage errors by backend and operation. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 0,
+            "y": 84
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "sum by (instance, backend, op) (rate(skipper_cache_storage_error_total{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+              "legendFormat": "{{instance}} {{backend}} {{op}}"
+            }
+          ],
+          "id": 27
+        },
+        {
+          "type": "timeseries",
+          "title": "L2 get errors / set fallbacks",
+          "description": "Shared L2 errors and set fallbacks. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 12,
+            "y": 84
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(l2_get_error|l2_set_fallback)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+              "legendFormat": "{{instance}} {{key}}"
+            }
+          ],
+          "id": 28
+        },
+        {
+          "type": "timeseries",
+          "title": "L2 get latency p95",
+          "description": "Shared L2 read latency. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 0,
+            "y": 92
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "histogram_quantile(0.95, sum by (instance, le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"cache.l2_get_duration\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+              "legendFormat": "{{instance}}"
+            }
+          ],
+          "id": 29
+        },
+        {
+          "type": "timeseries",
+          "title": "L2 set latency p95",
+          "description": "Shared L2 write latency. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 12,
+            "y": 92
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "histogram_quantile(0.95, sum by (instance, le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"cache.l2_set_duration\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+              "legendFormat": "{{instance}}"
+            }
+          ],
+          "id": 30
+        },
+        {
+          "type": "timeseries",
+          "title": "L1 evictions / oversized entries",
+          "description": "L1 LRU evictions and rejected oversized entries. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 0,
+            "y": 100
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(lru_eviction|lru_oversized)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+              "legendFormat": "{{instance}} {{key}}"
+            }
+          ],
+          "id": 31
+        },
+        {
+          "type": "timeseries",
+          "title": "L1 bytes as reported per route label",
+          "description": "Each route label repeats the WHOLE shared L1 size; series must not be summed. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 12,
+            "y": 100
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "max by (instance, route) (skipper_cache_lru_bytes{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+              "legendFormat": "{{instance}} {{route}}"
+            }
+          ],
+          "id": 32
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "Refresh queue, coalescing and errors",
+      "collapsed": true,
+      "id": 33,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 84
+      },
+      "panels": [
+        {
+          "type": "timeseries",
+          "title": "Refresh queue depth",
+          "description": "Current revalidation queue depth per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 0,
+            "y": 85
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "max by (instance) (skipper_custom_gauges{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"cache.reval_queue_depth\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+              "legendFormat": "{{instance}}"
+            }
+          ],
+          "id": 34
+        },
+        {
+          "type": "timeseries",
+          "title": "Refresh queue residence p95",
+          "description": "Time jobs wait in the queue. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 12,
+            "y": 85
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "histogram_quantile(0.95, sum by (instance, le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"cache.reval_wait_duration\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+              "legendFormat": "{{instance}}"
+            }
+          ],
+          "id": 35
+        },
+        {
+          "type": "timeseries",
+          "title": "Coalesce wait p95",
+          "description": "Time followers wait on a coalesced origin fetch. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 0,
+            "y": 93
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "histogram_quantile(0.95, sum by (instance, le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"cache.coalesce_wait_duration\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+              "legendFormat": "{{instance}}"
+            }
+          ],
+          "id": 36
+        },
+        {
+          "type": "timeseries",
+          "title": "Coalesce errors / bypass errors",
+          "description": "Coalescing failures. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 12,
+            "y": 93
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(coalesce_error|coalesce_bypass_error)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+              "legendFormat": "{{instance}} {{key}}"
+            }
+          ],
+          "id": 37
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "Instrumentation, coverage and run evidence",
+      "collapsed": true,
+      "id": 38,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 85
+      },
+      "panels": [
+        {
+          "type": "text",
+          "title": "Scope",
+          "gridPos": {
+            "w": 24,
+            "h": 3,
+            "x": 0,
+            "y": 86
+          },
+          "options": {
+            "mode": "markdown",
+            "content": "**Cache engineer view** \u2014 refresh pipeline, coalescing, L1/L2 storage, eviction and the full event inventory, per Skipper instance. Start from *Cache Operations* for impact. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero."
+          },
+          "id": 39
+        },
+        {
+          "type": "table",
+          "title": "Live LOCAL runs (drill down to single-run evidence)",
+          "description": "Scrape targets of runs with at least one up target. Click a row to open the run-scoped history dashboard for that exact run. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 24,
+            "h": 6,
+            "x": 0,
+            "y": 89
+          },
+          "fieldConfig": {
+            "defaults": {
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "links": [
+                {
+                  "title": "Open single-run evidence",
+                  "url": "/d/retail-local-history?var-run_id=${__data.fields.run_id}&var-candidate_sha=${__data.fields.candidate_sha}&var-harness_sha=${__data.fields.harness_sha}&${__url_time_range}"
+                }
+              ]
+            },
+            "overrides": []
+          },
+          "options": {
+            "showHeader": true,
+            "cellHeight": "sm"
+          },
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "__name__": true
+                },
+                "renameByName": {
+                  "Value": "up"
+                }
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "up{job=~\"skipper-local|mock-origin\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1)",
+              "legendFormat": "__auto",
+              "instant": true,
+              "range": false,
+              "format": "table"
+            }
+          ],
+          "id": 40
+        },
+        {
+          "type": "timeseries",
+          "title": "All cache event rates",
+          "description": "Every documented cache event key; absent keys were not exercised. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 0,
+            "y": 95
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(hit|miss|stale|coalesce_error|coalesce_bypass|coalesce_bypass_error|lru_eviction|lru_oversized|reval_dropped|reval_error|reval_backend_dispatch|l1_hit|l2_miss|l2_get_error|l2_set_fallback|l2_hit|storage_error)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+              "legendFormat": "{{instance}} {{key}}"
+            }
+          ],
+          "id": 41
+        },
+        {
+          "type": "timeseries",
+          "title": "Cache histogram observation rates",
+          "description": "Observation rate for every cache latency histogram. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "gridPos": {
+            "w": 12,
+            "h": 8,
+            "x": 12,
+            "y": 95
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops",
+              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "custom": {
+                "spanNulls": false
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
+          },
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-a:9911",
+                "renamePattern": "Skipper A"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "skipper-b:9911",
+                "renamePattern": "Skipper B"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bcatalogs\\b",
+                "renamePattern": "Catalogs"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bapi\\b",
+                "renamePattern": "Content gateway"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "\\bfooter\\b",
+                "renamePattern": "Retail footer"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "mock:9091",
+                "renamePattern": "Mock origins"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^cms( |$)",
+                "renamePattern": "CMS HTTPS$1"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "^gateway( |$)",
+                "renamePattern": "Content gateway HTTP$1"
+              }
+            }
+          ],
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "local-prometheus"
+              },
+              "expr": "sum by (instance, key) (rate(skipper_custom_duration_seconds_count{job=\"skipper-local\",instance=~\"${instance:regex}\",key=~\"cache\\\\.(coalesce_wait_duration|reval_wait_duration|reval_duration|l2_get_duration|l2_set_duration)\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+              "legendFormat": "{{instance}} {{key}}"
+            }
+          ],
+          "id": 42
+        }
+      ]
+    }
+  ]
+}

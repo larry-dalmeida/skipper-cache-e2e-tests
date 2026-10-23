@@ -206,13 +206,6 @@ panel("CPU (cores)", ['sum by (instance) (rate(process_cpu_seconds_total{' + SCO
 panel("L1 cache bytes", ['max by (instance) (skipper_cache_lru_bytes{' + SCOPE + '})'],
       "bytes", legend="{{instance}}")
 
-operations = dashboard_json(
-    "cache-performance-local", "Cache Operations",
-    "Cache metrics from Stack A: Prometheus scrape of Skipper. Logs and traces are "
-    "in Loki and Tempo datasources.",
-    ["skipper", "cache", "operations"], panels)
-
 if __name__ == "__main__":
     here = Path(__file__).parent
     (here / "dashboard.json").write_text(json.dumps(dashboard, indent=2) + "\n")
-    (here / "cache-operations.json").write_text(json.dumps(operations, indent=2) + "\n")

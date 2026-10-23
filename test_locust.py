@@ -133,5 +133,26 @@ class Ledger(unittest.TestCase):
         self.assertIsNone(wl.WindowLedger().end(1.0, []))
 
 
+class CohortTargets(unittest.TestCase):
+    def test_targets_stay_in_range_and_under_ceiling(self):
+        rng = random.Random(3)
+        for _ in range(2000):
+            targets = wl.pick_cohort_targets(rng, wl.MAX_VUS_CEILING)
+            self.assertEqual(set(targets), set(wl.COHORTS))
+            for count in targets.values():
+                self.assertTrue(10 <= count <= 30)
+            self.assertLessEqual(sum(targets.values()), wl.MAX_VUS_CEILING)
+
+    def test_targets_vary_across_draws(self):
+        rng = random.Random(5)
+        seen = {tuple(sorted(wl.pick_cohort_targets(rng, wl.MAX_VUS_CEILING).items()))
+                for _ in range(50)}
+        self.assertGreater(len(seen), 1)
+
+    def test_ceiling_below_minimum_is_rejected(self):
+        with self.assertRaises(ValueError):
+            wl.pick_cohort_targets(random.Random(1), 19)
+
+
 if __name__ == "__main__":
     unittest.main()

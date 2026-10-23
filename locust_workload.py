@@ -23,8 +23,11 @@ RELATED_SHARE = 0.20  # the remainder (0.10) selects cooler keys
 MIN_SAMPLES = 50
 MAX_FAILURE_RATIO = 0.05
 HISTORY_LIMIT = 100
-DEFAULT_MAX_VUS = 5
 MAX_VUS_CEILING = 50
+DEFAULT_MAX_VUS = MAX_VUS_CEILING
+# Per-cohort VU target range, re-rolled every REFRESH_SECONDS.
+COHORT_VU_RANGE = (10, 30)
+REFRESH_SECONDS = 60
 MAX_REQUEST_TIMEOUT = 30.0
 FAILURE_CATEGORIES = ("status", "body", "identity", "exception")
 
@@ -62,6 +65,17 @@ def pick_key(rng, cohort):
     if roll < PRIMARY_SHARE + RELATED_SHARE:
         return "related", rng.choice(list(RELATED_INDEXES))
     return "cooler", rng.choice(list(COOLER_INDEXES))
+
+
+def pick_cohort_targets(rng, ceiling, vu_range=COHORT_VU_RANGE):
+    """Random VU target per cohort within vu_range, with the total not above ceiling."""
+    low, high = vu_range
+    if ceiling < low * len(COHORTS):
+        raise ValueError(f"--max-vus must be at least {low * len(COHORTS)} for per-cohort targets")
+    while True:
+        targets = {cohort: rng.randint(low, high) for cohort in COHORTS}
+        if sum(targets.values()) <= ceiling:
+            return targets
 
 
 def request_headers(cohort):

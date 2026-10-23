@@ -132,6 +132,7 @@ data:
     apiVersion: 1
     datasources:
       - name: Prometheus
+        uid: local-prometheus
         type: prometheus
         access: proxy
         url: http://prometheus:9090

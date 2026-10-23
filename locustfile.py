@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Locust users for the Skipper cache stack; started by `python3 lifecycle.py locust`.
 
-Manual control: no LoadTestShape is registered, so the Locust UI owns VUs and spawn rate.
+CohortShape drives the swarm endlessly: per-cohort VU targets in 10..30 (total <= --max-vus),
+re-rolled every REFRESH_SECONDS. Stop with `./teardown.sh locust`.
 """
 import random
 import sys
@@ -9,7 +10,7 @@ import time
 from pathlib import Path
 
 import gevent
-from locust import HttpUser, events, task
+from locust import HttpUser, LoadTestShape, events, task
 from locust.exception import StopUser
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -74,6 +75,9 @@ def record_outcome(exception=None, **_):
 
 
 class CacheUser(HttpUser):
+    abstract = True
+    cohort = None
+
     def wait_time(self):
         return random.uniform(*SETTINGS["wait"])
 
@@ -82,7 +86,6 @@ class CacheUser(HttpUser):
             raise StopUser()
         SETTINGS["active"] += 1
         self.counted = True
-        self.cohort = random.choice(list(wl.COHORTS))
 
     def on_stop(self):
         if getattr(self, "counted", False):
@@ -101,3 +104,37 @@ class CacheUser(HttpUser):
                                            self.cohort, index)
             if problem is not None:
                 response.failure(problem)
+
+
+class SwrUser(CacheUser):
+    cohort = "swr"
+
+
+class HardUser(CacheUser):
+    cohort = "hard"
+
+
+COHORT_USERS = {user.cohort: user for user in (SwrUser, HardUser)}
+
+
+class CohortShape(LoadTestShape):
+    """Per-cohort VU pools with random targets, re-rolled every wl.REFRESH_SECONDS.
+
+    Each cohort's class weight equals its target and the total is their sum, so Locust's
+    weighted dispatch spawns exactly the chosen number of VUs per cohort.
+    """
+    spawn_rate = 10
+
+    def __init__(self):
+        super().__init__()
+        self.targets = None
+        self.next_roll = 0.0
+
+    def tick(self):
+        now = time.monotonic()
+        if self.targets is None or now >= self.next_roll:
+            self.targets = wl.pick_cohort_targets(random, SETTINGS["max_vus"])
+            self.next_roll = now + wl.REFRESH_SECONDS
+            for cohort, user in COHORT_USERS.items():
+                user.weight = self.targets[cohort]
+        return sum(self.targets.values()), self.spawn_rate, list(COHORT_USERS.values())

@@ -197,9 +197,12 @@ python3 -m venv .venv-locust && .venv-locust/bin/pip install -r requirements-loc
 .venv-locust/bin/python lifecycle.py locust   # UI at http://127.0.0.1:8089
 ```
 
-Use the UI to Start/Stop the swarm; `--max-vus` (default 5, max 50) caps concurrent
-users. Users alternate between two cohorts (`en-US`, `de-DE` Accept-Language, so two
-cache identities) and pick keys 70% primary, 20% related, 10% cooler from 53 keys.
+`CohortShape` runs the swarm endlessly (no run time). Each cohort (`en-US`, `de-DE`
+Accept-Language, so two cache identities) gets a random VU target in 10..30, with the
+total capped at `--max-vus` (default 50, max 50); targets re-roll every 60s. Start the
+UI-less supervisor with the Start button or `POST /swarm` on 8089 (the shape then owns VUs).
+Keys are picked 70% primary, 20% related, 10% cooler from 53 keys per cohort. CSV stats
+land in `.runtime/locust_*.csv` and the log in `.runtime/locust.log`.
 The run latches stopped on the first identity mismatch (response path, query or echoed
 headers differ) or when more than 5% of at least 50 requests fail. Restart the driver
 to clear the latch. Stop with `./teardown.sh locust`.
