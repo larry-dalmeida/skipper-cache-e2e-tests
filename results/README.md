@@ -1,4 +1,10 @@
-# Verification results — 2026-10-22
+# Verification results
+
+**Latest, 2026-10-23:** [60,000-request exercise PASS; 213,000-request
+campaign incomplete/FAIL at 79,950 completions](#bounded-synthetic-retail-acceptance--2026-10-23).
+The following historical results retain their original scope and outcomes.
+
+## Historical verification — 2026-10-22
 
 All traffic was synthetic and local. Mock origin: `mccutchen/go-httpbin:v2.15.0`;
 Valkey: `valkey/valkey:9-alpine3.23`; Prometheus: `v2.55.1`; Grafana OSS: `11.3.0`.
@@ -282,3 +288,94 @@ panels returned samples; five were correctly marked not exercised. Headless
 Chrome completed all nineteen queries and verified all twenty panel/row titles.
 The screenshot was refreshed after rendering, with separate L1/L2 legends and
 both flat `cache.hit` / `cache.miss` composition series visible.
+
+## Bounded synthetic retail acceptance — 2026-10-23
+
+The latest clean tested revisions were harness
+`b6b89ca2adb70db6a7436279180f5efdc6c22763` and candidate
+`8abfdaae54218381cb74ce2f48e5dc07498126cc`. All requests and dashboard data
+were fictional and LOCAL. The successful retail-requests run
+(`contentful-acceptance-12a6e749c106`) completed **60,000/60,000** scheduled
+requests: 60,000 admitted and completed, with **0 request errors and 0
+admission drops**. Its target was 100 requests/s for 600 seconds; the
+best-effort exact-count scheduler's measured active interval was **661.920606
+seconds** (90.64531 completed requests/s), with p95 **20.578 ms** and p99
+**24.503 ms**. These are client-observed results for this run, not a sustained
+throughput guarantee or a production performance claim.
+
+The separate boundary check passed its two short exact-count stages
+(2,500 at 100 requests/s and 1,250 at 50 requests/s; 3,750 total, no drops).
+This mode uses a 200 ms per-wakeup lateness ceiling and reanchors the next
+deadline to the actual admission plus the outgoing nominal interval; it does
+not compress a backlog into catch-up bursts. It is best-effort scheduling,
+not a promise that every requested
+rate will be maintained.
+
+A separate full seven-stage campaign did **not** pass: stages 1 and 2
+completed 30,000 and 15,000 requests, while the 200 requests/s third stage
+stopped after 34,950 of 60,000 completions and one admission drop at 32
+in-flight. The campaign had 79,950 completed requests over 848.713166 active
+seconds, with **0 client response errors**; stages 4–7 were skipped. The first two stage windows took 327.285 and
+308.483 seconds respectively (about 91.66 and 48.63 completed requests/s).
+This is a detected local harness/capacity-contract failure with retained
+partial evidence, **not a diagnosis of Skipper or backend root cause**. It
+does not establish an RPS limit or attribute the drop to a particular
+component. The failed slot's wakeup lag was 0.328 ms, and the maximum observed
+campaign lag was 76.769 ms, below the 200 ms ceiling. All admitted requests
+drained before cleanup; the failed admission was not silently skipped as success.
+
+For the successful 60,000-request run, owned-log delivery reported **120,337
+captured = 120,337 collector-accepted = 120,337 Loki-exported** records, and
+the run's persistent exporter parity check passed. Those aggregate delivery
+counts prove delivery parity only; they do not prove coverage of a particular
+final phase. The failed full campaign separately delivered **160,239 captured =
+accepted = exported** records, but its final campaign-wide exporter parity and
+exported-phase checks were **SKIP**, not PASS. Resource safety and post-cleanup
+persistent log/trace correlation passed in both runs. Only run-owned ephemeral
+resources were removed; persistent monitoring and its history were preserved.
+The raw acceptance
+reports remain local runtime artifacts and are not published here.
+
+The selected screenshots below were inspected from the successful run's
+`browser-end` capture. The recorded dashboard window is
+`from=1792735699698` through `to=1792736363618` (Unix epoch milliseconds);
+the corresponding report active interval is 1792735701.698143–1792736363.618749
+seconds. **Cache Operations** and **Retail Application** show combined LOCAL
+traffic over the selected history window and have no run selector, so their
+graphs are not individually attributed to this run. The **run-scoped**
+dashboard includes the run selector
+`contentful-acceptance-12a6e749c106`. These captures document rendered
+dashboards; the acceptance report, not a screenshot or localhost URL, is the
+source for the request and delivery counts.
+
+![Cache Operations dashboard at end of the successful synthetic run](images/retail-60k-cache-operations.png)
+
+Cache Operations — browser-end capture for
+`contentful-acceptance-12a6e749c106`; selected window
+`from=1792735699698` to `1792736363618` (epoch milliseconds; range-end
+freeze `1792736363618`). The report marks this dashboard render PASS. It is a
+combined LOCAL history view, not a run-filtered chart.
+
+![Retail Application dashboard at end of the successful synthetic run](images/retail-60k-retail-application.png)
+
+Retail Application — browser-end capture for
+`contentful-acceptance-12a6e749c106`; selected window
+`from=1792735699698` to `1792736363618` (epoch milliseconds; range-end
+freeze `1792736363618`). The report marks this dashboard render PASS. It is a
+combined LOCAL history view, not a run-filtered chart.
+
+![Run-scoped synthetic retail dashboard at end of the successful run](images/retail-60k-run-scoped.png)
+
+Run-scoped dashboard — browser-end capture for
+`contentful-acceptance-12a6e749c106`, with the run selector set to that ID;
+selected window `from=1792735699698` to `1792736363618` (epoch milliseconds;
+range-end freeze `1792736363618`). The report marks this dashboard render
+PASS.
+
+Evidence provenance (local, ignored and unmodified): the successful request
+report is `.runtime/acceptance/requests-best-effort-8abf-b6b89ca/report.json`;
+the boundary-check and partial full-campaign reports are
+`.runtime/acceptance/staircase-best-effort-8abf-b6b89ca/report.json` and
+`.runtime/acceptance/staircase-full-best-effort-8abf-b6b89ca/report.json`.
+The curated images are copies of the successful request run's three
+`browser-end*/dashboard.png` artifacts.
