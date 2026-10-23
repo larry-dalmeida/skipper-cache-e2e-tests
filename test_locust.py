@@ -57,6 +57,11 @@ class Validation(unittest.TestCase):
         body = echo("hard", 3)
         self.assertEqual(wl.validate_response(200, body, "swr", 3), "identity")
 
+    def test_masked_authorization_echo_is_accepted(self):
+        data = json.loads(echo("swr", 3))
+        data["headers"]["Authorization"] = ["******"]
+        self.assertIsNone(wl.validate_response(200, json.dumps(data), "swr", 3))
+
     def test_missing_authorization_echo_is_identity(self):
         data = json.loads(echo("swr", 3))
         del data["headers"]["Authorization"]

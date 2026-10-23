@@ -130,27 +130,89 @@ panel("Revalidation queue depth", [
 ], "short", "Current queued jobs, not a rate. A sampled 0 is an observed empty queue; "
    "an absent sample is unknown.", legend="queued jobs")
 
-dashboard = {
-    "uid": "ag1x69aba3qpse", "title": "Skipper Cache Verification",
-    "description": "Local synthetic traffic only. Check results/ for exact source SHAs. "
-                   "No nginx parity or production readiness claim.",
-    "schemaVersion": 39, "version": 3, "refresh": "5s",
-    "time": {"from": "now-15m", "to": "now"}, "timezone": "utc",
-    "tags": ["skipper", "cache", "local-verification"],
-    "templating": {"list": [{
-        "name": "datasource", "label": "Prometheus datasource",
-        "type": "datasource", "query": "prometheus", "refresh": 1,
-        "hide": 0, "multi": False, "includeAll": False, "options": [],
-    }, {
-        "name": "instance", "label": "Skipper instance", "type": "query",
-        "datasource": DATASOURCE,
-        "query": 'label_values(up{job="skipper-local"}, instance)',
-        "refresh": 1, "multi": True, "includeAll": True, "allValue": ".*",
-        "current": {"text": "All", "value": "$__all"}, "options": [],
-    }]},
-    "panels": panels,
-}
+def dashboard_json(uid, title, description, tags, panel_list):
+    return {
+        "uid": uid, "title": title, "description": description,
+        "schemaVersion": 39, "version": 3, "refresh": "5s",
+        "time": {"from": "now-15m", "to": "now"}, "timezone": "utc",
+        "tags": tags,
+        "templating": {"list": [{
+            "name": "datasource", "label": "Prometheus datasource",
+            "type": "datasource", "query": "prometheus", "refresh": 1,
+            "hide": 0, "multi": False, "includeAll": False, "options": [],
+        }, {
+            "name": "instance", "label": "Skipper instance", "type": "query",
+            "datasource": DATASOURCE,
+            "query": 'label_values(up{job="skipper-local"}, instance)',
+            "refresh": 1, "multi": True, "includeAll": True, "allValue": ".*",
+            "current": {"text": "All", "value": "$__all"}, "options": [],
+        }]},
+        "panels": panel_list,
+    }
+
+
+dashboard = dashboard_json(
+    "ag1x69aba3qpse", "Skipper Cache Verification",
+    "Local synthetic traffic only. Check results/ for exact source SHAs. "
+    "No nginx parity or production readiness claim.",
+    ["skipper", "cache", "local-verification"], panels)
+
+# Cache Operations: job-scoped queries only. Stack A has no origin exporter,
+# so origin panels are intentionally absent.
+panels = []
+slot = 0
+base_y = 0
+row("Client impact and scrape health")
+panel("Skipper scrape health", ['up{' + SCOPE + '}'], stat=True,
+      description="1 means the Skipper scrape succeeded.")
+panel("Request rate by instance", [
+    'sum by (instance) (rate(skipper_serve_route_count{' + SCOPE + '}[' + WINDOW + ']))'
+], "reqps", legend="{{instance}}")
+panel("Responses by route and status", [
+    'sum by (route, code) (rate(skipper_serve_route_count{' + SCOPE + '}[' + WINDOW + ']))'
+], "reqps", legend="{{route}} {{code}}")
+panel("Latency p95 by route", [
+    'histogram_quantile(0.95, sum by (route, le) (rate('
+    'skipper_serve_route_duration_seconds_bucket{' + SCOPE + '}[' + WINDOW + '])))'
+], "s", legend="{{route}}")
+row("Cache effectiveness")
+panel("Fresh cache hit % (hit / hit + miss + stale)", [fresh_ratio], "percent",
+      "Zero denominator or failed scrape yields no data, never 0%/100%.")
+panel("Hit / miss / stale rate", [outcome_rate("hit|miss|stale", grouped=True)],
+      "reqps", legend="{{key}}")
+panel("Cache result by status class", [
+    'sum by (result, code_class) (rate(skipper_cache_result_total{' + SCOPE +
+    ',result=~"hit|miss"}[' + WINDOW + ']))'
+], "reqps", legend="{{result}} {{code_class}}")
+panel("L1 / L2 hit rate", [
+    'sum by (result, code_class) (rate(skipper_cache_result_total{' + SCOPE +
+    ',result=~"l1_hit|l2_hit"}[' + WINDOW + ']))'
+], "reqps", legend="{{result}} {{code_class}}")
+row("Refresh, saturation and resources")
+panel("Refresh errors / dropped jobs", [
+    outcome_rate("reval_error|reval_dropped", True)], "ops", legend="{{key}}",
+    optional=True)
+panel("Refresh job duration p95", [
+    'histogram_quantile(0.95, sum by (le) (rate(skipper_custom_duration_seconds_bucket{'
+    + SCOPE + ',key="cache.reval_duration"}[' + WINDOW + '])))'
+], "s", optional=True)
+panel("Revalidation queue depth", [
+    'sum(skipper_custom_gauges{' + SCOPE + ',key="cache.reval_queue_depth"})'
+], "short", legend="queued jobs", optional=True)
+panel("Resident memory", ['max by (instance) (process_resident_memory_bytes{' + SCOPE + '})'],
+      "bytes", legend="{{instance}}")
+panel("CPU (cores)", ['sum by (instance) (rate(process_cpu_seconds_total{' + SCOPE +
+                      '}[' + WINDOW + ']))'], "cores", legend="{{instance}}")
+panel("L1 cache bytes", ['max by (instance) (skipper_cache_lru_bytes{' + SCOPE + '})'],
+      "bytes", legend="{{instance}}")
+
+operations = dashboard_json(
+    "cache-performance-local", "Cache Operations",
+    "Cache metrics from Stack A: Prometheus scrape of Skipper. Logs and traces are "
+    "in Loki and Tempo datasources.",
+    ["skipper", "cache", "operations"], panels)
 
 if __name__ == "__main__":
-    Path(__file__).with_name("dashboard.json").write_text(
-        json.dumps(dashboard, indent=2) + "\n")
+    here = Path(__file__).parent
+    (here / "dashboard.json").write_text(json.dumps(dashboard, indent=2) + "\n")
+    (here / "cache-operations.json").write_text(json.dumps(operations, indent=2) + "\n")

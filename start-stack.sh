@@ -10,7 +10,7 @@ metadata:
   name: cache-e2e
 YAML
 kubectl --context minikube -n cache-e2e create configmap cache-dashboard \
-  --from-file=dashboard.json --dry-run=client -o yaml |
+  --from-file=dashboard.json --from-file=cache-operations.json --dry-run=client -o yaml |
   kubectl --context minikube apply -f -
 kubectl --context minikube apply -f stack.yaml
 for deployment in mock-backend valkey prometheus grafana loki tempo; do

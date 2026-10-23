@@ -42,7 +42,12 @@ class CachectlTests(unittest.TestCase):
     def test_load_starts_locust_supervisor(self):
         [command] = plan("load")
         self.assertTrue(command[1].endswith("lifecycle.py"))
-        self.assertEqual(command[2:], ["locust"])
+        self.assertEqual(command[2], "locust")
+
+    def test_logs_starts_log_shipper_supervisor(self):
+        [command] = plan("logs")
+        self.assertTrue(command[1].endswith("lifecycle.py"))
+        self.assertEqual(command[2], "logs")
 
     def test_stack_down_uses_teardown_not_namespace_delete(self):
         [command] = plan("stack", "down")

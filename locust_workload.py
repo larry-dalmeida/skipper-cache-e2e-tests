@@ -90,7 +90,8 @@ def validate_response(status, body, cohort, index):
     echoed = data.get("headers") or {}
     if echoed.get("Host") != [HOST_HEADER]:
         return "identity"
-    if echoed.get("Authorization") != [AUTHORIZATION]:
+    # go-httpbin masks Authorization values, so only its presence is checked.
+    if not echoed.get("Authorization"):
         return "identity"
     if echoed.get("Accept-Language") != [COHORTS[cohort]]:
         return "identity"

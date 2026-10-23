@@ -169,7 +169,8 @@ if __name__ == "__main__":
                        cwd=checkout, check=True)
         print(f"Starting Skipper {sha}", flush=True)
         supervise([[str(binary), "-address=127.0.0.1:9999",
-                    "-metrics-flavour=prometheus", "-enable-swarm",
+                    "-metrics-flavour=prometheus", "-proxy-preserve-host",
+                    "-serve-route-counter", "-serve-route-metrics", "-enable-swarm",
                     "-enable-l2-cache", "-swarm-valkey-urls=127.0.0.1:6379",
                     "-swarm-valkey-dial-timeout=2s",
                     "-swarm-valkey-conn-timeout=2s",

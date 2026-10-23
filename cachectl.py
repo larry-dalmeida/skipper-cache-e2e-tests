@@ -45,6 +45,8 @@ def build_commands(args, extra):
                     [*KUBECTL, "rollout", "status", target, "--timeout=120s"]]
     if cmd == "load":
         return [[sys.executable, str(ROOT / "lifecycle.py"), "locust"]]
+    if cmd == "logs":
+        return [[sys.executable, str(ROOT / "lifecycle.py"), "logs"]]
     if cmd == "check":
         if args.name == "unit":
             return [[sys.executable, "-m", "unittest", "test_harness", "test_locust",
@@ -72,6 +74,8 @@ def parser():
     f.add_argument("action", choices=["down", "up"])
 
     sub.add_parser("load", help="Start Locust web UI on 127.0.0.1:8089 against Skipper on :9999")
+
+    sub.add_parser("logs", help="Ship Skipper's log file to Loki (run alongside Skipper)")
 
     c = sub.add_parser("check", help="Run a test or verification; extra args pass through")
     c.add_argument("name", choices=["unit", "coalescing", "browser", *sorted(VERIFY_SCRIPTS)])
