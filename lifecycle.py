@@ -14,6 +14,10 @@ ROOT = Path(__file__).resolve().parent
 STATE = ROOT / ".runtime"
 STATE.mkdir(exist_ok=True)
 
+# Skipper exports traces to Tempo's OTLP/HTTP receiver through the forwards.
+OTEL_OPTIONS = ("{tracesExporter: otlp, resourceAttributes: {service.name: skipper-local}, "
+                "exporterOtlp: {protocol: http/protobuf, endpoint: http://127.0.0.1:4318}}")
+
 
 def identity(pid):
     return subprocess.check_output(
@@ -36,12 +40,12 @@ def ready(url, timeout=90, children=()):
     raise RuntimeError(f"readiness timeout: {url}")
 
 
-def supervise(commands, probes, name):
+def supervise(commands, probes, name, log_file=None):
     record = STATE / (name + ".json")
     if record.exists():
         raise RuntimeError(f"{record} exists; use teardown.sh first")
     ports = {"skipper": (9999, 9911),
-             "forwards": (3000, 8080, 6379, 9090),
+             "forwards": (3000, 8080, 6379, 9090, 3100, 3200, 4318),
              "locust": (8089,)}.get(name, ())
     for port in ports:
         with socket.socket() as listener:
@@ -49,6 +53,7 @@ def supervise(commands, probes, name):
             listener.bind(("127.0.0.1", port))
     record.touch(exist_ok=False)
     children = []
+    output = open(log_file, "w") if log_file else None
 
     def stop(*_):
         raise KeyboardInterrupt
@@ -57,7 +62,8 @@ def supervise(commands, probes, name):
     signal.signal(signal.SIGINT, stop)
     try:
         for command in commands:
-            child = subprocess.Popen(command, cwd=ROOT)
+            child = subprocess.Popen(command, cwd=ROOT, stdout=output,
+                                     stderr=subprocess.STDOUT if output else None)
             children.append(child)
         record.write_text(json.dumps({
             "supervisor": {"pid": os.getpid(), "identity": identity(os.getpid())},
@@ -80,9 +86,11 @@ def supervise(commands, probes, name):
                 child.kill()
                 child.wait()
         record.unlink(missing_ok=True)
+        if output:
+            output.close()
 
 
-STOP_TARGETS = ("locust", "traffic", "skipper", "forwards")
+STOP_TARGETS = ("locust", "traffic", "skipper", "logs", "forwards")
 
 
 def teardown(names=STOP_TARGETS):
@@ -139,9 +147,16 @@ if __name__ == "__main__":
             for service, ports in (("grafana", "3000:3000"),
                                    ("mock-backend", "8080:8080"),
                                    ("valkey", "6379:6379"),
-                                   ("prometheus", "9090:9090"))
+                                   ("prometheus", "9090:9090"),
+                                   ("loki", "3100:3100"),
+                                   ("tempo", "3200:3200"),
+                                   ("tempo", "4318:4318"))
         ], ["http://127.0.0.1:3000/api/health", "http://127.0.0.1:8080/get",
-            "http://127.0.0.1:9090/-/ready"], "forwards")
+            "http://127.0.0.1:9090/-/ready", "http://127.0.0.1:3100/ready",
+            "http://127.0.0.1:3200/ready"], "forwards")
+    elif sys.argv[1] == "logs":
+        supervise([[sys.executable, "-u", str(ROOT / "log_shipper.py")]],
+                  ["http://127.0.0.1:3100/ready"], "logs")
     elif sys.argv[1] == "skipper":
         checkout = Path(sys.argv[2]).resolve()
         sha = subprocess.check_output(
@@ -160,6 +175,8 @@ if __name__ == "__main__":
                     "-swarm-valkey-conn-timeout=2s",
                     "-cache-l1-ttl=2s",
                     "-wait-for-healthcheck-interval=0",
-                    "-routes-file=" + str(ROOT / "routes.eskip")]],
+                    "-routes-file=" + str(ROOT / "routes.eskip"),
+                    "-open-telemetry=" + OTEL_OPTIONS]],
                   ["http://127.0.0.1:9999/get?readiness=" + sha,
-                   "http://127.0.0.1:9911/metrics"], "skipper")
+                   "http://127.0.0.1:9911/metrics"], "skipper",
+                  log_file=STATE / "skipper.log")

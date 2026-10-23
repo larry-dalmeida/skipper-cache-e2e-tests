@@ -13,7 +13,7 @@ kubectl --context minikube -n cache-e2e create configmap cache-dashboard \
   --from-file=dashboard.json --dry-run=client -o yaml |
   kubectl --context minikube apply -f -
 kubectl --context minikube apply -f stack.yaml
-for deployment in mock-backend valkey prometheus grafana; do
+for deployment in mock-backend valkey prometheus grafana loki tempo; do
   kubectl --context minikube -n cache-e2e rollout status "deployment/$deployment" --timeout=120s
 done
 exec python3 lifecycle.py forwards
