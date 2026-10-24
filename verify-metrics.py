@@ -23,14 +23,15 @@ if __name__ == "__main__":
     root = Path(__file__).resolve().parent
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    dashboard = json.loads((root / "dashboard.json").read_text())
+    panels = [panel for path in sorted((root / "dashboards").glob("*.json"))
+              for panel in json.loads(path.read_text())["panels"]]
     datasources = [d for d in get("http://127.0.0.1:3000/api/datasources")
                    if d["type"] == "prometheus"]
     if len(datasources) != 1:
         raise SystemExit("Expected one local Prometheus datasource")
     uid = datasources[0]["uid"]
     results = []
-    for panel in dashboard["panels"]:
+    for panel in panels:
         for target in panel.get("targets", []):
             expr = (target["expr"].replace("${instance:regex}", ".*")
                     .replace("$__rate_interval", "1m"))

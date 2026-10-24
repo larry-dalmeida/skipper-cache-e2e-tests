@@ -50,11 +50,9 @@ def build_commands(args, extra):
     if cmd == "check":
         if args.name == "unit":
             return [[sys.executable, "-m", "unittest", "test_harness", "test_locust",
-                     "test_dashboard", "-v"]]
+                     "test_catalogue", "test_cachectl", "-v"]]
         if args.name == "coalescing":
             return [["bash", str(ROOT / "verify-coalescing.sh"), *extra]]
-        if args.name == "browser":
-            return [["node", str(ROOT / "verify-browser.mjs"), *extra]]
         return [[sys.executable, str(ROOT / VERIFY_SCRIPTS[args.name]), *extra]]
     raise ValueError(f"unsupported command: {cmd} {getattr(args, 'action', '')}".strip())
 
@@ -78,7 +76,7 @@ def parser():
     sub.add_parser("logs", help="Ship Skipper's log file to Loki (run alongside Skipper)")
 
     c = sub.add_parser("check", help="Run a test or verification; extra args pass through")
-    c.add_argument("name", choices=["unit", "coalescing", "browser", *sorted(VERIFY_SCRIPTS)])
+    c.add_argument("name", choices=["unit", "coalescing", *sorted(VERIFY_SCRIPTS)])
     return p
 
 

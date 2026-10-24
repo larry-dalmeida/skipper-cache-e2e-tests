@@ -3,69 +3,64 @@ import random
 import unittest
 from collections import Counter
 
+import catalogue
 import locust_workload as wl
 
+ENTRY = catalogue.Entry("shop_navigation", "pl_PL", "/shop/pl_PL/api/navigation", 1.0)
 
-def echo(cohort, index, **overrides):
-    headers = {"Host": [wl.HOST_HEADER], "Authorization": [wl.AUTHORIZATION],
-               "Accept-Language": [wl.COHORTS[cohort]]}
-    body = {"url": "http://127.0.0.1:9999" + wl.key_path(cohort, index),
-            "headers": headers}
+
+def echo(cohort, entry, **overrides):
+    """Fixture as mock_origin.py returns it for a request on this entry."""
+    path, _, query = entry.path.partition("?")
+    body = {"version": "A", "path": path, "query": query, "host": wl.HOST_HEADER,
+            "tokenClass": wl.ORIGIN_TOKEN_CLASS, "language": wl.COHORTS[cohort]}
     body.update(overrides)
     return json.dumps(body)
 
 
-class Fixtures(unittest.TestCase):
-    def test_key_space_has_one_primary_twenty_related_thirty_two_cooler(self):
-        classes = Counter(wl.key_class(i) for i in range(wl.KEYS_PER_COHORT))
-        self.assertEqual(classes, {"primary": 1, "related": 20, "cooler": 32})
-
-    def test_out_of_range_key_is_rejected(self):
-        with self.assertRaises(ValueError):
-            wl.key_path("swr", wl.KEYS_PER_COHORT)
-        with self.assertRaises(ValueError):
-            wl.key_path("unknown", 0)
-
-    def test_pick_key_respects_70_20_10_within_tolerance(self):
-        rng = random.Random(7)
-        counts = Counter(wl.pick_key(rng, "swr")[0] for _ in range(20000))
-        self.assertAlmostEqual(counts["primary"] / 20000, 0.70, delta=0.02)
-        self.assertAlmostEqual(counts["related"] / 20000, 0.20, delta=0.02)
-        self.assertAlmostEqual(counts["cooler"] / 20000, 0.10, delta=0.02)
-
-    def test_stat_names_are_fixed_and_not_per_key(self):
-        names = {wl.stat_name(c, k) for c in wl.COHORTS
-                 for k in ("primary", "related", "cooler")}
-        self.assertEqual(len(names), 6)
+class StatNames(unittest.TestCase):
+    def test_stat_names_are_cohort_by_family_not_per_path(self):
+        families = catalogue.Catalogue(catalogue.build_entries()).families()
+        names = {wl.stat_name(c, f) for c in wl.COHORTS for f in families}
+        self.assertEqual(len(names), len(wl.COHORTS) * len(families))
 
 
 class Validation(unittest.TestCase):
     def test_valid_echo_passes(self):
-        self.assertIsNone(wl.validate_response(200, echo("swr", 3), "swr", 3))
+        self.assertIsNone(wl.validate_response(200, echo("swr", ENTRY), "swr", ENTRY))
+
+    def test_query_entry_passes(self):
+        entry = catalogue.Entry("shop_search", "pl_PL", "/shop/pl_PL/api/search?q=jacket", 1.0)
+        self.assertIsNone(wl.validate_response(200, echo("hard", entry), "hard", entry))
 
     def test_non_200_is_status(self):
-        self.assertEqual(wl.validate_response(502, echo("swr", 3), "swr", 3), "status")
+        self.assertEqual(wl.validate_response(502, echo("swr", ENTRY), "swr", ENTRY), "status")
 
     def test_non_json_is_body(self):
-        self.assertEqual(wl.validate_response(200, b"<html>", "swr", 3), "body")
-        self.assertEqual(wl.validate_response(200, b"[1]", "swr", 3), "body")
+        self.assertEqual(wl.validate_response(200, b"<html>", "swr", ENTRY), "body")
+        self.assertEqual(wl.validate_response(200, b"[1]", "swr", ENTRY), "body")
 
-    def test_wrong_key_is_identity(self):
-        self.assertEqual(wl.validate_response(200, echo("swr", 4), "swr", 3), "identity")
+    def test_wrong_path_is_identity(self):
+        other = catalogue.Entry("shop_navigation", "pl_PL", "/shop/pl_PL/api/promotions", 1.0)
+        self.assertEqual(wl.validate_response(200, echo("swr", other), "swr", ENTRY), "identity")
+
+    def test_wrong_query_is_identity(self):
+        entry = catalogue.Entry("shop_search", "pl_PL", "/shop/pl_PL/api/search?q=jacket", 1.0)
+        body = echo("swr", catalogue.Entry("shop_search", "pl_PL",
+                                           "/shop/pl_PL/api/search?q=dress", 1.0))
+        self.assertEqual(wl.validate_response(200, body, "swr", entry), "identity")
 
     def test_wrong_cohort_language_is_identity(self):
-        body = echo("hard", 3)
-        self.assertEqual(wl.validate_response(200, body, "swr", 3), "identity")
+        body = echo("hard", ENTRY)
+        self.assertEqual(wl.validate_response(200, body, "swr", ENTRY), "identity")
 
-    def test_masked_authorization_echo_is_accepted(self):
-        data = json.loads(echo("swr", 3))
-        data["headers"]["Authorization"] = ["******"]
-        self.assertIsNone(wl.validate_response(200, json.dumps(data), "swr", 3))
+    def test_wrong_token_class_is_identity(self):
+        body = echo("swr", ENTRY, tokenClass="alpha")
+        self.assertEqual(wl.validate_response(200, body, "swr", ENTRY), "identity")
 
-    def test_missing_authorization_echo_is_identity(self):
-        data = json.loads(echo("swr", 3))
-        del data["headers"]["Authorization"]
-        self.assertEqual(wl.validate_response(200, json.dumps(data), "swr", 3), "identity")
+    def test_wrong_host_is_identity(self):
+        body = echo("swr", ENTRY, host="other.local")
+        self.assertEqual(wl.validate_response(200, body, "swr", ENTRY), "identity")
 
     def test_failure_category_maps_known_and_unknown(self):
         self.assertIsNone(wl.failure_category(None))
@@ -121,8 +116,8 @@ class Ledger(unittest.TestCase):
         for n in range(3):
             ledger.begin(float(n))
             window = ledger.end(float(n) + 1,
-                                [{"name": "swr/primary", "requests": 4, "failures": 1,
-                                  "p95_ms": 3.0}])
+                                [{"name": "swr/contentful_spaces", "requests": 4,
+                                  "failures": 1, "p95_ms": 3.0}])
             self.assertEqual(window["requests"], 4)
         self.assertEqual(len(ledger.history), 2)
         self.assertEqual(ledger.windows_dropped, 1)

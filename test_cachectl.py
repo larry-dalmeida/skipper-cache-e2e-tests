@@ -37,7 +37,7 @@ class CachectlTests(unittest.TestCase):
 
     def test_check_unit_runs_all_offline_suites(self):
         [command] = plan("check", "unit")
-        self.assertEqual(command[-4:-1], ["test_harness", "test_locust", "test_dashboard"])
+        self.assertEqual(command[-5:-1], ["test_harness", "test_locust", "test_catalogue", "test_cachectl"])
 
     def test_load_starts_locust_supervisor(self):
         [command] = plan("load")

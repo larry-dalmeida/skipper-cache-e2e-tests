@@ -14,14 +14,16 @@ from locust import HttpUser, LoadTestShape, events, task
 from locust.exception import StopUser
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import catalogue  # noqa: E402
 import locust_workload as wl  # noqa: E402
 
+CATALOGUE = catalogue.Catalogue(catalogue.build_entries())
 GUARD = wl.SafetyGuard()
 LEDGER = wl.WindowLedger()
 SETTINGS = {"active": 0, "max_vus": wl.DEFAULT_MAX_VUS, "wait": (0.5, 1.5),
             "timeout": 5.0, "environment": None}
-STAT_NAMES = {wl.stat_name(cohort, klass)
-              for cohort in wl.COHORTS for klass in ("primary", "related", "cooler")}
+STAT_NAMES = {wl.stat_name(cohort, family)
+              for cohort in wl.COHORTS for family in CATALOGUE.families()}
 
 
 @events.init_command_line_parser.add_listener
@@ -93,15 +95,15 @@ class CacheUser(HttpUser):
             self.counted = False
 
     @task
-    def fetch_key(self):
-        klass, index = wl.pick_key(random, self.cohort)
-        with self.client.get(wl.key_path(self.cohort, index),
-                             name=wl.stat_name(self.cohort, klass),
+    def fetch_endpoint(self):
+        entry = CATALOGUE.pick(random)
+        with self.client.get(entry.path,
+                             name=wl.stat_name(self.cohort, entry.family),
                              headers=wl.request_headers(self.cohort),
                              timeout=SETTINGS["timeout"],
                              catch_response=True) as response:
             problem = wl.validate_response(response.status_code, response.content,
-                                           self.cohort, index)
+                                           self.cohort, entry)
             if problem is not None:
                 response.failure(problem)
 

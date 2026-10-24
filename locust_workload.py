@@ -11,14 +11,9 @@ REVISION = 1
 HOST_HEADER = "cache-e2e.local"
 # Synthetic, non-secret token: only needs to be stable so the cache identity is stable.
 AUTHORIZATION = "Bearer cache-e2e-synthetic"
+ORIGIN_TOKEN_CLASS = "unknown"
 # Cohort -> Accept-Language. Fixed per cohort so each cohort is a distinct cache identity.
 COHORTS = {"swr": "en-US", "hard": "de-DE"}
-KEYS_PER_COHORT = 53
-# Key index ranges within a cohort: one primary, 20 related, 32 cooler.
-RELATED_INDEXES = range(1, 21)
-COOLER_INDEXES = range(21, 53)
-PRIMARY_SHARE = 0.70
-RELATED_SHARE = 0.20  # the remainder (0.10) selects cooler keys
 
 MIN_SAMPLES = 50
 MAX_FAILURE_RATIO = 0.05
@@ -32,39 +27,9 @@ MAX_REQUEST_TIMEOUT = 30.0
 FAILURE_CATEGORIES = ("status", "body", "identity", "exception")
 
 
-def key_path(cohort, index):
-    if cohort not in COHORTS:
-        raise ValueError(f"unknown cohort: {cohort}")
-    if not 0 <= index < KEYS_PER_COHORT:
-        raise ValueError(f"key index out of range: {index}")
-    query = urllib.parse.urlencode(
-        [("cohort", cohort), ("key", f"{index:02d}"), ("rev", REVISION)])
-    return "/get?" + query
-
-
-def key_class(index):
-    if index == 0:
-        return "primary"
-    if index in RELATED_INDEXES:
-        return "related"
-    if index in COOLER_INDEXES:
-        return "cooler"
-    raise ValueError(f"key index out of range: {index}")
-
-
-def stat_name(cohort, klass):
-    """Fixed statistics names (cohort x key class), never per-key."""
-    return f"{cohort}/{klass}"
-
-
-def pick_key(rng, cohort):
-    """Return (key_class, index) using 70/20/10 weights within the cohort."""
-    roll = rng.random()
-    if roll < PRIMARY_SHARE:
-        return "primary", 0
-    if roll < PRIMARY_SHARE + RELATED_SHARE:
-        return "related", rng.choice(list(RELATED_INDEXES))
-    return "cooler", rng.choice(list(COOLER_INDEXES))
+def stat_name(cohort, family):
+    """Fixed statistics names (cohort x endpoint family), never per-path."""
+    return f"{cohort}/{family}"
 
 
 def pick_cohort_targets(rng, ceiling, vu_range=COHORT_VU_RANGE):
@@ -86,7 +51,7 @@ def request_headers(cohort):
     }
 
 
-def validate_response(status, body, cohort, index):
+def validate_response(status, body, cohort, entry):
     """Return None when the response matches the fixture, else a failure category."""
     if status != 200:
         return "status"
@@ -96,18 +61,18 @@ def validate_response(status, body, cohort, index):
         return "body"
     if not isinstance(data, dict):
         return "body"
-    expected = urllib.parse.urlsplit(key_path(cohort, index))
-    actual = urllib.parse.urlsplit(str(data.get("url", "")))
-    if actual.path != expected.path or \
-            urllib.parse.parse_qs(actual.query) != urllib.parse.parse_qs(expected.query):
+    # mock_origin.py answers with a fixture describing the request it actually received.
+    expected = urllib.parse.urlsplit(entry.path)
+    if data.get("path") != expected.path or \
+            urllib.parse.parse_qs(str(data.get("query", ""))) != \
+            urllib.parse.parse_qs(expected.query):
         return "identity"
-    echoed = data.get("headers") or {}
-    if echoed.get("Host") != [HOST_HEADER]:
+    if data.get("host") != HOST_HEADER:
         return "identity"
-    # go-httpbin masks Authorization values, so only its presence is checked.
-    if not echoed.get("Authorization"):
+    # The origin classifies only its literal fake tokens; the synthetic token is "unknown".
+    if data.get("tokenClass") != ORIGIN_TOKEN_CLASS:
         return "identity"
-    if echoed.get("Accept-Language") != [COHORTS[cohort]]:
+    if data.get("language") != COHORTS[cohort]:
         return "identity"
     return None
 

@@ -15,7 +15,6 @@ histogram samples and a dashboard screenshot.
   revision; Go version matching its `go.mod`.
 - Python 3.9+, Bash, Git, curl, kubectl and minikube with a working driver.
   `jq` is useful for inspecting saved JSON. The core harness needs no Python packages; only the optional Locust load needs `requirements-locust.txt`.
-- Optional browser verification: Node.js 22+ (built-in WebSocket) and Chrome/Chromium.
 - Free host ports: `3000`, `8080`, `6379`, `9090`, `9999`, `9911`.
 - A disposable **minikube** context and namespace **cache-e2e**. Scripts own the
   named resources in `stack.yaml`; do not share that namespace with other work.
@@ -68,119 +67,36 @@ or discarded background curl statuses are used.
 The route is force-cache mode: `cache("30s", "10s", "15s")`. These checks do not
 cover every HTTP cache policy, Vary variant, stale behavior or cache deployment.
 
-## Local endpoints and observability
+## Local endpoints and dashboards
 
-- [Grafana dashboard](http://localhost:3000/d/ag1x69aba3qpse/skipper-cache-verification)
+- [Cache Operations](http://localhost:3000/d/cache-performance-local/cache-operations)
+- [Retail Application](http://localhost:3000/d/retail-application-local/retail-application)
 - [Prometheus](http://localhost:9090)
 - [Skipper](http://localhost:9999/get)
 - [Raw Skipper metrics](http://localhost:9911/metrics)
-- Mock origin: `http://localhost:8080/get`; Valkey: `localhost:6379`.
+- Mock origin: `http://127.0.0.1:8081`; control port `:9091`; Valkey: `localhost:6379`.
 
-`dashboard.json` is a provisioned, exportable dashboard with nineteen data panels
-and one failure/fallback row. Regenerate
-it with `python3 dashboard.py`. Every panel and query uses the `datasource`
-variable rather than a hardcoded datasource UID. A multi-select `instance`
-variable scopes every query together with `job="skipper-local"`.
-Provisioning creates its own
-Prometheus datasource; Grafana reaches the Kubernetes Prometheus service.
-go-httpbin **does not export `/metrics`** and is deliberately not scraped.
+Dashboards are version-controlled JSON in `dashboards/` and are loaded into the
+`cache-dashboard` ConfigMap by `start-stack.sh`. Edit the JSON, then re-apply:
+
+```bash
+kubectl create configmap cache-dashboard --from-file=dashboards/ \
+  --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -
+kubectl rollout restart deployment/grafana
+```
+
+Server-side apply is required because the dashboards exceed the 256 KB
+client-side annotation limit. The `local-prometheus` datasource UID is set in
+`stack.yaml`. Every panel uses that UID.
 
 On a metrics-enabled revision, after sending traffic:
 
 ```bash
-python3 verify-metrics.py \
-  --sha "$(git -C "$SKIPPER_CHECKOUT" rev-parse HEAD)"
-export CHROME=/path/to/chrome-or-chromium
-node verify-browser.mjs
-# Inspect .runtime/dashboard.png; no browser profile or logs are committed.
+python3 verify-metrics.py
 ```
 
-The metric verifier executes every dashboard expression against both Prometheus
-and the Grafana datasource proxy. The browser waits for all nineteen panel queries,
-captures a screenshot, and checks datasource/title loading.
-
-### Overall versus tier results
-
-- **Overall Cache Result by Status Code Class**: `hit|miss` only, grouped by
-  `result,code_class`. No stale/error/tier outcomes are included.
-- **L1 Hits by Status Code Class**: `l1_hit` only, grouped by `code_class`.
-- **L2 Hits by Status Code Class**: `l2_hit` only, grouped by `code_class`.
-- **Cache Hit vs Miss Rate** and **Cache Hit vs Miss Rate (stacked)** use identical flat
-  `cache.hit|cache.miss` expressions grouped by key. The stacked view uses normal stacking,
-  not 100%, so it retains traffic volume. Tier hits are never extra outcomes.
-
-All five charts use the same `$__rate_interval` window, req/s units and scope.
-The exporter supports code-class labels on both tier counters. Live checks
-verified `hit/2xx`, `l1_hit/2xx`, and `l2_hit/2xx`; other hit code classes are
-unexercised. Exact PR4364 still lacks a live overall `miss` sample because its
-coalescing fetch fails before that instrumentation. The status-class chart is
-explicitly incomplete on that head. The flat `cache.miss` counter *does* cover
-those fallback requests, so the line/stack composition views use the complete
-flat schema. They never substitute `l2_miss` or `coalesce_error`.
-
-### Fresh hit percentage and failure signals
-
-Fresh hit percentage uses flat request-outcome counters because the labeled
-schema omits real fallback misses on exact PR4364:
-
-```promql
-100 * sum(rate(skipper_custom_total{key="cache.hit", ...}[$__rate_interval]))
-    / sum(rate(skipper_custom_total{key=~"cache\\.(hit|miss|stale)", ...}[$__rate_interval]))
-```
-
-The full production expression is in `dashboard.py` / `dashboard.json`: its
-numerator zero-fills absent hits only against an existing request denominator,
-filters denominator `> 0`, and requires all selected Skipper scrapes to be up.
-No traffic, absent outcomes or failed/absent scrape yields **No traffic / no data**,
-not 0% or 100%. A real miss-only denominator with a lazy absent hit counter yields
-0%. No errors or tier counters enter this denominator. Stale responses have a
-separate req/s panel and are not fresh hits. No offload-ratio substitute is used.
-`python3 verify-ratio.py` checks eight semantic cases with isolated synthetic
-vectors evaluated by the real Prometheus engine, without modifying live counters.
-
-The failure/fallback row groups compatible event rates:
-
-- L2 get errors / set fallbacks.
-- Storage faults by `backend,op`.
-- Coalesce errors / bypass errors, explicitly **per waiter**, not origin failure
-  or client-5xx rates.
-- Revalidation errors / dropped jobs.
-- LRU evictions / oversized entries.
-- Current revalidation queue depth, a **gauge**, not a rate.
-
-All rate panels use `$__rate_interval`; Grafana calculates this from its query
-step and scrape cadence. The CLI metric check resolves it explicitly to `1m`
-for reproducibility. Lazy absent counters display **Not exercised / no samples**,
-not invented zeros. The scrape-health panel distinguishes unreachable targets.
-A queue depth sample of 0 is a real observed empty queue. Controlled failure Go
-tests verify selected paths without clearing/disrupting shared Valkey; most live
-failure counters remain unexercised. See the results for that distinction.
-
-For a controlled real L1-to-L2 check (no shared-store flush):
-
-```bash
-python3 verify-tiers.py \
-  --sha "$(git -C "$SKIPPER_CHECKOUT" rev-parse HEAD)"
-```
-
-The launcher sets `-cache-l1-ttl=2s`, below the route's 30-second fresh lifetime.
-The tier check requests a UUID-scoped key, observes an immediate L1-hit increment,
-then polls until L1 expires and an L2-hit increment appears, while requiring
-identical HTTP 200 bodies and exactly one origin request in matching access logs.
-The demo traffic sends an additional post-expiry request to keep tier plots active.
-Use `python3 -m unittest -v test_dashboard test_harness` for panel contract tests.
-
-`skipper_custom_duration_seconds_{bucket,sum,count}` has the exact `key` values
-`cache.coalesce_wait_duration`, `cache.l2_get_duration`, `cache.l2_set_duration`.
-Exported units are **seconds**. Histogram p95s are bucket estimates; the first
-5 ms bucket is too coarse to infer precise microsecond waits. Coalesce wait
-includes the leader's work, not just a follower queue wait.
-
-Storage error expression uses `sum by (backend, op) (rate(
-skipper_cache_storage_error_total{...}[$__rate_interval]))`. **Absent is not a
-verified zero**: the dashboard and results explicitly mark this case not
-exercised. Controlled fault-injection Go tests cover error paths without
-disrupting the running Valkey instance.
+The metric verifier executes every expression in every `dashboards/*.json`
+against Prometheus.
 
 **The PRs are independent.** #4365 fixes coalescing but lacks #4364's metric
 additions. #4364 alone still produces ten origin calls and `coalesce_error`
@@ -201,8 +117,14 @@ python3 -m venv .venv-locust && .venv-locust/bin/pip install -r requirements-loc
 Accept-Language, so two cache identities) gets a random VU target in 10..30, with the
 total capped at `--max-vus` (default 50, max 50); targets re-roll every 60s. Start the
 UI-less supervisor with the Start button or `POST /swarm` on 8089 (the shape then owns VUs).
-Keys are picked 70% primary, 20% related, 10% cooler from 53 keys per cohort. CSV stats
-land in `.runtime/locust_*.csv` and the log in `.runtime/locust.log`.
+Keys are replaced by the endpoint catalogue (`catalogue.py`), built from the real
+Contentful path snapshot in `contentful-cache-paths.json`. Each request picks a weighted
+family and locale (532 entries: 9 families across 26 shop locales plus the Contentful
+spaces, footers and vouchers paths). Shop endpoints (products, categories, search,
+navigation, promotions) make up 25% of traffic. These are mock online-shop endpoints
+on the Skipper route table, which `python3 catalogue.py routes > routes.eskip` renders.
+Stats are named `cohort/family`. CSV stats land in `.runtime/locust_*.csv` and the log
+in `.runtime/locust.log`.
 The run latches stopped on the first identity mismatch (response path, query or echoed
 headers differ) or when more than 5% of at least 50 requests fail. Restart the driver
 to clear the latch. Stop with `./teardown.sh locust`.
@@ -228,7 +150,7 @@ python3 cachectl.py fault valkey down         # scale valkey to 0
 python3 cachectl.py fault valkey up
 python3 cachectl.py load                      # Locust web UI on 127.0.0.1:8089
 python3 cachectl.py check unit                # offline unit tests
-python3 cachectl.py check verify -- --label X --sha Y   # also: tiers, ratio, metrics, coalescing, browser
+python3 cachectl.py check verify -- --label X --sha Y   # also: tiers, ratio, metrics, coalescing
 ```
 
 Run `python3 test_cachectl.py` to check the argument mapping without touching the cluster.

@@ -50,19 +50,9 @@
       },
       {
         "name": "family",
-        "label": "Retail family (origin completions)",
-        "type": "query",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "local-prometheus"
-        },
-        "definition": "label_values(mock_retail_requests_total{job=\"mock-origin\"}, family)",
-        "query": {
-          "query": "label_values(mock_retail_requests_total{job=\"mock-origin\"}, family)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "sort": 1,
+        "label": "Retail family (Skipper route)",
+        "type": "custom",
+        "query": "contentful_footers_direct,contentful_footers_external,contentful_spaces,contentful_vouchers,shop_categories,shop_navigation,shop_products,shop_promotions,shop_search",
         "multi": true,
         "includeAll": true,
         "allValue": ".+",
@@ -79,19 +69,9 @@
       },
       {
         "name": "locale",
-        "label": "Locale (origin completions)",
-        "type": "query",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "local-prometheus"
-        },
-        "definition": "label_values(mock_retail_requests_total{job=\"mock-origin\"}, locale)",
-        "query": {
-          "query": "label_values(mock_retail_requests_total{job=\"mock-origin\"}, locale)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "sort": 1,
+        "label": "Locale (Skipper route)",
+        "type": "custom",
+        "query": "all,cs_CZ,da_DK,de_AT,de_CH,de_DE,de_LU,en_GB,es_ES,et_EE,fi_FI,fr_BE,fr_CH,fr_FR,fr_LU,hr_HR,hu_HU,it_IT,lt_LT,lv_LV,nl_BE,nl_NL,no_NO,pl_PL,ro_RO,sk_SK,sl_SI,sv_SE",
         "multi": true,
         "includeAll": true,
         "allValue": ".+",
@@ -131,17 +111,6 @@
       "type": "link",
       "title": "Cache Operations",
       "url": "/d/cache-performance-local",
-      "includeVars": true,
-      "keepTime": true,
-      "targetBlank": false,
-      "asDropdown": false,
-      "icon": "dashboard",
-      "tags": []
-    },
-    {
-      "type": "link",
-      "title": "Cache Diagnostics",
-      "url": "/d/cache-diagnostics-local",
       "includeVars": true,
       "keepTime": true,
       "targetBlank": false,
@@ -217,7 +186,7 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "**Application owner view** \u2014 which synthetic origin (cms / gateway) is under pressure or disconnected (orange annotations), and the synthetic retail families and locales it served. All family/locale series are **origin completions from all callers**, not client or cache traffic; they carry no origin label, so the origin filter applies only to the origin panels. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero."
+        "content": "**Application owner view** — which synthetic origin (cms / gateway) is under pressure or disconnected (orange annotations), and the synthetic retail families and locales it served. All family/locale series are **Skipper per-route request counts** (`skipper_serve_route_count`, route id `<family>__<locale>`), so they count what Skipper served, cache hits included. They are not origin-only and are not client traffic. The origin filter applies only to the origin panels. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero."
       },
       "id": 1
     },
@@ -251,7 +220,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           },
@@ -396,7 +365,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -500,7 +469,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -604,7 +573,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -708,7 +677,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -797,7 +766,7 @@
     },
     {
       "type": "row",
-      "title": "Synthetic retail taxonomy (origin completions only)",
+      "title": "Retail endpoint taxonomy (Skipper route counter)",
       "collapsed": false,
       "panels": [],
       "gridPos": {
@@ -810,7 +779,7 @@
     },
     {
       "type": "timeseries",
-      "title": "Origin completions by family",
+      "title": "Requests by family",
       "description": "Finite synthetic families. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
       "datasource": {
         "type": "prometheus",
@@ -825,7 +794,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -903,7 +872,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum by (family) (rate(mock_retail_requests_total{job=\"mock-origin\",family=~\"${family:regex}\",locale=~\"${locale:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+          "expr": "sum by (family) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(${family:regex})__(${locale:regex})\"}[$__rate_interval]) and on (instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"^(.+)__.+$\"))",
           "legendFormat": "{{family}}"
         }
       ],
@@ -911,7 +880,7 @@
     },
     {
       "type": "timeseries",
-      "title": "Origin completions by locale",
+      "title": "Requests by locale",
       "description": "Finite synthetic locales. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
       "datasource": {
         "type": "prometheus",
@@ -926,7 +895,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1004,7 +973,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum by (locale) (rate(mock_retail_requests_total{job=\"mock-origin\",family=~\"${family:regex}\",locale=~\"${locale:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+          "expr": "sum by (locale) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(${family:regex})__(${locale:regex})\"}[$__rate_interval]) and on (instance) (up{job=\"skipper-local\"} == 1), \"locale\", \"$1\", \"route\", \"^.+__(.+)$\"))",
           "legendFormat": "{{locale}}"
         }
       ],
@@ -1012,8 +981,8 @@
     },
     {
       "type": "timeseries",
-      "title": "Origin non-2xx completions by family",
-      "description": "Non-2xx origin completions per family and status. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "title": "Non-2xx responses by family",
+      "description": "Non-2xx Skipper responses per family and status (route counter). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -1027,7 +996,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1105,7 +1074,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum by (family, status) (rate(mock_retail_requests_total{job=\"mock-origin\",family=~\"${family:regex}\",locale=~\"${locale:regex}\",status!~\"2..\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+          "expr": "sum by (family, code) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(${family:regex})__(${locale:regex})\",code!~\"2..\"}[$__rate_interval]) and on (instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"^(.+)__.+$\"))",
           "legendFormat": "{{family}} {{status}}"
         }
       ],
@@ -1135,7 +1104,7 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "**Not collected today (deliberately no charts):**\n\n- Client/frontend requests, errors, p95/p99 by family or locale \u2014 family/locale exist only on origin completions.\n- Cache freshness (hit/miss/stale) by family or locale \u2014 cache metrics carry no family/locale labels.\n- Origin latency by family/locale \u2014 the origin latency histogram is labelled by origin only.\n- Origin traffic per caller (nginx vs Skipper) \u2014 the mock origin cannot attribute callers.\n\nAdding any of these needs new, bounded collection; it is not inferred here."
+        "content": "**Not collected today (deliberately no charts):**\n\n- Client/frontend requests, errors, p95/p99 by family or locale — family/locale exist only on Skipper route counts (no latency split).\n- Cache freshness (hit/miss/stale) by family or locale — cache metrics carry no family/locale labels.\n- Origin latency by family/locale — the origin latency histogram is labelled by origin only.\n- Origin traffic per caller (nginx vs Skipper) — the mock origin cannot attribute callers.\n\nAdding any of these needs new, bounded collection; it is not inferred here."
       },
       "id": 13
     }

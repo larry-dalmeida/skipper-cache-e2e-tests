@@ -71,17 +71,6 @@
   "links": [
     {
       "type": "link",
-      "title": "Cache Diagnostics (legacy duplicate; all panels merged here)",
-      "url": "/d/cache-diagnostics-local",
-      "includeVars": true,
-      "keepTime": true,
-      "targetBlank": false,
-      "asDropdown": false,
-      "icon": "dashboard",
-      "tags": []
-    },
-    {
-      "type": "link",
       "title": "Retail Application",
       "url": "/d/retail-application-local",
       "includeVars": true,

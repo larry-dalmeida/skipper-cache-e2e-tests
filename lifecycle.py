@@ -90,13 +90,13 @@ def supervise(commands, probes, name, log_file=None):
             output.close()
 
 
-STOP_TARGETS = ("locust", "traffic", "skipper", "logs", "forwards")
+STOP_TARGETS = ("locust", "traffic", "skipper", "logs", "forwards", "origin")
 
 
 def teardown(names=STOP_TARGETS):
     for name in names:
         if name not in STOP_TARGETS:
-            raise ValueError("Stop target must be locust, traffic, skipper, or forwards")
+            raise ValueError("Stop target must be locust, traffic, skipper, logs, forwards, or origin")
         record = STATE / (name + ".json")
         if not record.exists():
             continue
@@ -156,6 +156,14 @@ if __name__ == "__main__":
         ], ["http://127.0.0.1:3000/api/health", "http://127.0.0.1:8080/get",
             "http://127.0.0.1:9090/-/ready", "http://127.0.0.1:3100/ready",
             "http://127.0.0.1:3200/ready"], "forwards")
+    elif sys.argv[1] == "origin":
+        origin = os.environ.get("MOCK_ORIGIN")
+        if not origin or not Path(origin).is_file():
+            raise RuntimeError("Set MOCK_ORIGIN to the path of mock_origin.py")
+        supervise([[sys.executable, "-u", origin, "--http-port", "8081",
+                     "--control-port", "9091"]],
+                  ["http://127.0.0.1:9091/health", "http://127.0.0.1:8081/"],
+                  "origin", log_file=STATE / "origin.log")
     elif sys.argv[1] == "logs":
         supervise([[sys.executable, "-u", str(ROOT / "log_shipper.py")]],
                   ["http://127.0.0.1:3100/ready"], "logs")

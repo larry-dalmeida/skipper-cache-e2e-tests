@@ -70,6 +70,11 @@ data:
       - job_name: skipper-local
         static_configs:
           - targets: ['host.minikube.internal:9911']
+            labels: {run_id: local}
+      - job_name: mock-origin
+        static_configs:
+          - targets: ['host.minikube.internal:9091']
+            labels: {run_id: local}
 ---
 apiVersion: apps/v1
 kind: Deployment
