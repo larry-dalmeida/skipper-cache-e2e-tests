@@ -7,7 +7,7 @@ from pathlib import Path
 import catalogue
 
 ROUTES_FILE = Path(__file__).resolve().parent / "routes.eskip"
-ROUTE_LINE = re.compile(r'^(\w+): (Path|PathRegexp)\("([^"]*)"\)')
+ROUTE_LINE = re.compile(r'^(\w+): (?:Method\("(\w+)"\) && )?(Path|PathRegexp)\("([^"]*)"\)')
 
 
 def parse_routes(text):
@@ -15,13 +15,16 @@ def parse_routes(text):
     for line in text.splitlines():
         match = ROUTE_LINE.match(line)
         if match:
-            routes.append(match.groups())
+            route_id, method, kind, pattern = match.groups()
+            routes.append((route_id, method or "GET", kind, pattern))
     return routes
 
 
-def matching_route_ids(routes, path):
+def matching_route_ids(routes, path, method="GET"):
     ids = []
-    for route_id, kind, pattern in routes:
+    for route_id, route_method, kind, pattern in routes:
+        if route_method != method:
+            continue
         request_path = path.partition("?")[0]
         if kind == "Path" and request_path == pattern:
             ids.append(route_id)
@@ -48,29 +51,34 @@ class Snapshot(unittest.TestCase):
 
     def test_shop_traffic_is_the_configured_share(self):
         entries = catalogue.build_entries()
-        contentful = sum(e.weight for e in entries if e.family.startswith("contentful_"))
-        shop = sum(e.weight for e in entries if e.family.startswith("shop_"))
-        self.assertAlmostEqual(shop / (contentful + shop), catalogue.SHOP_SHARE)
+        total = sum(e.weight for e in entries)
+        shop = sum(e.weight for e in entries if e.family in catalogue.SHOP_FAMILY_NAMES)
+        extra = sum(e.weight for e in entries if e.family in catalogue.EXTRA_FAMILY_NAMES)
+        self.assertAlmostEqual(shop / total, catalogue.SHOP_SHARE)
+        self.assertAlmostEqual(extra / total, catalogue.EXTRA_SHARE)
 
     def test_shop_endpoints_exist_for_every_footer_locale(self):
         entries = catalogue.build_entries()
         footer_locales = {e.locale for e in entries if e.family == "contentful_footers_direct"}
-        shop_locales = {e.locale for e in entries if e.family.startswith("shop_")}
-        self.assertEqual(footer_locales, shop_locales)
+        for family in catalogue.FAMILIES:
+            if family.scope != "locale":
+                continue
+            locales = {e.locale for e in entries if e.family == family.name}
+            self.assertEqual(locales, footer_locales, family.name)
         self.assertEqual(len(footer_locales), 27)
 
 
 class Routes(unittest.TestCase):
-    def test_every_entry_is_served_by_its_own_route(self):
+    def test_every_entry_is_served_by_exactly_one_route(self):
         entries = catalogue.build_entries()
         routes = parse_routes(catalogue.render_routes(entries))
         for entry in entries:
-            ids = matching_route_ids(routes, entry.path)
-            self.assertIn(entry.route_id, ids, entry.path)
+            ids = matching_route_ids(routes, entry.path, entry.method)
+            self.assertEqual(ids, [entry.route_id], entry.path)
 
     def test_routes_are_unique_per_family_and_locale(self):
         routes = parse_routes(catalogue.render_routes(catalogue.build_entries()))
-        ids = [route_id for route_id, _, _ in routes]
+        ids = [route_id for route_id, _, _, _ in routes]
         self.assertEqual(len(ids), len(set(ids)))
 
     def test_fallback_route_is_first(self):
@@ -94,7 +102,7 @@ class Picking(unittest.TestCase):
     def test_families_lists_every_family_once(self):
         picker = catalogue.Catalogue(catalogue.build_entries())
         self.assertEqual(len(picker.families()), len(set(picker.families())))
-        self.assertEqual(len(picker.families()), 9)
+        self.assertEqual(len(picker.families()), 15)
 
     def test_boost_raises_share_of_boosted_families_only(self):
         entries = [catalogue.Entry("a", "x", "/a", 1.0), catalogue.Entry("b", "x", "/b", 1.0)]

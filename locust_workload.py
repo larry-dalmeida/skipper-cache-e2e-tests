@@ -7,6 +7,8 @@ import json
 import urllib.parse
 from collections import deque
 
+import catalogue
+
 REVISION = 1
 HOST_HEADER = "cache-e2e.local"
 # Synthetic, non-secret token: only needs to be stable so the cache identity is stable.
@@ -59,10 +61,30 @@ def request_headers(cohort):
     }
 
 
-def validate_response(status, body, cohort, entry):
-    """Return None when the response matches the fixture, else a failure category."""
-    if status != 200:
+def expected_status(entry):
+    """Status the origin answers for this entry: 200 unless its ?case= scenario says otherwise."""
+    case = urllib.parse.parse_qs(urllib.parse.urlsplit(entry.path).query).get("case", [None])[0]
+    return catalogue.ORIGIN_CASES.get(case, {}).get("status", 200)
+
+
+def _query_without_case(query):
+    params = urllib.parse.parse_qs(query)
+    params.pop("case", None)
+    return params
+
+
+def validate_response(status, body, cohort, entry, revalidated=False):
+    """Return None when the response matches the fixture, else a failure category.
+
+    revalidated: the request carried If-None-Match, so a 304 with no body is the valid answer.
+    Responses without a fixture body (HEAD, 304, non-200 scenarios) are checked by status only.
+    """
+    if revalidated and status == 304:
+        return None
+    if status != expected_status(entry):
         return "status"
+    if entry.method == "HEAD" or status != 200:
+        return None
     try:
         data = json.loads(body)
     except (TypeError, ValueError):
@@ -72,8 +94,7 @@ def validate_response(status, body, cohort, entry):
     # mock_origin.py answers with a fixture describing the request it actually received.
     expected = urllib.parse.urlsplit(entry.path)
     if data.get("path") != expected.path or \
-            urllib.parse.parse_qs(str(data.get("query", ""))) != \
-            urllib.parse.parse_qs(expected.query):
+            _query_without_case(str(data.get("query", ""))) != _query_without_case(expected.query):
         return "identity"
     if data.get("host") != HOST_HEADER:
         return "identity"

@@ -62,6 +62,39 @@ class Validation(unittest.TestCase):
         body = echo("swr", ENTRY, host="other.local")
         self.assertEqual(wl.validate_response(200, body, "swr", ENTRY), "identity")
 
+    def test_expected_error_scenarios_are_status_checked(self):
+        entry = catalogue.Entry("shop_products", "pl_PL",
+                                "/shop/pl_PL/api/products/sku-missing?case=notfound", 1.0)
+        self.assertEqual(wl.expected_status(entry), 404)
+        self.assertIsNone(wl.validate_response(404, b"", "swr", entry))
+        self.assertEqual(wl.validate_response(200, echo("swr", entry), "swr", entry), "status")
+        broken = catalogue.Entry("shop_products", "pl_PL",
+                                 "/shop/pl_PL/api/products/sku-broken?case=upstream503", 1.0)
+        self.assertIsNone(wl.validate_response(503, b"", "swr", broken))
+
+    def test_case_parameter_is_ignored_for_identity(self):
+        entry = catalogue.Entry("shop_personal", "pl_PL",
+                                "/shop/pl_PL/api/cart?case=private", 1.0)
+        self.assertEqual(wl.expected_status(entry), 200)
+        self.assertIsNone(wl.validate_response(200, echo("swr", entry), "swr", entry))
+
+    def test_head_is_status_only(self):
+        entry = catalogue.Entry("static_head", "all", "/static/js/app.3f2a1c.js", 1.0, "HEAD")
+        self.assertIsNone(wl.validate_response(200, b"", "swr", entry))
+        self.assertEqual(wl.validate_response(404, b"", "swr", entry), "status")
+
+    def test_post_fixture_is_identity_checked(self):
+        entry = catalogue.Entry("shop_mutations", "pl_PL", "/shop/pl_PL/api/cart/items", 1.0,
+                                "POST")
+        self.assertIsNone(wl.validate_response(200, echo("swr", entry), "swr", entry))
+        body = echo("swr", entry, path="/shop/pl_PL/api/cart")
+        self.assertEqual(wl.validate_response(200, body, "swr", entry), "identity")
+
+    def test_not_modified_passes_only_when_revalidated(self):
+        entry = catalogue.Entry("static_assets", "all", "/static/css/main.9b8e7d.css", 1.0)
+        self.assertIsNone(wl.validate_response(304, b"", "swr", entry, revalidated=True))
+        self.assertEqual(wl.validate_response(304, b"", "swr", entry), "status")
+
     def test_failure_category_maps_known_and_unknown(self):
         self.assertIsNone(wl.failure_category(None))
         self.assertEqual(wl.failure_category(Exception("identity")), "identity")

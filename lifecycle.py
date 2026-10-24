@@ -6,9 +6,13 @@ import signal
 import socket
 import subprocess
 import sys
+import threading
 import time
 import urllib.request
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import catalogue  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT / ".runtime"
@@ -93,6 +97,19 @@ def supervise(commands, probes, name, log_file=None):
 STOP_TARGETS = ("locust", "traffic", "skipper", "logs", "forwards", "origin")
 
 
+def apply_origin_cases(control="http://127.0.0.1:9091"):
+    """Register the caching-need scenarios on the mock origin once it is ready."""
+    try:
+        ready(control + "/health", timeout=90)
+        for case, config in catalogue.ORIGIN_CASES.items():
+            body = json.dumps({"case": case, **config}).encode()
+            request = urllib.request.Request(control + "/config", data=body, method="POST",
+                                             headers={"Content-Type": "application/json"})
+            urllib.request.urlopen(request, timeout=5).read()
+    except Exception as error:
+        print(f"origin case configs not applied: {error}", file=sys.stderr)
+
+
 def teardown(names=STOP_TARGETS):
     for name in names:
         if name not in STOP_TARGETS:
@@ -157,9 +174,8 @@ if __name__ == "__main__":
             "http://127.0.0.1:9090/-/ready", "http://127.0.0.1:3100/ready",
             "http://127.0.0.1:3200/ready"], "forwards")
     elif sys.argv[1] == "origin":
-        origin = os.environ.get("MOCK_ORIGIN")
-        if not origin or not Path(origin).is_file():
-            raise RuntimeError("Set MOCK_ORIGIN to the path of mock_origin.py")
+        origin = ROOT / "origin" / "mock_origin.py"
+        threading.Thread(target=apply_origin_cases, daemon=True).start()
         supervise([[sys.executable, "-u", origin, "--http-port", "8081",
                      "--control-port", "9091"]],
                   ["http://127.0.0.1:9091/health", "http://127.0.0.1:8081/"],

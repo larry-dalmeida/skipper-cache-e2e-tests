@@ -4,6 +4,7 @@
 CohortShape drives the swarm endlessly: per-cohort VU targets in 20..150 (total <= --max-vus),
 re-rolled every REFRESH_SECONDS. Stop with `./teardown.sh locust`.
 """
+import json
 import random
 import sys
 import time
@@ -88,6 +89,7 @@ class CacheUser(HttpUser):
             raise StopUser()
         SETTINGS["active"] += 1
         self.counted = True
+        self.etags = {}
 
     def on_stop(self):
         if getattr(self, "counted", False):
@@ -97,15 +99,30 @@ class CacheUser(HttpUser):
     @task
     def fetch_endpoint(self):
         entry = CATALOGUE.pick(random)
-        with self.client.get(entry.path,
-                             name=wl.stat_name(self.cohort, entry.family),
-                             headers=wl.request_headers(self.cohort),
-                             timeout=SETTINGS["timeout"],
-                             catch_response=True) as response:
+        headers = wl.request_headers(self.cohort)
+        revalidated = entry.family in catalogue.CONDITIONAL_FAMILIES and entry.path in self.etags
+        if revalidated:
+            headers["If-None-Match"] = self.etags[entry.path]
+        data = None
+        if entry.method == "POST":
+            headers["Content-Type"] = "application/json"
+            data = json.dumps({"sku": "sku-1001", "quantity": 1})
+        with self.client.request(entry.method, entry.path,
+                                 name=wl.stat_name(self.cohort, entry.family),
+                                 headers=headers, data=data,
+                                 timeout=SETTINGS["timeout"],
+                                 catch_response=True) as response:
             problem = wl.validate_response(response.status_code, response.content,
-                                           self.cohort, entry)
+                                           self.cohort, entry, revalidated)
             if problem is not None:
                 response.failure(problem)
+            else:
+                # Locust marks non-2xx responses as failures unless told otherwise.
+                response.success()
+                if entry.family in catalogue.CONDITIONAL_FAMILIES and response.status_code == 200:
+                    etag = response.headers.get("ETag")
+                    if etag:
+                        self.etags[entry.path] = etag
 
 
 class SwrUser(CacheUser):
