@@ -136,7 +136,7 @@ if __name__ == "__main__":
         supervise([[sys.executable, "-m", "locust", "-f", str(ROOT / "locustfile.py"),
                     "--web-host", "127.0.0.1", "--web-port", "8089",
                     "--host", "http://127.0.0.1:9999", "--stop-timeout", "10",
-                    "--max-vus", "50", "--csv", str(STATE / "locust")]],
+                    "--max-vus", "300", "--csv", str(STATE / "locust")]],
                   ["http://127.0.0.1:8089/"], "locust",
                   log_file=STATE / "locust.log")
     elif sys.argv[1] == "traffic":

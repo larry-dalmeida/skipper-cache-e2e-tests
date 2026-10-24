@@ -96,6 +96,17 @@ class Picking(unittest.TestCase):
         self.assertEqual(len(picker.families()), len(set(picker.families())))
         self.assertEqual(len(picker.families()), 9)
 
+    def test_boost_raises_share_of_boosted_families_only(self):
+        entries = [catalogue.Entry("a", "x", "/a", 1.0), catalogue.Entry("b", "x", "/b", 1.0)]
+        picker = catalogue.Catalogue(entries)
+        picker.set_boost({"a"}, 3)
+        rng = random.Random(5)
+        counts = Counter(picker.pick(rng).family for _ in range(20000))
+        self.assertAlmostEqual(counts["a"] / 20000, 0.75, delta=0.02)
+        picker.set_boost(set(), 1)
+        counts = Counter(picker.pick(rng).family for _ in range(20000))
+        self.assertAlmostEqual(counts["a"] / 20000, 0.5, delta=0.02)
+
 
 if __name__ == "__main__":
     unittest.main()

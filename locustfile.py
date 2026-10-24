@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Locust users for the Skipper cache stack; started by `python3 lifecycle.py locust`.
 
-CohortShape drives the swarm endlessly: per-cohort VU targets in 10..30 (total <= --max-vus),
+CohortShape drives the swarm endlessly: per-cohort VU targets in 20..150 (total <= --max-vus),
 re-rolled every REFRESH_SECONDS. Stop with `./teardown.sh locust`.
 """
 import random
@@ -136,6 +136,7 @@ class CohortShape(LoadTestShape):
         now = time.monotonic()
         if self.targets is None or now >= self.next_roll:
             self.targets = wl.pick_cohort_targets(random, SETTINGS["max_vus"])
+            CATALOGUE.set_boost(wl.pick_hot_families(random, CATALOGUE.families()), wl.HOT_FAMILY_FACTOR)
             self.next_roll = now + wl.REFRESH_SECONDS
             for cohort, user in COHORT_USERS.items():
                 user.weight = self.targets[cohort]

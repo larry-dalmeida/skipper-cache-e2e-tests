@@ -18,11 +18,14 @@ COHORTS = {"swr": "en-US", "hard": "de-DE"}
 MIN_SAMPLES = 50
 MAX_FAILURE_RATIO = 0.05
 HISTORY_LIMIT = 100
-MAX_VUS_CEILING = 50
+MAX_VUS_CEILING = 300
 DEFAULT_MAX_VUS = MAX_VUS_CEILING
 # Per-cohort VU target range, re-rolled every REFRESH_SECONDS.
-COHORT_VU_RANGE = (10, 30)
+COHORT_VU_RANGE = (20, 150)
 REFRESH_SECONDS = 60
+# Each refresh boosts a few random families so they carry a larger share of requests.
+HOT_FAMILY_COUNT = 3
+HOT_FAMILY_FACTOR = 5
 MAX_REQUEST_TIMEOUT = 30.0
 FAILURE_CATEGORIES = ("status", "body", "identity", "exception")
 
@@ -41,6 +44,11 @@ def pick_cohort_targets(rng, ceiling, vu_range=COHORT_VU_RANGE):
         targets = {cohort: rng.randint(low, high) for cohort in COHORTS}
         if sum(targets.values()) <= ceiling:
             return targets
+
+
+def pick_hot_families(rng, families, count=HOT_FAMILY_COUNT):
+    """Random subset of families that receive the hot-route boost for one refresh period."""
+    return set(rng.sample(sorted(families), min(count, len(families))))
 
 
 def request_headers(cohort):

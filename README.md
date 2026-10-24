@@ -114,8 +114,9 @@ python3 -m venv .venv-locust && .venv-locust/bin/pip install -r requirements-loc
 ```
 
 `CohortShape` runs the swarm endlessly (no run time). Each cohort (`en-US`, `de-DE`
-Accept-Language, so two cache identities) gets a random VU target in 10..30, with the
-total capped at `--max-vus` (default 50, max 50); targets re-roll every 60s. Start the
+Accept-Language, so two cache identities) gets a random VU target in 20..150, with the
+total capped at `--max-vus` (default 300, max 300); targets re-roll every 60s. Three random
+families are boosted 5x on each re-roll, so a few routes carry the most traffic. Start the
 UI-less supervisor with the Start button or `POST /swarm` on 8089 (the shape then owns VUs).
 Keys are replaced by the endpoint catalogue (`catalogue.py`), built from the real
 Contentful path snapshot in `contentful-cache-paths.json`. Each request picks a weighted

@@ -69,7 +69,7 @@ class Validation(unittest.TestCase):
 
     def test_options_bounds(self):
         wl.validate_options(5, 0.5, 1.5, 5.0)
-        for args in [(0, 0.5, 1.5, 5.0), (51, 0.5, 1.5, 5.0), (5, 2, 1, 5.0),
+        for args in [(0, 0.5, 1.5, 5.0), (301, 0.5, 1.5, 5.0), (5, 2, 1, 5.0),
                      (5, 0.5, 1.5, 0), (5, 0.5, 1.5, 31)]:
             with self.assertRaises(ValueError):
                 wl.validate_options(*args)
@@ -135,7 +135,7 @@ class CohortTargets(unittest.TestCase):
             targets = wl.pick_cohort_targets(rng, wl.MAX_VUS_CEILING)
             self.assertEqual(set(targets), set(wl.COHORTS))
             for count in targets.values():
-                self.assertTrue(10 <= count <= 30)
+                self.assertTrue(20 <= count <= 150)
             self.assertLessEqual(sum(targets.values()), wl.MAX_VUS_CEILING)
 
     def test_targets_vary_across_draws(self):

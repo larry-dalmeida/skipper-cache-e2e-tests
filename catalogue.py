@@ -90,10 +90,14 @@ class Catalogue:
 
     def __init__(self, entries):
         self.entries = entries
+        self.set_boost(frozenset(), 1)
+
+    def set_boost(self, families, factor):
+        """Multiply the weight of every entry in families by factor (1 restores base weights)."""
         self.cumulative = []
         total = 0.0
-        for entry in entries:
-            total += entry.weight
+        for entry in self.entries:
+            total += entry.weight * (factor if entry.family in families else 1)
             self.cumulative.append(total)
         self.total = total
 
