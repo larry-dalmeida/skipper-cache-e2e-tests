@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Locust users for the Skipper cache stack; started by `python3 lifecycle.py locust`.
 
-CohortShape drives the swarm endlessly: per-cohort VU targets in 20..150 (total <= --max-vus),
-re-rolled every REFRESH_SECONDS. Stop with `./teardown.sh locust`.
+CohortShape drives the swarm: per-cohort VU targets in 20..150 (total <= --max-vus), re-rolled
+every REFRESH_SECONDS. --duration N stops the run after N seconds; 0 (default) runs endlessly.
+Use `python3 lifecycle.py locust <scenario>` for named scenarios from locust_workload.SCENARIOS.
 """
 import json
+import os
 import random
 import sys
 import time
@@ -19,10 +21,11 @@ import catalogue  # noqa: E402
 import locust_workload as wl  # noqa: E402
 
 CATALOGUE = catalogue.Catalogue(catalogue.build_entries())
-GUARD = wl.SafetyGuard()
+# Chaos runs expect origin errors; only the identity trip stays armed there.
+GUARD = wl.SafetyGuard(max_ratio=1.0 if os.environ.get("LOCUST_CHAOS_TOLERANT") else wl.MAX_FAILURE_RATIO)
 LEDGER = wl.WindowLedger()
 SETTINGS = {"active": 0, "max_vus": wl.DEFAULT_MAX_VUS, "wait": (0.5, 1.5),
-            "timeout": 5.0, "environment": None}
+            "timeout": 5.0, "duration": 0, "environment": None}
 STAT_NAMES = {wl.stat_name(cohort, family)
               for cohort in wl.COHORTS for family in CATALOGUE.families()}
 
@@ -35,6 +38,8 @@ def add_arguments(parser):
     group.add_argument("--wait-min", type=float, default=0.5)
     group.add_argument("--wait-max", type=float, default=1.5)
     group.add_argument("--request-timeout", type=float, default=5.0)
+    group.add_argument("--duration", type=float, default=0,
+                       help="stop after this many seconds; 0 runs endlessly")
 
 
 @events.init.add_listener
@@ -43,10 +48,12 @@ def configure(environment, **_):
     try:
         wl.validate_options(options.max_vus, options.wait_min, options.wait_max,
                             options.request_timeout)
+        wl.validate_duration(options.duration)
     except ValueError as error:
         raise SystemExit(f"invalid cache workload options: {error}")
     SETTINGS.update(max_vus=options.max_vus, wait=(options.wait_min, options.wait_max),
-                    timeout=options.request_timeout, environment=environment)
+                    timeout=options.request_timeout, duration=options.duration,
+                    environment=environment)
 
 
 @events.test_start.add_listener
@@ -148,9 +155,14 @@ class CohortShape(LoadTestShape):
         super().__init__()
         self.targets = None
         self.next_roll = 0.0
+        self.started = None
 
     def tick(self):
         now = time.monotonic()
+        if self.started is None:
+            self.started = now
+        if wl.run_expired(now, self.started, SETTINGS["duration"]):
+            return None
         if self.targets is None or now >= self.next_roll:
             self.targets = wl.pick_cohort_targets(random, SETTINGS["max_vus"])
             CATALOGUE.set_boost(wl.pick_hot_families(random, CATALOGUE.families()), wl.HOT_FAMILY_FACTOR)

@@ -182,5 +182,26 @@ class CohortTargets(unittest.TestCase):
             wl.pick_cohort_targets(random.Random(1), 19)
 
 
+class Scenarios(unittest.TestCase):
+    def test_endless_never_expires(self):
+        self.assertFalse(wl.run_expired(10_000.0, 0.0, 0))
+
+    def test_timed_run_expires_at_duration(self):
+        self.assertFalse(wl.run_expired(119.9, 0.0, 120))
+        self.assertTrue(wl.run_expired(120.0, 0.0, 120))
+
+    def test_named_scenarios_are_valid(self):
+        self.assertIn("endless", wl.SCENARIOS)
+        self.assertEqual(wl.SCENARIOS["endless"]["duration"], 0)
+        for name, shape in wl.SCENARIOS.items():
+            with self.subTest(scenario=name):
+                wl.validate_duration(shape["duration"])
+                self.assertTrue(1 <= shape["max_vus"] <= wl.MAX_VUS_CEILING)
+
+    def test_negative_duration_is_rejected(self):
+        with self.assertRaises(ValueError):
+            wl.validate_duration(-1)
+
+
 if __name__ == "__main__":
     unittest.main()

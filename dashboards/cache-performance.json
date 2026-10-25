@@ -94,7 +94,7 @@
     {
       "type": "link",
       "title": "Skipper logs (Loki Explore)",
-      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22acceptance-local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D~%5C%22skipper-a%7Cskipper-b%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D~%5C%22skipper-a%7Cskipper-b%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
       "includeVars": false,
       "keepTime": false,
       "targetBlank": true,
@@ -105,7 +105,7 @@
     {
       "type": "link",
       "title": "Skipper traces (Tempo Explore; Skipper spans only)",
-      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-tempo%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22tempo%22%2C%22uid%22%3A%22acceptance-local-tempo%22%7D%2C%22queryType%22%3A%22traceql%22%2C%22limit%22%3A20%2C%22tableType%22%3A%22traces%22%2C%22query%22%3A%22%7Bresource.service.name%3D~%5C%22skipper-a%7Cskipper-b%5C%22%7D%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22local-tempo%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22tempo%22%2C%22uid%22%3A%22local-tempo%22%7D%2C%22queryType%22%3A%22traceql%22%2C%22limit%22%3A20%2C%22tableType%22%3A%22traces%22%2C%22query%22%3A%22%7Bresource.service.name%3D~%5C%22skipper-a%7Cskipper-b%5C%22%7D%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
       "includeVars": false,
       "keepTime": false,
       "targetBlank": true,
@@ -116,7 +116,7 @@
     {
       "type": "link",
       "title": "Mock origin + nginx logs (Loki Explore; no traces exist)",
-      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22acceptance-local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D~%5C%22mock%7Cnginx%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D~%5C%22mock%7Cnginx%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
       "includeVars": false,
       "keepTime": false,
       "targetBlank": true,
@@ -126,8 +126,8 @@
     },
     {
       "type": "link",
-      "title": "Single-run evidence (run-scoped history)",
-      "url": "/d/retail-local-history",
+      "title": "Retail application (same time window)",
+      "url": "/d/retail-application-local",
       "includeVars": false,
       "keepTime": true,
       "targetBlank": false,
@@ -139,9 +139,9 @@
   "panels": [
     {
       "type": "row",
-      "title": "Client impact and scrape health",
+      "title": "Now (last 1m)",
       "collapsed": false,
-      "id": 1,
+      "id": 43,
       "gridPos": {
         "w": 24,
         "h": 1,
@@ -151,19 +151,383 @@
       "panels": []
     },
     {
-      "type": "text",
-      "title": "Scope",
+      "type": "stat",
+      "title": "Client RPS",
+      "description": "Skipper route requests per second over the last 1m, summed across selected instances.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
       "gridPos": {
-        "w": 24,
-        "h": 3,
+        "w": 4,
+        "h": 4,
         "x": 0,
         "y": 1
       },
-      "options": {
-        "mode": "markdown",
-        "content": "**Cache Operations** \u2014 health, performance and fault diagnostics in incident-priority rows: client impact and scrape health first, then cache effectiveness and all-caller origin, origin/refresh health and resources (expanded); deep storage/eviction, queue/coalescing and instrumentation rows are collapsed below. Family/locale views are in *Retail Application*. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero."
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: no live traffic in the last 1m",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
       },
-      "id": 2
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "Client RPS"
+        }
+      ],
+      "id": 44
+    },
+    {
+      "type": "stat",
+      "title": "Cache hit ratio",
+      "description": "skipper_cache_result_total result=hit as a share of hit+miss+stale over the last 1m.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 4,
+        "h": 4,
+        "x": 4,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "No data: no cache results in the last 1m",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",result=\"hit\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) / (sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",result=~\"hit|miss|stale\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+          "legendFormat": "Hit ratio"
+        }
+      ],
+      "id": 45
+    },
+    {
+      "type": "stat",
+      "title": "Cache miss ratio",
+      "description": "skipper_cache_result_total result=miss as a share of hit+miss+stale over the last 1m.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 4,
+        "h": 4,
+        "x": 8,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "No data: no cache results in the last 1m",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",result=\"miss\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) / (sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",result=~\"hit|miss|stale\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+          "legendFormat": "Miss ratio"
+        }
+      ],
+      "id": 46
+    },
+    {
+      "type": "stat",
+      "title": "Cache stale ratio",
+      "description": "skipper_cache_result_total result=stale as a share of hit+miss+stale over the last 1m.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 4,
+        "h": 4,
+        "x": 12,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "No data: no cache results in the last 1m",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",result=\"stale\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) / (sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",result=~\"hit|miss|stale\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+          "legendFormat": "Stale ratio"
+        }
+      ],
+      "id": 47
+    },
+    {
+      "type": "stat",
+      "title": "Origin offload %",
+      "description": "1 - (origin RPS / client RPS) over the last 1m, clamped to [0,1]. No data when client RPS is 0.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 4,
+        "h": 4,
+        "x": 16,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "No data: no client traffic in the last 1m",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "clamp(1 - (sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)), 0, 1)",
+          "legendFormat": "Origin offload"
+        }
+      ],
+      "id": 48
+    },
+    {
+      "type": "stat",
+      "title": "Origin RPS",
+      "description": "All-caller origin requests per second over the last 1m (mock_origin_requests_total).",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 4,
+        "h": 4,
+        "x": 20,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: no origin traffic in the last 1m",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+          "legendFormat": "Origin RPS"
+        }
+      ],
+      "id": 49
+    },
+    {
+      "type": "row",
+      "title": "Client impact and scrape health",
+      "collapsed": false,
+      "id": 1,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 13
+      },
+      "panels": []
     },
     {
       "type": "stat",
@@ -174,15 +538,15 @@
         "uid": "local-prometheus"
       },
       "gridPos": {
-        "w": 6,
+        "w": 12,
         "h": 4,
         "x": 0,
-        "y": 4
+        "y": 14
       },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           },
@@ -319,15 +683,15 @@
         "uid": "local-prometheus"
       },
       "gridPos": {
-        "w": 6,
+        "w": 12,
         "h": 4,
-        "x": 6,
-        "y": 4
+        "x": 12,
+        "y": 14
       },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           },
@@ -456,296 +820,6 @@
       "id": 4
     },
     {
-      "type": "stat",
-      "title": "Skipper scrape health",
-      "description": "1 = last scrape succeeded, 0 = registered target failing (kept while any target of its run is up). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "local-prometheus"
-      },
-      "gridPos": {
-        "w": 6,
-        "h": 4,
-        "x": 12,
-        "y": 4
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
-          "custom": {
-            "spanNulls": false
-          },
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "gray"
-          },
-          "mappings": [
-            {
-              "type": "value",
-              "options": {
-                "1": {
-                  "text": "OK",
-                  "color": "green"
-                },
-                "0": {
-                  "text": "Error",
-                  "color": "red"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "null+nan",
-                "result": {
-                  "text": "Offline / Unknown",
-                  "color": "gray"
-                }
-              }
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "gray",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "textMode": "value_and_name",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        }
-      },
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "skipper-a:9911",
-            "renamePattern": "Skipper A"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "skipper-b:9911",
-            "renamePattern": "Skipper B"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "\\bcatalogs\\b",
-            "renamePattern": "Catalogs"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "\\bapi\\b",
-            "renamePattern": "Content gateway"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "\\bfooter\\b",
-            "renamePattern": "Retail footer"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "mock:9091",
-            "renamePattern": "Mock origins"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "^cms( |$)",
-            "renamePattern": "CMS HTTPS$1"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "^gateway( |$)",
-            "renamePattern": "Content gateway HTTP$1"
-          }
-        }
-      ],
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "local-prometheus"
-          },
-          "expr": "min by (instance) (up{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
-          "legendFormat": "{{instance}}"
-        }
-      ],
-      "id": 5
-    },
-    {
-      "type": "stat",
-      "title": "Origin scrape health",
-      "description": "1 = last scrape succeeded, 0 = registered target failing (kept while any target of its run is up). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "local-prometheus"
-      },
-      "gridPos": {
-        "w": 6,
-        "h": 4,
-        "x": 18,
-        "y": 4
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
-          "custom": {
-            "spanNulls": false
-          },
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "gray"
-          },
-          "mappings": [
-            {
-              "type": "value",
-              "options": {
-                "1": {
-                  "text": "OK",
-                  "color": "green"
-                },
-                "0": {
-                  "text": "Error",
-                  "color": "red"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "null+nan",
-                "result": {
-                  "text": "Offline / Unknown",
-                  "color": "gray"
-                }
-              }
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "gray",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "textMode": "value_and_name",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        }
-      },
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "skipper-a:9911",
-            "renamePattern": "Skipper A"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "skipper-b:9911",
-            "renamePattern": "Skipper B"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "\\bcatalogs\\b",
-            "renamePattern": "Catalogs"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "\\bapi\\b",
-            "renamePattern": "Content gateway"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "\\bfooter\\b",
-            "renamePattern": "Retail footer"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "mock:9091",
-            "renamePattern": "Mock origins"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "^cms( |$)",
-            "renamePattern": "CMS HTTPS$1"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "^gateway( |$)",
-            "renamePattern": "Content gateway HTTP$1"
-          }
-        }
-      ],
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "local-prometheus"
-          },
-          "expr": "min by (instance) (up{job=\"mock-origin\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
-          "legendFormat": "{{instance}}"
-        }
-      ],
-      "id": 6
-    },
-    {
       "type": "timeseries",
       "title": "Request rate",
       "description": "Requests served by Skipper ingress, per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
@@ -757,12 +831,12 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 8
+        "y": 18
       },
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -858,12 +932,12 @@
         "w": 12,
         "h": 8,
         "x": 12,
-        "y": 8
+        "y": 18
       },
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -959,12 +1033,12 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 16
+        "y": 26
       },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1057,7 +1131,7 @@
         "w": 24,
         "h": 1,
         "x": 0,
-        "y": 24
+        "y": 34
       },
       "panels": []
     },
@@ -1073,12 +1147,12 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 25
+        "y": 35
       },
       "fieldConfig": {
         "defaults": {
           "unit": "percent",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1174,12 +1248,12 @@
         "w": 12,
         "h": 8,
         "x": 12,
-        "y": 25
+        "y": 35
       },
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1275,12 +1349,12 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 33
+        "y": 43
       },
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1376,12 +1450,12 @@
         "w": 12,
         "h": 8,
         "x": 12,
-        "y": 33
+        "y": 43
       },
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1474,15 +1548,15 @@
         "uid": "local-prometheus"
       },
       "gridPos": {
-        "w": 12,
+        "w": 8,
         "h": 8,
         "x": 0,
-        "y": 41
+        "y": 51
       },
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1578,15 +1652,15 @@
         "uid": "local-prometheus"
       },
       "gridPos": {
-        "w": 12,
+        "w": 8,
         "h": 8,
-        "x": 12,
-        "y": 41
+        "x": 8,
+        "y": 51
       },
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1674,6 +1748,51 @@
       "id": 16
     },
     {
+      "type": "timeseries",
+      "title": "Origin offload % over time",
+      "description": "1 - (origin RPS / client RPS), clamped to [0,1]. Same formula as the Origin offload % stat, over $__rate_interval.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 8,
+        "h": 8,
+        "x": 16,
+        "y": 51
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "noValue": "No data: no client traffic in the window",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "clamp(1 - (sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)), 0, 1)",
+          "legendFormat": "Origin offload"
+        }
+      ],
+      "id": 50
+    },
+    {
       "type": "row",
       "title": "Origin latency, errors and refresh health",
       "collapsed": false,
@@ -1682,7 +1801,7 @@
         "w": 24,
         "h": 1,
         "x": 0,
-        "y": 49
+        "y": 59
       },
       "panels": []
     },
@@ -1698,12 +1817,12 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 50
+        "y": 60
       },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1802,12 +1921,12 @@
         "w": 12,
         "h": 8,
         "x": 12,
-        "y": 50
+        "y": 60
       },
       "fieldConfig": {
         "defaults": {
           "unit": "ops",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -1903,12 +2022,12 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 58
+        "y": 68
       },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -2001,7 +2120,7 @@
         "w": 24,
         "h": 1,
         "x": 0,
-        "y": 66
+        "y": 76
       },
       "panels": []
     },
@@ -2017,12 +2136,12 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 67
+        "y": 77
       },
       "fieldConfig": {
         "defaults": {
           "unit": "bytes",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -2118,12 +2237,12 @@
         "w": 12,
         "h": 8,
         "x": 12,
-        "y": 67
+        "y": 77
       },
       "fieldConfig": {
         "defaults": {
           "unit": "cores",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -2219,12 +2338,12 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 75
+        "y": 85
       },
       "fieldConfig": {
         "defaults": {
           "unit": "bytes",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -2320,12 +2439,12 @@
         "w": 12,
         "h": 8,
         "x": 12,
-        "y": 75
+        "y": 85
       },
       "fieldConfig": {
         "defaults": {
           "unit": "bytes",
-          "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+          "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
           "custom": {
             "spanNulls": false
           }
@@ -2418,7 +2537,7 @@
         "w": 24,
         "h": 1,
         "x": 0,
-        "y": 83
+        "y": 93
       },
       "panels": [
         {
@@ -2433,12 +2552,12 @@
             "w": 12,
             "h": 8,
             "x": 0,
-            "y": 84
+            "y": 94
           },
           "fieldConfig": {
             "defaults": {
               "unit": "ops",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -2534,12 +2653,12 @@
             "w": 12,
             "h": 8,
             "x": 12,
-            "y": 84
+            "y": 94
           },
           "fieldConfig": {
             "defaults": {
               "unit": "ops",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -2635,12 +2754,12 @@
             "w": 12,
             "h": 8,
             "x": 0,
-            "y": 92
+            "y": 102
           },
           "fieldConfig": {
             "defaults": {
               "unit": "s",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -2736,12 +2855,12 @@
             "w": 12,
             "h": 8,
             "x": 12,
-            "y": 92
+            "y": 102
           },
           "fieldConfig": {
             "defaults": {
               "unit": "s",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -2837,12 +2956,12 @@
             "w": 12,
             "h": 8,
             "x": 0,
-            "y": 100
+            "y": 110
           },
           "fieldConfig": {
             "defaults": {
               "unit": "ops",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -2938,12 +3057,12 @@
             "w": 12,
             "h": 8,
             "x": 12,
-            "y": 100
+            "y": 110
           },
           "fieldConfig": {
             "defaults": {
               "unit": "bytes",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -3038,7 +3157,7 @@
         "w": 24,
         "h": 1,
         "x": 0,
-        "y": 84
+        "y": 118
       },
       "panels": [
         {
@@ -3053,12 +3172,12 @@
             "w": 12,
             "h": 8,
             "x": 0,
-            "y": 85
+            "y": 119
           },
           "fieldConfig": {
             "defaults": {
               "unit": "short",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -3154,12 +3273,12 @@
             "w": 12,
             "h": 8,
             "x": 12,
-            "y": 85
+            "y": 119
           },
           "fieldConfig": {
             "defaults": {
               "unit": "s",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -3255,12 +3374,12 @@
             "w": 12,
             "h": 8,
             "x": 0,
-            "y": 93
+            "y": 127
           },
           "fieldConfig": {
             "defaults": {
               "unit": "s",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -3356,12 +3475,12 @@
             "w": 12,
             "h": 8,
             "x": 12,
-            "y": 93
+            "y": 127
           },
           "fieldConfig": {
             "defaults": {
               "unit": "ops",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -3456,24 +3575,9 @@
         "w": 24,
         "h": 1,
         "x": 0,
-        "y": 85
+        "y": 135
       },
       "panels": [
-        {
-          "type": "text",
-          "title": "Scope",
-          "gridPos": {
-            "w": 24,
-            "h": 3,
-            "x": 0,
-            "y": 86
-          },
-          "options": {
-            "mode": "markdown",
-            "content": "**Cache engineer view** \u2014 refresh pipeline, coalescing, L1/L2 storage, eviction and the full event inventory, per Skipper instance. Start from *Cache Operations* for impact. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero."
-          },
-          "id": 39
-        },
         {
           "type": "table",
           "title": "Live LOCAL runs (drill down to single-run evidence)",
@@ -3486,15 +3590,15 @@
             "w": 24,
             "h": 6,
             "x": 0,
-            "y": 89
+            "y": 136
           },
           "fieldConfig": {
             "defaults": {
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "links": [
                 {
-                  "title": "Open single-run evidence",
-                  "url": "/d/retail-local-history?var-run_id=${__data.fields.run_id}&var-candidate_sha=${__data.fields.candidate_sha}&var-harness_sha=${__data.fields.harness_sha}&${__url_time_range}"
+                  "title": "Open retail application (same time window)",
+                  "url": "/d/retail-application-local?${__url_time_range}"
                 }
               ]
             },
@@ -3546,12 +3650,12 @@
             "w": 12,
             "h": 8,
             "x": 0,
-            "y": 95
+            "y": 142
           },
           "fieldConfig": {
             "defaults": {
               "unit": "ops",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -3647,12 +3751,12 @@
             "w": 12,
             "h": 8,
             "x": 12,
-            "y": 95
+            "y": 142
           },
           "fieldConfig": {
             "defaults": {
               "unit": "ops",
-              "noValue": "No data: unknown / not exercised / no live target \u2014 never a healthy zero",
+              "noValue": "No data: unknown / not exercised / no live target — never a healthy zero",
               "custom": {
                 "spanNulls": false
               }
@@ -3737,6 +3841,438 @@
           "id": 42
         }
       ]
+    },
+    {
+      "collapsed": false,
+      "id": 51,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 151
+      },
+      "panels": [],
+      "title": "Per-family outcomes, refresh and origin latency (requires skipper-cache-prs build)",
+      "type": "row"
+    },
+    {
+      "type": "timeseries",
+      "title": "Cache outcomes by family",
+      "description": "Cache results (hit, miss, stale, l1_hit, l2_hit where emitted) per endpoint family, from skipper_cache_family_result_total{family, result}. Requires skipper-cache-prs build with bounded metrics. Family is a bounded taxonomy label; no data until that build is running.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 152
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: skipper-cache-prs build with family label not running, or no cache traffic in the window",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (family, result) (rate(skipper_cache_family_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",family!=\"\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{family}} {{result}}"
+        }
+      ],
+      "id": 52
+    },
+    {
+      "type": "timeseries",
+      "title": "Refresh outcomes by family",
+      "description": "Background revalidation/refresh job outcomes per endpoint family, from skipper_cache_family_reval_total{family, outcome}. Covers the stale-and-refresh path by family. Requires skipper-cache-prs build with bounded metrics.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 152
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: skipper-cache-prs build with refresh family label not running, or no refresh jobs in the window",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (family, outcome) (rate(skipper_cache_family_reval_total{job=\"skipper-local\",instance=~\"${instance:regex}\",family!=\"\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{family}} {{outcome}}"
+        }
+      ],
+      "id": 53
+    },
+    {
+      "type": "timeseries",
+      "title": "Origin latency p95 by family",
+      "description": "Skipper-to-origin fetch latency p95 per endpoint family and origin status class, from skipper_cache_origin_duration_seconds_bucket{family, status_class}. Requires skipper-cache-prs build with bounded metrics. Compare with the all-caller origin latency panel above.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 160
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "No data: skipper-cache-prs build with origin latency family histogram not running, or no origin fetches in the window",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "histogram_quantile(0.95, sum by (family, status_class, le) (rate(skipper_cache_origin_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\",family!=\"\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+          "legendFormat": "{{family}} {{status_class}}"
+        }
+      ],
+      "id": 54
+    },
+    {
+      "type": "timeseries",
+      "title": "Origin fetch-to-served ratio",
+      "description": "Origin requests (mock_origin_requests_total, all callers) divided by Skipper served requests (skipper_serve_route_count). Uses existing metrics only. Values near 0 mean the cache serves most traffic; equals 1 - origin offload % when origin RPS is below client RPS.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 160
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "noValue": "No data: no client traffic in the window",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+          "legendFormat": "origin / served"
+        }
+      ],
+      "id": 55
+    },
+    {
+      "collapsed": false,
+      "id": 56,
+      "gridPos": {
+        "w": 24,
+        "h": 1,
+        "x": 0,
+        "y": 168
+      },
+      "panels": [],
+      "title": "Cache-Control, capacity, evictions and warm-up (requires skipper-cache-prs build)",
+      "type": "row"
+    },
+    {
+      "type": "timeseries",
+      "title": "Cache-Control directives",
+      "description": "Rate of Cache-Control directives seen on responses, by cache_control directive, from skipper_cache_origin_cache_control_total{cache_control}. Requires skipper-cache-prs build with bounded metrics.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 8,
+        "h": 8,
+        "x": 0,
+        "y": 169
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "No data: skipper-cache-prs build with Cache-Control counter not running, or no traffic in the window",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (cache_control) (rate(skipper_cache_origin_cache_control_total{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{cache_control}}"
+        }
+      ],
+      "id": 57
+    },
+    {
+      "type": "timeseries",
+      "title": "Cache entries",
+      "description": "Entries held by the cache per instance, from skipper_cache_lru_entries (gauge). Max over series per instance, as with the L1 bytes panels. Requires skipper-cache-prs build with bounded metrics.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 8,
+        "h": 8,
+        "x": 8,
+        "y": 169
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "No data: skipper-cache-prs build with entries gauge not running",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "max by (instance) (skipper_cache_lru_entries{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 58
+    },
+    {
+      "type": "timeseries",
+      "title": "Cache bytes",
+      "description": "Bytes held by the cache per instance, from skipper_cache_lru_bytes (gauge). Max over series per instance, as with the L1 bytes panels. Requires skipper-cache-prs build with bounded metrics.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 8,
+        "h": 8,
+        "x": 16,
+        "y": 169
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "noValue": "No data: skipper-cache-prs build with bytes gauge not running",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "max by (instance) (skipper_cache_lru_bytes{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 59
+    },
+    {
+      "type": "timeseries",
+      "title": "Cache evictions",
+      "description": "Rate of cache evictions per instance, from skipper_custom_total{key=\"cache.lru_eviction\"}. Pair with the entries and bytes panels to see capacity pressure. Requires skipper-cache-prs build with bounded metrics.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 0,
+        "y": 177
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "noValue": "No data: skipper-cache-prs build with evictions counter not running, or no evictions in the window",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"cache.lru_eviction\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 60
+    },
+    {
+      "type": "stat",
+      "title": "Time to First Hit",
+      "description": "Warm-up: how long the cache took to serve its first hit after the Skipper process started.\n\nMath: skipper_cache_first_hit_seconds = timestamp of first cache hit − timestamp of metrics init (seconds). It reads 0 until the first hit.\n\nShown: max per instance. Absent means no data in the selected window. Requires skipper-cache-prs build.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 12,
+        "h": 8,
+        "x": 12,
+        "y": 177
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "No data: no warm-up recorded (skipper-cache-prs build not running, or no warm-up in the window)",
+          "custom": {
+            "spanNulls": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value_and_name",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "max by (instance) (skipper_cache_first_hit_seconds{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "id": 61
     }
   ]
 }

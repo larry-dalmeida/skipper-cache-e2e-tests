@@ -114,6 +114,23 @@ def failure_category(exception):
     return message if message in FAILURE_CATEGORIES else "exception"
 
 
+# Named load shapes. duration is seconds; 0 means endless until stopped.
+SCENARIOS = {
+    "endless": {"duration": 0, "max_vus": MAX_VUS_CEILING},
+    "smoke": {"duration": 120, "max_vus": 60},
+    "soak": {"duration": 1800, "max_vus": MAX_VUS_CEILING},
+}
+
+
+def run_expired(now, started, duration):
+    return duration > 0 and now - started >= duration
+
+
+def validate_duration(duration):
+    if duration < 0:
+        raise ValueError("--duration must be >= 0 (0 means endless)")
+
+
 def validate_options(max_vus, wait_min, wait_max, request_timeout):
     if not 1 <= max_vus <= MAX_VUS_CEILING:
         raise ValueError(f"--max-vus must be 1..{MAX_VUS_CEILING}")

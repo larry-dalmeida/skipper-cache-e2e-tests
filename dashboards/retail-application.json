@@ -132,7 +132,7 @@
     {
       "type": "link",
       "title": "Retail harness probe logs (Loki Explore; trace_id links)",
-      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22acceptance-local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D%5C%22retail-harness%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D%5C%22retail-harness%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
       "includeVars": false,
       "keepTime": false,
       "targetBlank": true,
@@ -143,7 +143,7 @@
     {
       "type": "link",
       "title": "Skipper traces (Tempo Explore; Skipper spans only)",
-      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-tempo%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22tempo%22%2C%22uid%22%3A%22acceptance-local-tempo%22%7D%2C%22queryType%22%3A%22traceql%22%2C%22limit%22%3A20%2C%22tableType%22%3A%22traces%22%2C%22query%22%3A%22%7Bresource.service.name%3D~%5C%22skipper-a%7Cskipper-b%5C%22%7D%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22local-tempo%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22tempo%22%2C%22uid%22%3A%22local-tempo%22%7D%2C%22queryType%22%3A%22traceql%22%2C%22limit%22%3A20%2C%22tableType%22%3A%22traces%22%2C%22query%22%3A%22%7Bresource.service.name%3D~%5C%22skipper-a%7Cskipper-b%5C%22%7D%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
       "includeVars": false,
       "keepTime": false,
       "targetBlank": true,
@@ -154,7 +154,7 @@
     {
       "type": "link",
       "title": "Mock origin + nginx logs (Loki Explore; no traces exist)",
-      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22acceptance-local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22acceptance-local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D~%5C%22mock%7Cnginx%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
+      "url": "/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22local-loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22local-loki%22%7D%2C%22expr%22%3A%22%7Bservice_name%3D~%5C%22mock%7Cnginx%5C%22%7D%22%2C%22queryType%22%3A%22range%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22${__from}%22%2C%22to%22%3A%22${__to}%22%7D%7D%7D",
       "includeVars": false,
       "keepTime": false,
       "targetBlank": true,
@@ -164,8 +164,8 @@
     },
     {
       "type": "link",
-      "title": "Single-run evidence (run-scoped history)",
-      "url": "/d/retail-local-history",
+      "title": "Cache operations (same time window)",
+      "url": "/d/cache-performance-local",
       "includeVars": false,
       "keepTime": true,
       "targetBlank": false,
@@ -1104,7 +1104,7 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "**Not collected today (deliberately no charts):**\n\n- Client/frontend requests, errors, p95/p99 by family or locale — family/locale exist only on Skipper route counts (no latency split).\n- Cache freshness (hit/miss/stale) by family or locale — cache metrics carry no family/locale labels.\n- Origin latency by family/locale — the origin latency histogram is labelled by origin only.\n- Origin traffic per caller (nginx vs Skipper) — the mock origin cannot attribute callers.\n\nAdding any of these needs new, bounded collection; it is not inferred here."
+        "content": "**Still not collected (deliberately no charts):**\n\n- Client/frontend p95/p99 by family or locale — no client timing metric; Skipper route duration has no family split.\n- Errors and latency by locale — no locale label on cache, origin or route metrics.\n- Origin traffic per caller (nginx vs Skipper) — the mock origin cannot attribute callers.\n\nFamily-level cache outcomes, refresh, origin latency, Cache-Control, capacity and warm-up are on the Cache Operations dashboard and need the skipper-cache-prs build with bounded metrics."
       },
       "id": 13
     }

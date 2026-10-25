@@ -83,6 +83,7 @@ metadata:
   namespace: cache-e2e
 spec:
   replicas: 1
+  strategy: {type: Recreate}
   selector:
     matchLabels: {app: prometheus}
   template:
@@ -99,9 +100,12 @@ spec:
             periodSeconds: 2
           volumeMounts:
             - {name: config, mountPath: /etc/prometheus}
+            - {name: data, mountPath: /prometheus}
       volumes:
         - name: config
           configMap: {name: prometheus-config}
+        - name: data
+          persistentVolumeClaim: {claimName: prometheus-data}
 ---
 apiVersion: v1
 kind: Service
@@ -157,6 +161,9 @@ data:
         url: http://tempo:3200
         isDefault: false
         jsonData:
+          # Grafana 11.3 enables TraceQL streaming by default; the streamed search path returns
+          # "unsupported query type: 'traceql'" from the bundled backend. Plain search works.
+          streamingEnabled: {search: false, metrics: false}
           tracesToLogsV2:
             datasourceUid: local-loki
             spanStartTimeShift: "-1m"
@@ -183,7 +190,7 @@ spec:
     spec:
       containers:
         - name: grafana
-          image: grafana/grafana-oss:11.3.0
+          image: grafana/grafana:13.2.4
           ports: [{containerPort: 3000}]
           readinessProbe:
             httpGet: {path: /api/health, port: 3000}
@@ -264,6 +271,7 @@ metadata:
   namespace: cache-e2e
 spec:
   replicas: 1
+  strategy: {type: Recreate}
   selector:
     matchLabels: {app: loki}
   template:
@@ -286,7 +294,7 @@ spec:
         - name: config
           configMap: {name: loki-config}
         - name: data
-          emptyDir: {}
+          persistentVolumeClaim: {claimName: loki-data}
 ---
 apiVersion: v1
 kind: Service
@@ -335,6 +343,7 @@ metadata:
   namespace: cache-e2e
 spec:
   replicas: 1
+  strategy: {type: Recreate}
   selector:
     matchLabels: {app: tempo}
   template:
@@ -348,6 +357,7 @@ spec:
           ports:
             - {containerPort: 3200}
             - {containerPort: 4318}
+            - {containerPort: 9095}
           readinessProbe:
             httpGet: {path: /ready, port: 3200}
             periodSeconds: 2
@@ -359,7 +369,7 @@ spec:
         - name: config
           configMap: {name: tempo-config}
         - name: data
-          emptyDir: {}
+          persistentVolumeClaim: {claimName: tempo-data}
 ---
 apiVersion: v1
 kind: Service
@@ -371,3 +381,4 @@ spec:
   ports:
     - {name: http, port: 3200, targetPort: 3200}
     - {name: otlp-http, port: 4318, targetPort: 4318}
+    - {name: grpc, port: 9095, targetPort: 9095}

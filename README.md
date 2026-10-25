@@ -126,6 +126,12 @@ navigation, promotions) make up 25% of traffic. These are mock online-shop endpo
 on the Skipper route table, which `python3 catalogue.py routes > routes.eskip` renders.
 Stats are named `cohort/family`. CSV stats land in `.runtime/locust_*.csv` and the log
 in `.runtime/locust.log`.
+Each run folder under `results/runs/` gets a `report.md` when it ends (timed or endless,
+including Ctrl-C and `make stop`): summary, top endpoints, failures, exceptions and Grafana
+links for the run's time range. Regenerate one with `make report RUN=results/runs/<dir>`
+or the latest with `make report`. Panel screenshots (full-screen Grafana panel views over
+the run window, via Playwright) go in `results/runs/<dir>/screenshots/` and are embedded
+in the report: `.runtime/venv/bin/python screenshots.py results/runs/<dir>`.
 The run latches stopped on the first identity mismatch (response path, query or echoed
 headers differ) or when more than 5% of at least 50 requests fail. Restart the driver
 to clear the latch. Stop with `./teardown.sh locust`.
@@ -155,6 +161,19 @@ python3 cachectl.py check verify -- --label X --sha Y   # also: tiers, ratio, me
 ```
 
 Run `python3 test_cachectl.py` to check the argument mapping without touching the cluster.
+
+## Timed chaos scenarios
+
+Each runs Locust for a fixed duration with a fault schedule (`chaos.py`), writes `results/runs/<run>/faults.json`, posts Grafana annotations tagged `chaos` and the scenario name, and restores origin 200, valkey up and Skipper running on exit (try/finally). Annotations need Grafana basic auth; the default is `admin:admin`, overridable with `GRAFANA_AUTH=user:pass`.
+
+```sh
+make chaos NAME=origin-stale                  # origin 503 at 60 s, 200 at 150 s (300 s)
+make chaos NAME=valkey-kill                   # valkey scaled to 0 at 90 s, back at 150 s (300 s)
+make chaos NAME=skipper-kill                  # Skipper child PID killed at 90 s, supervise restarts it (300 s)
+make chaos NAME=origin-stale DURATION=90      # shorter run; offsets scale proportionally
+```
+
+`skipper-kill` sends `kill <pid>` to the recorded child PID only. The `skipper` supervisor now respawns a crashed Skipper after 2 s (a behaviour change for `make start`).
 
 ## Stop, switch revision, and validate the harness
 
