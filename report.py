@@ -196,7 +196,10 @@ def screenshots_section(run):
     images = sorted((run / "screenshots").glob("*.png")) if (run / "screenshots").is_dir() else []
     if not images:
         return "No panel screenshots. Run `python3 screenshots.py <run folder>`."
-    return "\n\n".join(f"### {image.stem}\n\n![{image.stem}](screenshots/{image.name})"
+    # GitHub requires full relative path from repo root (this script's parent dir)
+    # run is like .../results/runs/20261025-HHMMSS-scenario
+    run_rel = run.relative_to(run.parents[2])  # Go up 2 levels: runs/ -> results/
+    return "\n\n".join(f"### {image.stem}\n\n![{image.stem}]({run_rel}/screenshots/{image.name})"
                        for image in images)
 
 
