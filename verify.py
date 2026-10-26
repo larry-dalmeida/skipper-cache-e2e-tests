@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""Wire-level checks against Skipper and a go-httpbin origin; no fetch stubs."""
+"""Wire-level checks against Skipper and the harness-controlled Python origin; no fetch stubs."""
 import argparse
 import concurrent.futures
 import datetime
 import json
-import subprocess
 import threading
-import time
 import urllib.parse
 import urllib.request
 import uuid
@@ -18,14 +16,18 @@ def require(condition, message):
         raise AssertionError(message)
 
 
-def origin_count(namespace, since, marker):
-    logs = subprocess.check_output(
-        ["kubectl", "--context", "minikube", "-n", namespace, "logs",
-         "deployment/mock-backend", "--since-time=" + since], text=True,
-        stderr=subprocess.PIPE, timeout=15,
-    )
-    return sum(marker in line and "method=GET" in line and "uri=" in line
-               for line in logs.splitlines())
+def origin_count(control, marker):
+    query = urllib.parse.urlencode({"case": marker})
+    with urllib.request.urlopen(control + "/events?" + query, timeout=15) as response:
+        return json.load(response)["counts"]["total"]
+
+
+def configure(control, marker, **behavior):
+    payload = {"case": marker, "cache_control": "public, max-age=30", **behavior}
+    request = urllib.request.Request(control + "/config", data=json.dumps(payload).encode(),
+                                     headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(request, timeout=15) as response:
+        require(response.status == 200, "origin configuration failed")
 
 
 def fetch(base, path, vary=False):
@@ -34,13 +36,10 @@ def fetch(base, path, vary=False):
         body = json.load(response)
         if vary:
             require(response.headers.get("Vary") == "*", "missing Vary: * header")
-            require(body.get("Vary") == ["*"], "unexpected Vary response body")
-        else:
-            actual = urllib.parse.urlsplit(body["url"])
-            expected = urllib.parse.urlsplit(path)
-            require(actual.path == expected.path, "response path mismatch")
-            require(urllib.parse.parse_qs(actual.query) ==
-                    urllib.parse.parse_qs(expected.query), "response query mismatch")
+        expected = urllib.parse.urlsplit(path)
+        require(body["path"] == expected.path, "response path mismatch")
+        require(urllib.parse.parse_qs(body["query"]) ==
+                urllib.parse.parse_qs(expected.query), "response query mismatch")
         return body
 
 
@@ -62,20 +61,12 @@ def verify(args):
               flush=True)
 
     def count(marker):
-        # Wait for access logs to settle; require repeated stable observations.
-        previous, stable, deadline = None, 0, time.monotonic() + 8
-        while time.monotonic() < deadline:
-            value = origin_count(args.namespace, since, marker)
-            stable = stable + 1 if value == previous else 0
-            if value > 0 and stable >= 3:
-                return value
-            previous = value
-            time.sleep(0.2)
-        raise AssertionError(f"origin logs did not settle (last count={previous})")
+        return origin_count(args.control, marker)
 
     def single():
         marker = run_id + "-single"
-        path = "/get?run=" + marker + "&check=path-query"
+        configure(args.control, marker)
+        path = "/get?case=" + marker + "&check=path-query"
         cold, warm = fetch(args.base, path), fetch(args.base, path)
         calls = count(marker)
         require(cold == warm, "warm response body differs")
@@ -85,7 +76,8 @@ def verify(args):
 
     def burst():
         marker = run_id + "-burst"
-        path = "/delay/1?run=" + marker + "&check=path-query"
+        configure(args.control, marker, delay=1)
+        path = "/delay/1?case=" + marker + "&check=path-query"
         barrier = threading.Barrier(10, timeout=15)
 
         def request(_):
@@ -107,10 +99,10 @@ def verify(args):
 
     def vary():
         marker = run_id + "-vary"
-        path = "/response-headers?Vary=%2A&run=" + marker
+        configure(args.control, marker, vary="*")
+        path = "/response-headers?case=" + marker
         for _ in range(3):
-            body = fetch(args.base, path, vary=True)
-            require(body.get("run") == [marker], "Vary body query mismatch")
+            fetch(args.base, path, vary=True)
         calls = count(marker)
         require(calls == 3, f"origin calls={calls}, expected 3")
         return {"responses": 3, "origin_calls": calls, "http_status": 200}
@@ -129,7 +121,7 @@ def verify(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", default="http://127.0.0.1:9999")
-    parser.add_argument("--namespace", default="cache-e2e")
+    parser.add_argument("--control", default="http://127.0.0.1:9091")
     parser.add_argument("--label", required=True)
     parser.add_argument("--sha", required=True)
     parser.add_argument("--output", default=".runtime/result.json")

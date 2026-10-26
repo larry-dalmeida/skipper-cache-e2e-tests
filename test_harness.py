@@ -19,21 +19,18 @@ _spec.loader.exec_module(verify_metrics)
 class HarnessTests(unittest.TestCase):
     def run_harness(self, fetch=None, count=1):
         output = Path(".runtime/harness-unit-result.json")
-        args = argparse.Namespace(label="unit", sha="unit", namespace="cache-e2e",
+        args = argparse.Namespace(label="unit", sha="unit", control="http://control",
                                   base="http://unused", output=str(output))
 
-        def counts(_namespace, _since, marker):
+        def counts(_control, marker):
             return 3 if marker.endswith("-vary") else count
 
         def response(_base, path, vary=False):
-            if vary:
-                marker = path.split("run=")[1]
-                return {"Vary": ["*"], "run": [marker]}
-            return {"url": path}
+            return {"path": path.split("?")[0], "query": path.split("?")[1]}
 
-        with patch.object(verify, "fetch", side_effect=fetch or response), \
+        with patch.object(verify, "configure"), \
+                patch.object(verify, "fetch", side_effect=fetch or response), \
                 patch.object(verify, "origin_count", side_effect=counts), \
-                patch.object(verify.time, "sleep"), \
                 contextlib.redirect_stdout(io.StringIO()):
             code = verify.verify(args)
         report = json.loads(output.read_text())
@@ -77,7 +74,7 @@ class HarnessTests(unittest.TestCase):
 
         for url in ("/wrong?run=expected", "/get?run=wrong"):
             with patch.object(verify.urllib.request, "urlopen",
-                              return_value=Response(json.dumps({"url": url}).encode())):
+                              return_value=Response(json.dumps({"path": url.split("?")[0], "query": url.split("?")[1]}).encode())):
                 with self.assertRaisesRegex(AssertionError, "mismatch"):
                     verify.fetch("http://unused", "/get?run=expected")
 
@@ -99,6 +96,23 @@ class VerifyMetricsUrls(unittest.TestCase):
     def test_stack_urls_default_without_urls_file(self):
         self.assertEqual(verify_metrics.stack_urls(self.root),
                          {"grafana": "http://127.0.0.1:3000", "prometheus": "http://127.0.0.1:9090"})
+
+
+class OriginControlTests(unittest.TestCase):
+    def test_configuration_sends_real_delay_and_cache_lifetime(self):
+        response = unittest.mock.MagicMock()
+        response.__enter__.return_value.status = 200
+        with patch.object(verify.urllib.request, "urlopen", return_value=response) as fetch:
+            verify.configure("http://control", "unique-case", delay=1, vary="*")
+        payload = json.loads(fetch.call_args[0][0].data)
+        self.assertEqual(payload, {"case": "unique-case", "delay": 1, "vary": "*",
+                                   "cache_control": "public, max-age=30"})
+
+    def test_counter_uses_filtered_control_events(self):
+        response = io.BytesIO(b'{"counts":{"total":3}}')
+        with patch.object(verify.urllib.request, "urlopen", return_value=response) as fetch:
+            self.assertEqual(verify.origin_count("http://control", "unique-case"), 3)
+        self.assertEqual(fetch.call_args[0][0], "http://control/events?case=unique-case")
 
 
 if __name__ == "__main__":
