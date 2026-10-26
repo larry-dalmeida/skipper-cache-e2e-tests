@@ -176,6 +176,18 @@ class SafetyGuard:
         return True
 
 
+# report.py finds this marker in locust.log to flag runs the guard aborted.
+GUARD_TRIP_MARKER = "safety guard latched"
+
+
+def guard_trip_message(reason, method, name, url, body, limit=300):
+    """One log line naming the request that latched the guard and what came back."""
+    if isinstance(body, bytes):
+        body = body.decode("utf-8", "replace")
+    body = " ".join(str(body or "").split())[:limit]
+    return f"{GUARD_TRIP_MARKER} ({reason}) by {method} {name} {url}; response: {body}; stopping run"
+
+
 class WindowLedger:
     """Bounded per-window history plus lifetime totals; old windows are counted, not kept."""
 

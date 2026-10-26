@@ -308,6 +308,9 @@ def run_locust(scenario, shape=None, chaos=None):
     finally:
         finish_run(run)
     print(f"results: {run}", flush=True)
+    trip = report.guard_trip(run)
+    if trip is not None:
+        raise SystemExit(f"run aborted early: {trip}")
 
 
 def run_chaos(name, duration=None):

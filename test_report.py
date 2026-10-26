@@ -4,8 +4,10 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import lifecycle
+import locust_workload as wl
 import report
 
 HERE = Path(__file__).resolve().parent
@@ -122,7 +124,7 @@ class Grafana(Scratch):
         shots.mkdir()
         (shots / "cache-performance-cache-hit-ratio.png").write_bytes(b"png")
         text = report.render(run, grafana=None)
-        self.assertIn("![cache-performance-cache-hit-ratio](screenshots/cache-performance-cache-hit-ratio.png)", text)
+        self.assertIn("![cache-performance-cache-hit-ratio](./screenshots/cache-performance-cache-hit-ratio.png)", text)
 
     def test_missing_screenshots_note(self):
         text = report.render(make_run(self.root), grafana=None)
@@ -156,6 +158,50 @@ class Table(unittest.TestCase):
         self.assertIsNone(report.number("N/A"))
         self.assertIsNone(report.number(""))
         self.assertEqual(report.number("2.5"), 2.5)
+
+
+TRIP_LINE = (f"{wl.GUARD_TRIP_MARKER} (identity mismatch) by GET swr/contentful_spaces "
+             "http://127.0.0.1:9999/spaces/x; response: {\"language\": \"de-DE\"}; stopping run")
+LOCUST_LOG = ("[2026-10-26 16:30:59,604] host/INFO/locust.runners: Shape test starting.\n"
+              f"[2026-10-26 16:30:59,650] host/ERROR/root: {TRIP_LINE}\n"
+              "[2026-10-26 16:30:59,656] host/INFO/locust.main: --run-time limit reached, shutting down\n")
+
+
+class GuardTrip(Scratch):
+    def test_guard_trip_is_reported_as_aborted(self):
+        run = make_run(self.root, {"locust.log": LOCUST_LOG})
+        self.assertEqual(report.guard_trip(run), TRIP_LINE)
+        self.assertIn(f"- **Aborted:** `{TRIP_LINE}`", report.render(run))
+
+    def test_clean_or_missing_log_is_not_aborted(self):
+        run = make_run(self.root, {"locust.log": "[x] host/INFO/locust.main: Starting Locust\n"})
+        self.assertIsNone(report.guard_trip(run))
+        self.assertNotIn("Aborted", report.render(run))
+        (run / "locust.log").unlink()
+        self.assertIsNone(report.guard_trip(run))
+
+    def run_locust(self, log_text):
+        def fake_locust(command, **_):
+            run = Path(command[command.index("--csv") + 1]).parent
+            (run / "locust.log").write_text(log_text)
+
+        with patch.object(lifecycle, "ROOT", self.root), patch.object(lifecycle, "STATE", self.root), \
+                patch.object(lifecycle.urllib.request, "urlopen"), \
+                patch.object(lifecycle.subprocess, "check_output", return_value="abc1234\n"), \
+                patch.object(lifecycle.subprocess, "run", side_effect=fake_locust), \
+                patch.object(lifecycle.shutil, "which", return_value=None), \
+                patch.object(lifecycle, "grafana_base", return_value=None), \
+                contextlib.redirect_stdout(io.StringIO()):
+            lifecycle.run_locust("smoke")
+
+    def test_run_locust_fails_when_guard_aborted_the_run(self):
+        with self.assertRaisesRegex(SystemExit, "run aborted early: safety guard latched"):
+            self.run_locust(LOCUST_LOG)
+        (run,) = (self.root / "results" / "runs").iterdir()
+        self.assertIn("**Aborted:**", (run / "report.md").read_text())
+
+    def test_run_locust_succeeds_without_guard_trip(self):
+        self.run_locust("[x] host/INFO/locust.main: Shutting down (exit code 0)\n")
 
 
 class FinishRun(Scratch):

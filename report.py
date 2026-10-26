@@ -8,6 +8,8 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+import locust_workload as wl
+
 DASHBOARDS = (("Cache Operations", "cache-performance-local"),
               ("Retail Application", "retail-application-local"))
 TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
@@ -149,6 +151,19 @@ def exceptions_section(run):
     return text
 
 
+def guard_trip(run):
+    """The safety-guard line from run/locust.log when the guard stopped the run early, else None."""
+    try:
+        lines = (run / "locust.log").read_text(errors="replace").splitlines()
+    except OSError:
+        return None
+    for line in lines:
+        index = line.find(wl.GUARD_TRIP_MARKER)
+        if index >= 0:
+            return line[index:]
+    return None
+
+
 def faults_section(run):
     """Fault timeline from run/faults.json, written by chaos runs; empty when absent."""
     path = run / "faults.json"
@@ -224,6 +239,11 @@ def render(run, grafana=None):
         f"- **Max VUs:** {max_vus if max_vus is not None else 'not recorded'}",
         f"- **cache-e2e commit:** {meta.get('cache_e2e_commit', 'not recorded')}",
         f"- **Skipper SHA:** {meta.get('skipper_sha', 'not recorded')}",
+    ]
+    trip = guard_trip(run)
+    if trip is not None:
+        lines.append(f"- **Aborted:** `{trip}`")
+    lines += [
         "", "## Summary", "", summary_section(aggregated),
         "", "## Endpoints", "", endpoints_section(rows),
         "", "## Failures", "", failures_section(run),

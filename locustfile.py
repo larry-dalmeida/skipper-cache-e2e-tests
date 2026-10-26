@@ -6,6 +6,7 @@ every REFRESH_SECONDS. --duration N stops the run after N seconds; 0 (default) r
 Use `python3 lifecycle.py locust <scenario>` for named scenarios from locust_workload.SCENARIOS.
 """
 import json
+import logging
 import os
 import random
 import sys
@@ -79,8 +80,11 @@ def close_window(environment, **_):
 
 
 @events.request.add_listener
-def record_outcome(exception=None, **_):
+def record_outcome(request_type=None, name=None, url=None, response=None, exception=None, **_):
     if GUARD.record(wl.failure_category(exception)):
+        # Locust then logs "--run-time limit reached"; this line says why the run really stopped.
+        logging.error(wl.guard_trip_message(GUARD.latched, request_type, name, url,
+                                            getattr(response, "content", None)))
         gevent.spawn(SETTINGS["environment"].runner.stop)
 
 

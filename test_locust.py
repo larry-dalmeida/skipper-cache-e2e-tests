@@ -142,6 +142,20 @@ class Guard(unittest.TestCase):
             self.assertFalse(guard.record(None))
         self.assertIsNone(guard.latched)
 
+    def test_trip_message_names_request_and_response(self):
+        body = b'{"path": "/spaces/x",\n "language": "de-DE"}' + b"x" * 400
+        message = wl.guard_trip_message("identity mismatch", "GET", "swr/contentful_spaces",
+                                        "http://127.0.0.1:9999/spaces/x", body)
+        self.assertTrue(message.startswith(f"{wl.GUARD_TRIP_MARKER} (identity mismatch) by GET "
+                                           "swr/contentful_spaces http://127.0.0.1:9999/spaces/x"))
+        self.assertIn('response: {"path": "/spaces/x", "language": "de-DE"}', message)
+        self.assertNotIn("\n", message)
+        self.assertLess(len(message), 450)
+
+    def test_trip_message_without_response_body(self):
+        message = wl.guard_trip_message("failure ratio", "GET", "hard/x", None, None)
+        self.assertIn("(failure ratio) by GET hard/x None; response: ;", message)
+
 
 class Ledger(unittest.TestCase):
     def test_window_totals_and_history_bound(self):
