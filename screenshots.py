@@ -26,6 +26,12 @@ PANELS = (
     ("cache-performance-local", 19, "refresh-errors", "Refresh errors / dropped jobs"),
     ("cache-performance-local", 7, "request-rate", "Request rate"),
     ("cache-performance-local", 61, "time-to-first-hit", "Time to First Hit"),
+    ("cache-performance-local", 58, "cache-entries", "Cache entries"),
+    ("cache-performance-local", 59, "cache-bytes-vs-capacity", "Cache bytes vs capacity"),
+    ("cache-performance-local", 52, "cache-outcomes-by-family", "Cache outcomes by family"),
+    ("cache-performance-local", 53, "refresh-outcomes-by-family", "Refresh outcomes by family"),
+    ("cache-performance-local", 54, "origin-latency-p95-by-family", "Origin latency p95 by family"),
+    ("cache-performance-local", 57, "cache-control-directives", "Cache-Control directives"),
     ("retail-application-local", 5, "retail-origin-responses", "Origin responses by origin and status"),
     ("retail-application-local", 7, "retail-non-2xx", "Non-2xx responses by origin"),
 )

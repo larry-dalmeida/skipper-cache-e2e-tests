@@ -1,0 +1,11 @@
+{
+  "scenario": "smoke",
+  "duration_seconds": 120,
+  "max_vus": 60,
+  "started": "2026-10-26T14:55:13+0100",
+  "started_ms": 1793022913911,
+  "cache_e2e_commit": "c00a804",
+  "skipper_sha": "bda674b0d1574461a30317b2cd154543baa60f65",
+  "ended": "2026-10-26T14:57:22+0100",
+  "ended_ms": 1793023042714
+}

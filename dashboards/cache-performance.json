@@ -4129,8 +4129,8 @@
     },
     {
       "type": "timeseries",
-      "title": "Cache bytes",
-      "description": "Bytes held by the cache per instance, from skipper_cache_lru_bytes (gauge). Max over series per instance, as with the L1 bytes panels. Requires skipper-cache-prs build with bounded metrics.",
+      "title": "Cache bytes vs capacity",
+      "description": "Bytes held by the cache per instance, from skipper_cache_lru_bytes (gauge), against the configured L1 (LRU) limit from skipper_cache_lru_capacity_bytes (gauge, legend \"capacity\"). Max over series per instance, as with the L1 bytes panels. Requires skipper-cache-prs build with bounded metrics.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -4166,6 +4166,15 @@
           },
           "expr": "max by (instance) (skipper_cache_lru_bytes{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
           "legendFormat": "{{instance}}"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "max by (instance) (skipper_cache_lru_capacity_bytes{job=\"skipper-local\",instance=~\"${instance:regex}\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "capacity"
         }
       ],
       "id": 59
