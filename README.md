@@ -143,11 +143,24 @@ The dashboards are **Cache Operations** (`cache-performance-local`) and
 `dashboards/`; `make stack` reapplies the ConfigMap using server-side apply
 (the dashboard payload exceeds client-side annotation limits).
 
-The metric verifier executes every dashboard PromQL expression directly and
-through Grafana. Standalone runs retry required queries for up to 45s each;
-`make verify` uses `--wait-seconds 0` after the two-minute smoke warm-up, so
-unexercised panels fail immediately rather than adding minutes of empty retries.
-Empty/nonfinite required panels fail; optional unexercised panels are reported as `NOT EXERCISED`, never synthesized as zero.
+The metric verifier expands dashboard variables from their All/default selections
+and resolves Grafana time macros before querying both Prometheus and Grafana.
+Standalone runs retry required queries for up to 45s each; `make verify` uses
+`--wait-seconds 0 --scenario smoke` after the two-minute smoke warm-up.
+Histogram p95 panels pass when at least one series is finite (inactive buckets
+can yield NaN); missing/all-NaN panels and failed/down scrapes still fail.
+Other query types require every returned series to be finite.
+
+Only **Refresh errors / dropped jobs** and **Cache evictions** may be absent
+(`NOT EXERCISED`) during smoke. The explicit scenario allowlists are in
+`verify-metrics.py`; `--scenario origin-stale` requires refresh-error samples,
+while `--scenario strict` requires every panel. A present nonfinite sample is
+never excused by the missing-event allowlist. The former blanket optional-panel
+metadata exemption is not used. Query errors always fail.
+
+Error-rate dashboard panels show zero only when an actual live traffic series
+exists for that origin/family. They never substitute `vector(0)` for missing
+traffic or unavailable targets. Positive error rates remain visible.
 
 ## Workloads and reports
 

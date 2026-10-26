@@ -125,7 +125,7 @@ def verify():
         failures.append(str(error))
     sha = (STATE / "skipper.sha").read_text().strip()
     for script, extra, output in (("verify.py", ["--label", "coalescing"], "coalescing.json"),
-                                  ("verify-metrics.py", ["--wait-seconds", "0"], "metrics.json")):
+                                  ("verify-metrics.py", ["--wait-seconds", "0", "--scenario", "smoke"], "metrics.json")):
         result = subprocess.run([sys.executable, script, "--sha", sha, *extra,
                                  "--output", str(folder / output)], cwd=ROOT)
         if result.returncode:

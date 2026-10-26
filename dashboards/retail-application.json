@@ -663,7 +663,7 @@
     {
       "type": "timeseries",
       "title": "Origin non-2xx/304 responses by origin",
-      "description": "Aggregate origin, ALL callers (nginx, Skipper A and B, background refresh): the mock origin cannot attribute requests to a caller, so this is an adjacent context panel, not a Skipper-only overlay. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "description": "Aggregate origin, ALL callers (nginx, Skipper A and B, background refresh): the mock origin cannot attribute requests to a caller, so this is an adjacent context panel, not a Skipper-only overlay. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero. Zero error rates are derived only from an observed, live traffic series for the same origin/family; absent traffic or a down scrape target remains unknown.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -758,7 +758,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum by (origin, status) (rate(mock_origin_requests_total{job=\"mock-origin\",origin=~\"${origin:regex}\",status!~\"2..|304\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+          "expr": "sum by (origin, status) (rate(mock_origin_requests_total{job=\"mock-origin\",origin=~\"${origin:regex}\",status!~\"2..|304\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) or on (origin) (0 * sum by (origin) (rate(mock_origin_requests_total{job=\"mock-origin\",origin=~\"${origin:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)))",
           "legendFormat": "{{origin}} {{status}}"
         }
       ],
@@ -982,7 +982,7 @@
     {
       "type": "timeseries",
       "title": "Non-2xx responses by family",
-      "description": "Non-2xx Skipper responses per family and status (route counter). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "description": "Non-2xx Skipper responses per family and status (route counter). LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero. Zero error rates are derived only from an observed, live traffic series for the same origin/family; absent traffic or a down scrape target remains unknown.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -1074,8 +1074,8 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum by (family, code) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(${family:regex})__(${locale:regex})\",code!~\"2..\"}[$__rate_interval]) and on (instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"^(.+)__.+$\"))",
-          "legendFormat": "{{family}} {{status}}"
+          "expr": "sum by (family, code) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(${family:regex})__(${locale:regex})\",code!~\"2..\"}[$__rate_interval]) and on (instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"^(.+)__.+$\")) or on (family) (0 * sum by (family) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(${family:regex})__(${locale:regex})\"}[$__rate_interval]) and on (instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"^(.+)__.+$\")))",
+          "legendFormat": "{{family}} {{code}}"
         }
       ],
       "id": 11
