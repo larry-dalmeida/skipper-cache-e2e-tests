@@ -103,6 +103,125 @@ additions. #4364 alone still produces ten origin calls and `coalesce_error`
 on the cold burst. This is an expected negative control, not proof of a
 metrics regression. No combined revision is used in the recorded results.
 
+## Manual E2E testing: all commands
+
+All commands must use `.runtime/venv/bin/python` (not system Python). The stack must be running first.
+Run each scenario or chaos test in a separate terminal; keep supervisors in the foreground.
+
+### Setup and verification
+
+```bash
+# Build and verify Python venv (includes Locust)
+make venv
+
+# Start the full stack (Grafana, Loki, Tempo, Prometheus, Skipper supervision)
+# Set SKIPPER_CHECKOUT to your clean Skipper revision first
+export SKIPPER_CHECKOUT=/path/to/clean/skipper
+make start
+
+# Verify stack health (shows live port forwarding and Grafana login)
+.runtime/venv/bin/python lifecycle.py urls
+```
+
+### Run load test scenarios (timed)
+
+Each scenario runs for a fixed duration (except `endless`), auto-saves results to
+`results/runs/YYYYMMDD-HHMMSS-SCENARIO/`, and generates a report with Grafana screenshots.
+
+```bash
+# Individual scenarios (replace SCENARIO with one of: smoke, origin-stale, valkey-kill, skipper-kill, soak)
+.runtime/venv/bin/python lifecycle.py locust smoke          # 10 min, baseline
+.runtime/venv/bin/python lifecycle.py locust origin-stale   # 10 min, origin chaos included
+.runtime/venv/bin/python lifecycle.py locust valkey-kill    # 10 min, valkey chaos included
+.runtime/venv/bin/python lifecycle.py locust skipper-kill   # 10 min, skipper chaos included
+.runtime/venv/bin/python lifecycle.py locust soak           # 30 min, extended load
+.runtime/venv/bin/python lifecycle.py locust endless        # runs until Ctrl+C (no time limit)
+
+# Or use make (equivalent):
+make load SCENARIO=smoke
+make load SCENARIO=soak
+make load SCENARIO=endless
+```
+
+### Run chaos tests (fault injection)
+
+These inject faults (kill origin, Valkey, or Skipper) while load runs. Run in a separate terminal
+alongside a `make load` session. Chaos tests run for a fixed duration (default 300 s), with faults
+scheduled mid-run and restored on exit.
+
+```bash
+# Fault injection scenarios
+.runtime/venv/bin/python lifecycle.py chaos origin-stale    # origin 503 at 60 s, 200 at 150 s (300 s total)
+.runtime/venv/bin/python lifecycle.py chaos valkey-kill     # valkey scaled to 0 at 90 s, back at 150 s (300 s)
+.runtime/venv/bin/python lifecycle.py chaos skipper-kill    # Skipper child PID killed at 90 s, auto-restarted (300 s)
+
+# Custom duration (offsets scale proportionally):
+make chaos NAME=origin-stale DURATION=120
+make chaos NAME=valkey-kill DURATION=90
+```
+
+### Generate reports and view results
+
+Reports include metrics summary, top endpoints, failures, exceptions and full-screen Grafana panel
+screenshots (via Playwright) embedded in the report markdown.
+
+```bash
+# Generate report for the latest run:
+.runtime/venv/bin/python lifecycle.py report
+
+# Generate report for a specific run:
+.runtime/venv/bin/python lifecycle.py report results/runs/20261025-232247-endless/
+
+# List all completed runs:
+.runtime/venv/bin/python lifecycle.py runs
+
+# Manually capture Grafana panel screenshots for a run:
+.runtime/venv/bin/python screenshots.py results/runs/20261025-232247-endless/
+```
+
+### Full E2E suite (all scenarios sequentially)
+
+Run all scenarios in order (takes ~2 hours):
+
+```bash
+for scenario in smoke origin-stale valkey-kill skipper-kill soak; do
+  .runtime/venv/bin/python lifecycle.py locust $scenario
+done
+```
+
+Or use the single-entry-point wrapper:
+
+```bash
+python3 cachectl.py load
+```
+
+### Cleanup
+
+Stop Skipper supervision, port-forwards, and stack resources:
+
+```bash
+.runtime/venv/bin/python lifecycle.py stop   # or Ctrl+C in the make start terminal
+make stop
+```
+
+### Load test behavior and metrics
+
+**Endpoints:** Keys are built from a real Contentful catalogue snapshot (`contentful-cache-paths.json`).
+Each request picks a weighted family and locale (532 entries: 9 families across 26 shop locales plus
+spaces, footers, vouchers). Shop endpoints (products, categories, search, navigation, promotions) make
+up 25% of traffic.
+
+**Virtual users:** `CohortShape` runs endlessly (no time limit on `endless`; timed scenarios set
+`duration` in `locust_workload.py`). Each cohort (one per locale; `en-US`, `de-DE`) gets a random
+VU target in 20..150, total capped at 300; targets re-roll every 60 s. Three random families are
+boosted 5x on each re-roll.
+
+**Stats:** Named `cohort/family`. CSV stats (`locust_*.csv`) and logs (`locust.log`) go in
+`.runtime/` and `results/runs/<dir>/`.
+
+**Latch:** Run stops on the first response mismatch (path, query, or echoed headers differ) or when
+>5% of ≥50 requests fail. Restart `lifecycle.py` to clear the latch.
+
 ## Interactive Locust load (optional)
 
 Requires a running Skipper (`lifecycle.py skipper`). Locust is pinned in
