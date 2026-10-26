@@ -1,12 +1,19 @@
 import argparse
 import contextlib
+import importlib.util
 import io
 import json
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
 import verify
+
+HERE = Path(__file__).resolve().parent
+_spec = importlib.util.spec_from_file_location("verify_metrics", HERE / "verify-metrics.py")
+verify_metrics = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(verify_metrics)
 
 
 class HarnessTests(unittest.TestCase):
@@ -73,6 +80,25 @@ class HarnessTests(unittest.TestCase):
                               return_value=Response(json.dumps({"url": url}).encode())):
                 with self.assertRaisesRegex(AssertionError, "mismatch"):
                     verify.fetch("http://unused", "/get?run=expected")
+
+
+class VerifyMetricsUrls(unittest.TestCase):
+    def setUp(self):
+        scratch = tempfile.TemporaryDirectory(dir=HERE / ".runtime")
+        self.addCleanup(scratch.cleanup)
+        self.root = Path(scratch.name)
+
+    def test_stack_urls_come_from_runtime_urls_file(self):
+        (self.root / ".runtime").mkdir()
+        (self.root / ".runtime" / "urls.txt").write_text(
+            "grafana: http://127.0.0.1:55853/\nprometheus: http://127.0.0.1:55854\n"
+            "cache-operations: http://127.0.0.1:55853/d/cache-performance-local/cache-operations\n")
+        self.assertEqual(verify_metrics.stack_urls(self.root),
+                         {"grafana": "http://127.0.0.1:55853", "prometheus": "http://127.0.0.1:55854"})
+
+    def test_stack_urls_default_without_urls_file(self):
+        self.assertEqual(verify_metrics.stack_urls(self.root),
+                         {"grafana": "http://127.0.0.1:3000", "prometheus": "http://127.0.0.1:9090"})
 
 
 if __name__ == "__main__":

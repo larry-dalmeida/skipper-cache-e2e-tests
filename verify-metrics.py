@@ -15,17 +15,31 @@ def get(url):
         return json.load(response)
 
 
+def stack_urls(root):
+    """Grafana and Prometheus base URLs: `.runtime/urls.txt` (minikube service ports) when present."""
+    urls = {"grafana": "http://127.0.0.1:3000", "prometheus": "http://127.0.0.1:9090"}
+    path = root / ".runtime" / "urls.txt"
+    if path.exists():
+        for line in path.read_text().splitlines():
+            label, _, url = line.partition(":")
+            if label.strip() in urls and url.strip():
+                urls[label.strip()] = url.strip().rstrip("/")
+    return urls
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sha", required=True, help="Exact running Skipper source SHA")
     parser.add_argument("--output", default=".runtime/metrics.json")
     args = parser.parse_args()
     root = Path(__file__).resolve().parent
+    urls = stack_urls(root)
+    grafana, prometheus = urls["grafana"], urls["prometheus"]
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     panels = [panel for path in sorted((root / "dashboards").glob("*.json"))
               for panel in json.loads(path.read_text())["panels"]]
-    datasources = [d for d in get("http://127.0.0.1:3000/api/datasources")
+    datasources = [d for d in get(grafana + "/api/datasources")
                    if d["type"] == "prometheus"]
     if len(datasources) != 1:
         raise SystemExit("Expected one local Prometheus datasource")
@@ -39,8 +53,8 @@ if __name__ == "__main__":
             optional = panel["fieldConfig"]["defaults"].get("noValue") == "Not exercised / no samples"
             while True:
                 query = urllib.parse.urlencode({"query": expr})
-                direct = get("http://127.0.0.1:9090/api/v1/query?" + query)
-                proxy = get("http://127.0.0.1:3000/api/datasources/proxy/uid/" +
+                direct = get(prometheus + "/api/v1/query?" + query)
+                proxy = get(grafana + "/api/datasources/proxy/uid/" +
                             uid + "/api/v1/query?" + query)
                 if direct.get("status") != "success" or proxy.get("status") != "success":
                     raise SystemExit(f"Query failed: {expr}")
@@ -71,7 +85,7 @@ if __name__ == "__main__":
     flat_query = urllib.parse.urlencode({
         "query": 'skipper_custom_total{job="skipper-local",key=~"cache\\\\.(hit|miss|stale|l2_get_error|l2_set_fallback|coalesce_error|coalesce_bypass_error|reval_error|reval_dropped|lru_eviction|lru_oversized)"}'})
     report["flat_counter_samples"] = get(
-        "http://127.0.0.1:9090/api/v1/query?" + flat_query)["data"]["result"]
+        prometheus + "/api/v1/query?" + flat_query)["data"]["result"]
     expected_keys = {"cache." + key for key in (
         "hit", "miss", "stale", "l2_get_error", "l2_set_fallback",
         "coalesce_error", "coalesce_bypass_error", "reval_error", "reval_dropped",
@@ -80,7 +94,7 @@ if __name__ == "__main__":
     report["absent_flat_counters_not_exercised"] = sorted(expected_keys - observed_keys)
     label_query = urllib.parse.urlencode({
         "query": 'skipper_cache_result_total{job="skipper-local",instance=~".*"}'})
-    labels = get("http://127.0.0.1:9090/api/v1/query?" + label_query)["data"]["result"]
+    labels = get(prometheus + "/api/v1/query?" + label_query)["data"]["result"]
     report["observed_result_code_classes"] = [
         {"result": sample["metric"]["result"],
          "code_class": sample["metric"]["code_class"]}
