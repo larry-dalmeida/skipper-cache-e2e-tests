@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
-minikube status >/dev/null
+minikube status --profile minikube >/dev/null
 kubectl --context minikube apply -f - <<'YAML'
 apiVersion: v1
 kind: Namespace
@@ -10,7 +10,7 @@ metadata:
 YAML
 kubectl --context minikube -n cache-e2e create configmap cache-dashboard \
   --from-file=dashboards/ --dry-run=client -o yaml |
-  kubectl --context minikube apply -f -
+  kubectl --context minikube apply --server-side --force-conflicts -f -
 kubectl --context minikube apply -f storage.yaml
 kubectl --context minikube apply -f stack.yaml
 for deployment in mock-backend valkey prometheus grafana loki tempo; do

@@ -293,7 +293,7 @@ def run_locust(scenario, shape=None, chaos=None):
                 worker.start()
             try:
                 env = dict(os.environ, LOCUST_CHAOS_TOLERANT="1") if chaos else None
-                subprocess.run(wrapped + ["--headless", "--duration", str(shape["duration"])],
+                result = subprocess.run(wrapped + ["--headless", "--duration", str(shape["duration"])],
                                cwd=ROOT, check=False, env=env)
             finally:
                 if worker:
@@ -311,6 +311,9 @@ def run_locust(scenario, shape=None, chaos=None):
     trip = report.guard_trip(run)
     if trip is not None:
         raise SystemExit(f"run aborted early: {trip}")
+    if shape["duration"] and result.returncode and not chaos:
+        raise SystemExit(f"Locust exited {result.returncode}; see {run}")
+    return run
 
 
 def run_chaos(name, duration=None):
@@ -408,7 +411,7 @@ if __name__ == "__main__":
             lambda: ready("http://127.0.0.1:8080/get"))
     elif sys.argv[1] == "ui":
         keep_alive("ui", [
-            (label, ["minikube", "service", label, "-n", "cache-e2e", "--url"])
+            (label, ["minikube", "service", label, "--profile", "minikube", "-n", "cache-e2e", "--url"])
             for label, _ in UI_SERVICES], ui_ready)
     elif sys.argv[1] == "urls":
         print((STATE / "urls.txt").read_text(), end="")

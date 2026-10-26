@@ -31,7 +31,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sha", required=True, help="Exact running Skipper source SHA")
     parser.add_argument("--output", default=".runtime/metrics.json")
+    parser.add_argument("--wait-seconds", type=float, default=45,
+                        help="Retry window per required query; 0 for an already-warmed smoke run")
     args = parser.parse_args()
+    if not math.isfinite(args.wait_seconds) or args.wait_seconds < 0:
+        parser.error("--wait-seconds must be finite and nonnegative")
     root = Path(__file__).resolve().parent
     urls = stack_urls(root)
     grafana, prometheus = urls["grafana"], urls["prometheus"]
@@ -49,7 +53,7 @@ if __name__ == "__main__":
         for target in panel.get("targets", []):
             expr = (target["expr"].replace("${instance:regex}", ".*")
                     .replace("$__rate_interval", "1m"))
-            deadline = time.monotonic() + 45
+            deadline = time.monotonic() + args.wait_seconds
             optional = panel["fieldConfig"]["defaults"].get("noValue") == "Not exercised / no samples"
             while True:
                 query = urllib.parse.urlencode({"query": expr})

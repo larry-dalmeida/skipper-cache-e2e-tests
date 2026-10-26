@@ -180,10 +180,11 @@ class GuardTrip(Scratch):
         (run / "locust.log").unlink()
         self.assertIsNone(report.guard_trip(run))
 
-    def run_locust(self, log_text):
+    def run_locust(self, log_text, returncode=0):
         def fake_locust(command, **_):
             run = Path(command[command.index("--csv") + 1]).parent
             (run / "locust.log").write_text(log_text)
+            return lifecycle.subprocess.CompletedProcess(command, returncode)
 
         with patch.object(lifecycle, "ROOT", self.root), patch.object(lifecycle, "STATE", self.root), \
                 patch.object(lifecycle.urllib.request, "urlopen"), \
@@ -199,6 +200,10 @@ class GuardTrip(Scratch):
             self.run_locust(LOCUST_LOG)
         (run,) = (self.root / "results" / "runs").iterdir()
         self.assertIn("**Aborted:**", (run / "report.md").read_text())
+
+    def test_run_locust_propagates_process_failure(self):
+        with self.assertRaisesRegex(SystemExit, "Locust exited 2"):
+            self.run_locust("startup failed", returncode=2)
 
     def test_run_locust_succeeds_without_guard_trip(self):
         self.run_locust("[x] host/INFO/locust.main: Shutting down (exit code 0)\n")
