@@ -162,6 +162,15 @@ Error-rate dashboard panels show zero only when an actual live traffic series
 exists for that origin/family. They never substitute `vector(0)` for missing
 traffic or unavailable targets. Positive error rates remain visible.
 
+The route-labelled cache build exports `skipper_cache_route_result_total` and
+`skipper_cache_route_reval_total`; origin duration uses the `route` label on
+`skipper_cache_origin_duration_seconds`. The route-family panels derive their
+display grouping with `label_replace` from `<family>__<variant>` route IDs.
+Revalidation retains the `outcome` dimension, including `failed` for origin
+HTTP 5xx, transport errors and store failures. After origin-stale chaos, inspect
+`skipper_cache_route_reval_total{outcome="failed"}` in Prometheus or raw Skipper
+metrics; it must increase during the fault, not just show `started`/`success`.
+
 ## Workloads and reports
 
 `make load SCENARIO=smoke` runs for 2 minutes; `SCENARIO=soak` for 30 minutes;

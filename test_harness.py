@@ -188,6 +188,33 @@ class VerifyMetricQueries(unittest.TestCase):
         self.assertEqual(verify_metrics.sample_status('sum(m)', [], False), 'FAIL')
         self.assertEqual(verify_metrics.sample_status('sum(m)', self.samples('NaN'), True), 'FAIL')
 
+    def test_route_cache_panels_use_route_metrics_and_derive_display_family(self):
+        dashboard = json.loads((HERE / 'dashboards/cache-performance.json').read_text())
+        panels = {panel['id']: panel for panel in dashboard['panels']}
+        expected = {52: 'skipper_cache_route_result_total',
+                    53: 'skipper_cache_route_reval_total',
+                    54: 'skipper_cache_origin_duration_seconds_bucket'}
+        for panel_id, metric in expected.items():
+            expression = verify_metrics.expand_query(panels[panel_id]['targets'][0]['expr'],
+                                                     verify_metrics.dashboard_variables(dashboard))
+            self.assertIn(metric, expression)
+            self.assertIn('label_replace(', expression)
+            self.assertIn('"route", "(.+?)__.*"', expression)
+            self.assertNotIn('family!=', expression)
+
+    def test_route_refresh_outcomes_include_failed_samples(self):
+        dashboard = json.loads((HERE / 'dashboards/cache-performance.json').read_text())
+        panel = next(panel for panel in dashboard['panels'] if panel['id'] == 53)
+        expression = verify_metrics.expand_query(panel['targets'][0]['expr'],
+                                                 verify_metrics.dashboard_variables(dashboard))
+        self.assertIn('sum by (family, outcome)', expression)
+        self.assertNotIn('outcome=', expression)
+        failed = [{"metric": {"route": "contentful_spaces__all", "outcome": "failed"},
+                   "value": [0, "3"]}]
+        self.assertEqual(verify_metrics.query_status(expression,
+            {"status": "success", "data": {"result": failed}},
+            {"status": "success", "data": {"result": failed}})[0], 'PASS')
+
     def test_error_panels_zero_only_from_real_observed_traffic(self):
         dashboard = json.loads((HERE / 'dashboards/retail-application.json').read_text())
         for panel in dashboard['panels']:
