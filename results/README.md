@@ -40,6 +40,8 @@ Each report includes:
 | **Valkey Kill** | [report.md](runs/20261025-201721-valkey-kill/report.md) | 20:17–20:22 UTC | Hit ratio degradation, L1/L2 cache split, origin offload during cache loss |
 | **Skipper Kill** | [report.md](runs/20261025-202222-skipper-kill/report.md) | 20:22–20:27 UTC | Recovery after Skipper restart, error spike during downtime, rapid stabilization |
 | **Soak (30m)** | [report.md](runs/20261025-202723-soak/report.md) | 20:27–20:57 UTC | Extended load behavior, sustained hit rates, minimal errors, steady origin latency |
+| **Smoke** (Skipper `bda674b0`) | [report.md](runs/20261026-145513-smoke/report.md) | 26 Oct 14:55–14:57 local | Request rate, origin latency p95, per-family outcomes/refresh/latency, first hit, L1 entries and bytes vs capacity, Cache-Control directives |
+| **Origin Stale** (Skipper `bda674b0`) | [report.md](runs/20261026-152311-origin-stale/report.md) | 26 Oct 15:23–15:28 local | Hit/miss/stale rate and origin responses by status across the 503 window (15:24:11–15:25:41); refresh errors stayed empty |
 
 ## Sample Panel Screenshots
 

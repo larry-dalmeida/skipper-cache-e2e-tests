@@ -1,0 +1,11 @@
+{
+  "scenario": "origin-stale",
+  "duration_seconds": 300,
+  "max_vus": 300,
+  "started": "2026-10-26T15:23:11+0100",
+  "started_ms": 1793024591582,
+  "cache_e2e_commit": "b39ae50",
+  "skipper_sha": "bda674b0d1574461a30317b2cd154543baa60f65",
+  "ended": "2026-10-26T15:28:13+0100",
+  "ended_ms": 1793024893073
+}

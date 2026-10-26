@@ -250,7 +250,8 @@ including Ctrl-C and `make stop`): summary, top endpoints, failures, exceptions 
 links for the run's time range. Regenerate one with `make report RUN=results/runs/<dir>`
 or the latest with `make report`. Panel screenshots (full-screen Grafana panel views over
 the run window, via Playwright) go in `results/runs/<dir>/screenshots/` and are embedded
-in the report: `.runtime/venv/bin/python screenshots.py results/runs/<dir>`.
+in the report: `.runtime/venv/bin/python screenshots.py results/runs/<dir>`. Add `--only <slug>...`
+to recapture selected panels, or `--height <px>` for panels whose legend is cut off.
 The run latches stopped on the first identity mismatch (response path, query or echoed
 headers differ) or when more than 5% of at least 50 requests fail. Restart the driver
 to clear the latch. Stop with `./teardown.sh locust`.

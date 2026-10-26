@@ -1,0 +1,29 @@
+{
+  "scenario": "origin-stale",
+  "duration_seconds": 300,
+  "run_started_ms": 1793024591582,
+  "run_ended_ms": 1793024893073,
+  "faults": [
+    {
+      "action": "origin-503",
+      "scheduled_offset": 60,
+      "actual_epoch_ms": 1793024651589,
+      "ended_epoch_ms": 1793024741585,
+      "detail": "origin default case status 503"
+    },
+    {
+      "action": "origin-200",
+      "scheduled_offset": 150,
+      "actual_epoch_ms": 1793024741585,
+      "ended_epoch_ms": 1793024741585,
+      "detail": "origin default case status 200"
+    },
+    {
+      "action": "restore",
+      "scheduled_offset": null,
+      "actual_epoch_ms": 1793024892911,
+      "ended_epoch_ms": 1793024892911,
+      "detail": "origin: origin default case status 200; valkey: valkey up"
+    }
+  ]
+}

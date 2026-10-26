@@ -1,0 +1,22 @@
+[2026-10-26 15:23:11,997] ZALANDO-71039/INFO/locust.main: Starting Locust 2.34.0
+[2026-10-26 15:23:11,998] ZALANDO-71039/WARNING/locust.main: Python 3.9 support is deprecated and will be removed soon
+[2026-10-26 15:23:12,000] ZALANDO-71039/INFO/locust.runners: Shape test starting.
+[2026-10-26 15:23:12,001] ZALANDO-71039/INFO/locust.runners: Shape worker starting
+[2026-10-26 15:23:12,001] ZALANDO-71039/INFO/locust.runners: Shape test updating to 140 users at 10.00 spawn rate
+[2026-10-26 15:23:12,001] ZALANDO-71039/INFO/locust.runners: Ramping to 140 users at a rate of 10.00 per second
+[2026-10-26 15:23:25,032] ZALANDO-71039/INFO/locust.runners: All users spawned: {"HardUser": 36, "SwrUser": 104} (140 total users)
+[2026-10-26 15:24:12,174] ZALANDO-71039/INFO/locust.runners: Shape test updating to 212 users at 10.00 spawn rate
+[2026-10-26 15:24:12,175] ZALANDO-71039/INFO/locust.runners: Ramping to 212 users at a rate of 10.00 per second
+[2026-10-26 15:24:19,189] ZALANDO-71039/INFO/locust.runners: All users spawned: {"HardUser": 55, "SwrUser": 157} (212 total users)
+[2026-10-26 15:25:12,316] ZALANDO-71039/INFO/locust.runners: Shape test updating to 181 users at 10.00 spawn rate
+[2026-10-26 15:25:12,317] ZALANDO-71039/INFO/locust.runners: Ramping to 181 users at a rate of 10.00 per second
+[2026-10-26 15:25:15,323] ZALANDO-71039/INFO/locust.runners: All users spawned: {"HardUser": 47, "SwrUser": 134} (181 total users)
+[2026-10-26 15:26:12,480] ZALANDO-71039/INFO/locust.runners: Shape test updating to 197 users at 10.00 spawn rate
+[2026-10-26 15:26:12,481] ZALANDO-71039/INFO/locust.runners: Ramping to 197 users at a rate of 10.00 per second
+[2026-10-26 15:26:13,483] ZALANDO-71039/INFO/locust.runners: All users spawned: {"HardUser": 51, "SwrUser": 146} (197 total users)
+[2026-10-26 15:27:12,640] ZALANDO-71039/INFO/locust.runners: Shape test updating to 134 users at 10.00 spawn rate
+[2026-10-26 15:27:12,641] ZALANDO-71039/INFO/locust.runners: Ramping to 134 users at a rate of 10.00 per second
+[2026-10-26 15:27:18,657] ZALANDO-71039/INFO/locust.runners: All users spawned: {"HardUser": 34, "SwrUser": 100} (134 total users)
+[2026-10-26 15:28:12,831] ZALANDO-71039/INFO/locust.runners: Shape test stopping
+[2026-10-26 15:28:12,868] ZALANDO-71039/INFO/locust.main: --run-time limit reached, shutting down
+[2026-10-26 15:28:12,868] ZALANDO-71039/INFO/locust.main: Shutting down (exit code 1)
