@@ -146,8 +146,8 @@ The dashboards are **Cache Operations** (`cache-performance-local`) and
 The metric verifier executes every dashboard PromQL expression directly and
 through Grafana. Standalone runs retry required queries for up to 45s each;
 `make verify` uses `--wait-seconds 0` after the two-minute smoke warm-up, so
-unexercised panels fail immediately rather than adding minutes of empty retries. Empty/nonfinite required panels fail; optional unexercised
-panels are reported as `NOT EXERCISED`, never synthesized as zero.
+unexercised panels fail immediately rather than adding minutes of empty retries.
+Empty/nonfinite required panels fail; optional unexercised panels are reported as `NOT EXERCISED`, never synthesized as zero.
 
 ## Workloads and reports
 

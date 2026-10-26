@@ -100,6 +100,29 @@ class BootstrapTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "Missing prerequisite: python3"):
                 bootstrap.prerequisites("checkout")
 
+    def test_go_toolchain_must_meet_checkout_directive(self):
+        (self.state / "go.mod").write_text("module skipper\ngo 1.27.3\n")
+        with patch.object(bootstrap.shutil, "which", return_value="available"),                 patch.object(bootstrap.subprocess, "check_output", side_effect=["", "go1.26.5"]):
+            with self.assertRaisesRegex(RuntimeError, "requires Go >= 1.27.3"):
+                bootstrap.prerequisites(self.state)
+
+    def test_dirty_checkout_rejected_before_startup(self):
+        (self.state / "go.mod").write_text("module skipper\ngo 1.27.3\n")
+        with patch.object(bootstrap.shutil, "which", return_value="available"),                 patch.object(bootstrap.subprocess, "check_output", return_value=" M file.go"):
+            with self.assertRaisesRegex(RuntimeError, "checkout must be clean"):
+                bootstrap.prerequisites(self.state)
+
+    def test_setup_starts_only_a_stopped_minikube_profile(self):
+        for status in (0, 1):
+            with self.subTest(status=status),                     patch.object(bootstrap.sys, "argv", ["bootstrap.py", "setup", "--checkout", "checkout"]),                     patch.object(bootstrap.sys, "prefix", str(self.state / "venv")),                     patch.object(bootstrap, "prerequisites", return_value=Path("checkout")),                     patch.object(bootstrap.subprocess, "run") as probe,                     patch.object(bootstrap, "run") as execute,                     patch.object(bootstrap, "start") as start:
+                probe.return_value.returncode = status
+                bootstrap.main()
+                expected = [call(["make", "venv"]), call(["bash", "start-stack.sh"])]
+                if status:
+                    expected.insert(0, call(["minikube", "start", "--profile", "minikube", "--keep-context"]))
+                self.assertEqual(execute.call_args_list, expected)
+                start.assert_called_once_with(Path("checkout"))
+
     def test_verification_runs_both_checks_and_reports_failure(self):
         (self.state / "skipper.sha").write_text("exact-sha\n")
         with patch.object(bootstrap.lifecycle, "run_locust", return_value=self.state), \

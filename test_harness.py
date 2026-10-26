@@ -3,6 +3,8 @@ import contextlib
 import importlib.util
 import io
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -92,6 +94,14 @@ class VerifyMetricsUrls(unittest.TestCase):
             "cache-operations: http://127.0.0.1:55853/d/cache-performance-local/cache-operations\n")
         self.assertEqual(verify_metrics.stack_urls(self.root),
                          {"grafana": "http://127.0.0.1:55853", "prometheus": "http://127.0.0.1:55854"})
+
+    def test_invalid_retry_window_rejected_before_network_access(self):
+        for window in ("-1", "nan", "inf"):
+            result = subprocess.run([sys.executable, str(HERE / "verify-metrics.py"),
+                                     "--sha", "unit", "--wait-seconds", window],
+                                    text=True, capture_output=True)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("must be finite and nonnegative", result.stderr)
 
     def test_stack_urls_default_without_urls_file(self):
         self.assertEqual(verify_metrics.stack_urls(self.root),
