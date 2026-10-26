@@ -87,7 +87,7 @@ Long-running baseline for stability verification:
 
 ## Observability Setup
 
-- **Grafana 13.2.4:** Uses TraceQL search with `streamingEnabled.search: false` (no 500 errors)
+- **Grafana 13.2.4:** TraceQL search enabled for trace queries
 - **Prometheus:** Scrapes Skipper metrics from `:9911/metrics`; resolves all dashboard expressions
 - **Loki:** Receives Skipper and harness logs; queries work via dashboard
 - **Tempo:** Receives Skipper OTel exports; trace links functional

@@ -73,47 +73,47 @@ Time range: `from=1792955540816` to `to=1792955841604` (epoch ms). The base URL 
 
 ### cache-performance-cache-hit-ratio
 
-![cache-performance-cache-hit-ratio](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-cache-hit-ratio.png)
+![cache-performance-cache-hit-ratio](./screenshots/cache-performance-cache-hit-ratio.png)
 
 ### cache-performance-hit-miss-stale-rate
 
-![cache-performance-hit-miss-stale-rate](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-hit-miss-stale-rate.png)
+![cache-performance-hit-miss-stale-rate](./screenshots/cache-performance-hit-miss-stale-rate.png)
 
 ### cache-performance-l1-l2-hit-rate
 
-![cache-performance-l1-l2-hit-rate](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-l1-l2-hit-rate.png)
+![cache-performance-l1-l2-hit-rate](./screenshots/cache-performance-l1-l2-hit-rate.png)
 
 ### cache-performance-origin-latency-p95
 
-![cache-performance-origin-latency-p95](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-origin-latency-p95.png)
+![cache-performance-origin-latency-p95](./screenshots/cache-performance-origin-latency-p95.png)
 
 ### cache-performance-origin-offload
 
-![cache-performance-origin-offload](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-origin-offload.png)
+![cache-performance-origin-offload](./screenshots/cache-performance-origin-offload.png)
 
 ### cache-performance-origin-responses-status
 
-![cache-performance-origin-responses-status](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-origin-responses-status.png)
+![cache-performance-origin-responses-status](./screenshots/cache-performance-origin-responses-status.png)
 
 ### cache-performance-refresh-errors
 
-![cache-performance-refresh-errors](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-refresh-errors.png)
+![cache-performance-refresh-errors](./screenshots/cache-performance-refresh-errors.png)
 
 ### cache-performance-request-rate
 
-![cache-performance-request-rate](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-request-rate.png)
+![cache-performance-request-rate](./screenshots/cache-performance-request-rate.png)
 
 ### cache-performance-time-to-first-hit
 
-![cache-performance-time-to-first-hit](results/runs/20261025-201220-origin-stale/screenshots/cache-performance-time-to-first-hit.png)
+![cache-performance-time-to-first-hit](./screenshots/cache-performance-time-to-first-hit.png)
 
 ### retail-application-retail-non-2xx
 
-![retail-application-retail-non-2xx](results/runs/20261025-201220-origin-stale/screenshots/retail-application-retail-non-2xx.png)
+![retail-application-retail-non-2xx](./screenshots/retail-application-retail-non-2xx.png)
 
 ### retail-application-retail-origin-responses
 
-![retail-application-retail-origin-responses](results/runs/20261025-201220-origin-stale/screenshots/retail-application-retail-origin-responses.png)
+![retail-application-retail-origin-responses](./screenshots/retail-application-retail-origin-responses.png)
 
 ## Fault timeline
 
