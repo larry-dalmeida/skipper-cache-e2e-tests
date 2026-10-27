@@ -1,0 +1,866 @@
+{
+  "skipper_sha": "d767f6362226c6260e4288120e21136a3102cb26",
+  "before_failed_total": 0,
+  "after_failed_total": 155.0,
+  "failed_increase": 155.0,
+  "routes_with_failed_increase": 77,
+  "failed_increase_by_route": {
+    "contentful_footers_direct__cs_CZ": 2.0,
+    "contentful_footers_direct__de_AT": 2.0,
+    "contentful_footers_direct__de_CH": 1.0,
+    "contentful_footers_direct__de_DE": 2.0,
+    "contentful_footers_direct__es_ES": 2.0,
+    "contentful_footers_direct__fr_FR": 2.0,
+    "contentful_footers_direct__it_IT": 2.0,
+    "contentful_footers_direct__nl_BE": 2.0,
+    "contentful_footers_direct__nl_NL": 1.0,
+    "contentful_footers_direct__pl_PL": 2.0,
+    "contentful_footers_direct__ro_RO": 2.0,
+    "contentful_footers_direct__sv_SE": 1.0,
+    "contentful_footers_external__da_DK": 1.0,
+    "contentful_footers_external__de_CH": 1.0,
+    "contentful_footers_external__de_DE": 2.0,
+    "contentful_footers_external__es_ES": 1.0,
+    "contentful_footers_external__fr_FR": 1.0,
+    "contentful_footers_external__it_IT": 1.0,
+    "contentful_footers_external__nl_BE": 1.0,
+    "contentful_footers_external__nl_NL": 1.0,
+    "contentful_footers_external__pl_PL": 2.0,
+    "contentful_footers_external__ro_RO": 1.0,
+    "contentful_spaces__all": 4.0,
+    "contentful_vouchers__cs_CZ": 2.0,
+    "contentful_vouchers__de_AT": 1.0,
+    "contentful_vouchers__de_CH": 1.0,
+    "contentful_vouchers__de_DE": 2.0,
+    "contentful_vouchers__es_ES": 1.0,
+    "contentful_vouchers__fr_FR": 2.0,
+    "contentful_vouchers__it_IT": 2.0,
+    "contentful_vouchers__lt_LT": 1.0,
+    "contentful_vouchers__nl_NL": 1.0,
+    "contentful_vouchers__pl_PL": 2.0,
+    "shop_categories__cs_CZ": 1.0,
+    "shop_categories__de_DE": 2.0,
+    "shop_categories__es_ES": 1.0,
+    "shop_categories__fr_FR": 3.0,
+    "shop_categories__it_IT": 1.0,
+    "shop_categories__nl_NL": 1.0,
+    "shop_categories__pl_PL": 3.0,
+    "shop_images__all": 5.0,
+    "shop_navigation__cs_CZ": 2.0,
+    "shop_navigation__da_DK": 1.0,
+    "shop_navigation__de_CH": 1.0,
+    "shop_navigation__de_DE": 2.0,
+    "shop_navigation__es_ES": 2.0,
+    "shop_navigation__it_IT": 2.0,
+    "shop_navigation__nl_BE": 1.0,
+    "shop_navigation__pl_PL": 2.0,
+    "shop_navigation__sv_SE": 1.0,
+    "shop_products__cs_CZ": 6.0,
+    "shop_products__de_AT": 1.0,
+    "shop_products__de_CH": 1.0,
+    "shop_products__de_DE": 3.0,
+    "shop_products__es_ES": 5.0,
+    "shop_products__fr_FR": 6.0,
+    "shop_products__it_IT": 7.0,
+    "shop_products__nl_NL": 4.0,
+    "shop_products__pl_PL": 4.0,
+    "shop_promotions__cs_CZ": 1.0,
+    "shop_promotions__de_AT": 1.0,
+    "shop_promotions__de_CH": 1.0,
+    "shop_promotions__de_DE": 2.0,
+    "shop_promotions__fr_FR": 1.0,
+    "shop_promotions__it_IT": 1.0,
+    "shop_promotions__nl_BE": 1.0,
+    "shop_search__de_AT": 1.0,
+    "shop_search__de_DE": 3.0,
+    "shop_search__es_ES": 1.0,
+    "shop_search__fr_FR": 1.0,
+    "shop_search__it_IT": 1.0,
+    "shop_search__lt_LT": 1.0,
+    "shop_search__nl_BE": 1.0,
+    "shop_search__pl_PL": 5.0,
+    "site_meta__all": 2.0,
+    "static_assets__all": 7.0,
+    "static_head__all": 4.0
+  },
+  "prometheus_query": "sum by (route, outcome) (increase(skipper_cache_route_reval_total{outcome=\"failed\"}[5m]))",
+  "prometheus_time": 1793044283.227,
+  "prometheus_result": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__de_CH"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__de_DE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__pl_PL"
+          },
+          "value": [
+            1793044283.227,
+            "1.0400618721001362"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__de_DE"
+          },
+          "value": [
+            1793044283.227,
+            "1.0400618721001362"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__nl_BE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_spaces__all"
+          },
+          "value": [
+            1793044283.227,
+            "1.0400618721001362"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__de_AT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_categories__fr_FR"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_categories__it_IT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__cs_CZ"
+          },
+          "value": [
+            1793044283.227,
+            "2.0801237442002725"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__de_CH"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__de_DE"
+          },
+          "value": [
+            1793044283.227,
+            "2.0801237442002725"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__es_ES"
+          },
+          "value": [
+            1793044283.227,
+            "1.0400618721001362"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__fr_FR"
+          },
+          "value": [
+            1793044283.227,
+            "3.1201856163004087"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__it_IT"
+          },
+          "value": [
+            1793044283.227,
+            "5.200309360500681"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_promotions__cs_CZ"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_promotions__de_AT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_search__nl_BE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__cs_CZ"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__es_ES"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__fr_FR"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__it_IT"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__nl_BE"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__ro_RO"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__es_ES"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__pl_PL"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__fr_FR"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__it_IT"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__lt_LT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__pl_PL"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_categories__cs_CZ"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_categories__de_DE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_categories__nl_NL"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_images__all"
+          },
+          "value": [
+            1793044283.227,
+            "4.168525873907073"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__pl_PL"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__sv_SE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__nl_NL"
+          },
+          "value": [
+            1793044283.227,
+            "3.126394405430305"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_promotions__fr_FR"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_search__de_AT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_search__de_DE"
+          },
+          "value": [
+            1793044283.227,
+            "2.0842629369535364"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_search__es_ES"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "static_assets__all"
+          },
+          "value": [
+            1793044283.227,
+            "3.126394405430305"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "static_head__all"
+          },
+          "value": [
+            1793044283.227,
+            "1.0421314684767682"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__de_AT"
+          },
+          "value": [
+            1793044283.227,
+            "1.0444565864406479"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__da_DK"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__de_CH"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__fr_FR"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__it_IT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__nl_NL"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__cs_CZ"
+          },
+          "value": [
+            1793044283.227,
+            "1.0444565864406479"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__de_DE"
+          },
+          "value": [
+            1793044283.227,
+            "1.0444565864406479"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__es_ES"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_categories__pl_PL"
+          },
+          "value": [
+            1793044283.227,
+            "2.0889131728812957"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__cs_CZ"
+          },
+          "value": [
+            1793044283.227,
+            "1.0444565864406479"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__da_DK"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__de_DE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__es_ES"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__de_AT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_products__pl_PL"
+          },
+          "value": [
+            1793044283.227,
+            "1.0444565864406479"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_promotions__de_CH"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_promotions__de_DE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_promotions__it_IT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_promotions__nl_BE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_search__pl_PL"
+          },
+          "value": [
+            1793044283.227,
+            "4.1778263457625915"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "site_meta__all"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__nl_NL"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_direct__sv_SE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_footers_external__ro_RO"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__de_CH"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "contentful_vouchers__nl_NL"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_categories__es_ES"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__de_CH"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__it_IT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_navigation__nl_BE"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_search__fr_FR"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_search__it_IT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "outcome": "failed",
+            "route": "shop_search__lt_LT"
+          },
+          "value": [
+            1793044283.227,
+            "0"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -3852,13 +3852,13 @@
         "y": 151
       },
       "panels": [],
-      "title": "Per-family outcomes, refresh and origin latency (requires skipper-cache-prs build)",
+      "title": "Per-route outcomes, refresh and origin latency (requires skipper-cache-prs build)",
       "type": "row"
     },
     {
       "type": "timeseries",
-      "title": "Cache outcomes by family",
-      "description": "Cache results (hit, miss, stale, l1_hit, l2_hit where emitted) per endpoint family, from skipper_cache_family_result_total{family, result}. Requires skipper-cache-prs build with bounded metrics. Family is a bounded taxonomy label; no data until that build is running.",
+      "title": "Cache outcomes by route family",
+      "description": "Cache results (hit, miss, stale, l1_hit, l2_hit where emitted) derived from route IDs in skipper_cache_route_result_total{route, result}. This dashboard derives a family from the <family>__<variant> route-ID convention; use route labels directly or adapt the expression for other naming schemes.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -3872,7 +3872,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: skipper-cache-prs build with family label not running, or no cache traffic in the window",
+          "noValue": "No data: route-result metrics not available, or no cache traffic in the window",
           "custom": {
             "spanNulls": false
           }
@@ -3892,7 +3892,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum by (family, result) (rate(skipper_cache_family_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\",family!=\"\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "expr": "sum by (family, result) (label_replace(rate(skipper_cache_route_result_total{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"(.+?)__.*\"))",
           "legendFormat": "{{family}} {{result}}"
         }
       ],
@@ -3900,8 +3900,8 @@
     },
     {
       "type": "timeseries",
-      "title": "Refresh outcomes by family",
-      "description": "Background revalidation/refresh job outcomes per endpoint family, from skipper_cache_family_reval_total{family, outcome}. Covers the stale-and-refresh path by family. Requires skipper-cache-prs build with bounded metrics.",
+      "title": "Refresh outcomes by route family",
+      "description": "Background revalidation outcomes derived from route IDs in skipper_cache_route_reval_total{route, outcome}. This dashboard derives a family from the <family>__<variant> route-ID convention; use route labels directly or adapt the expression for other naming schemes.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -3915,7 +3915,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "noValue": "No data: skipper-cache-prs build with refresh family label not running, or no refresh jobs in the window",
+          "noValue": "No data: route-revalidation metrics not available, or no refresh jobs in the window",
           "custom": {
             "spanNulls": false
           }
@@ -3935,7 +3935,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum by (family, outcome) (rate(skipper_cache_family_reval_total{job=\"skipper-local\",instance=~\"${instance:regex}\",family!=\"\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "expr": "sum by (family, outcome) (label_replace(rate(skipper_cache_route_reval_total{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"(.+?)__.*\"))",
           "legendFormat": "{{family}} {{outcome}}"
         }
       ],
@@ -3943,8 +3943,8 @@
     },
     {
       "type": "timeseries",
-      "title": "Origin latency p95 by family",
-      "description": "Skipper-to-origin fetch latency p95 per endpoint family and origin status class, from skipper_cache_origin_duration_seconds_bucket{family, status_class}. Requires skipper-cache-prs build with bounded metrics. Compare with the all-caller origin latency panel above.",
+      "title": "Origin latency p95 by route family",
+      "description": "Skipper-to-origin fetch latency p95 derived from route IDs and grouped by origin status class. This dashboard derives a family from the <family>__<variant> route-ID convention; use route labels directly or adapt the expression for other naming schemes.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -3958,7 +3958,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "noValue": "No data: skipper-cache-prs build with origin latency family histogram not running, or no origin fetches in the window",
+          "noValue": "No data: route-labelled origin histogram not available, or no origin fetches in the window",
           "custom": {
             "spanNulls": false
           }
@@ -3978,7 +3978,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "histogram_quantile(0.95, sum by (family, status_class, le) (rate(skipper_cache_origin_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\",family!=\"\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+          "expr": "histogram_quantile(0.95, sum by (family, status_class, le) (label_replace(rate(skipper_cache_origin_duration_seconds_bucket{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"(.+?)__.*\")))",
           "legendFormat": "{{family}} {{status_class}}"
         }
       ],
@@ -4029,13 +4029,56 @@
       "id": 55
     },
     {
+      "type": "timeseries",
+      "title": "Origin fetches by dispatch path",
+      "description": "Cache origin fetches per second by dispatch path (requires zalando/skipper#4387). direct: force mode with a static backend, bypassing the proxy pipeline, access log and backend metrics. pipeline: self-loopback through the proxy pipeline. Includes cold misses and revalidation; no data until the dispatch label is deployed or when no origin fetches occur.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "local-prometheus"
+      },
+      "gridPos": {
+        "w": 24,
+        "h": 8,
+        "x": 0,
+        "y": 168
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "noValue": "Not exercised / no samples",
+          "custom": {
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "local-prometheus"
+          },
+          "expr": "sum by (dispatch) (rate(skipper_cache_origin_duration_seconds_count{job=\"skipper-local\",instance=~\"${instance:regex}\",dispatch=~\"direct|pipeline\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "legendFormat": "{{dispatch}}"
+        }
+      ],
+      "id": 62
+    },
+    {
       "collapsed": false,
       "id": 56,
       "gridPos": {
         "w": 24,
         "h": 1,
         "x": 0,
-        "y": 168
+        "y": 176
       },
       "panels": [],
       "title": "Cache-Control, capacity, evictions and warm-up (requires skipper-cache-prs build)",
@@ -4053,7 +4096,7 @@
         "w": 8,
         "h": 8,
         "x": 0,
-        "y": 169
+        "y": 177
       },
       "fieldConfig": {
         "defaults": {
@@ -4096,7 +4139,7 @@
         "w": 8,
         "h": 8,
         "x": 8,
-        "y": 169
+        "y": 177
       },
       "fieldConfig": {
         "defaults": {
@@ -4139,7 +4182,7 @@
         "w": 8,
         "h": 8,
         "x": 16,
-        "y": 169
+        "y": 177
       },
       "fieldConfig": {
         "defaults": {
@@ -4191,7 +4234,7 @@
         "w": 12,
         "h": 8,
         "x": 0,
-        "y": 177
+        "y": 185
       },
       "fieldConfig": {
         "defaults": {
@@ -4234,7 +4277,7 @@
         "w": 12,
         "h": 8,
         "x": 12,
-        "y": 177
+        "y": 185
       },
       "fieldConfig": {
         "defaults": {

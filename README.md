@@ -171,6 +171,15 @@ HTTP 5xx, transport errors and store failures. After origin-stale chaos, inspect
 `skipper_cache_route_reval_total{outcome="failed"}` in Prometheus or raw Skipper
 metrics; it must increase during the fault, not just show `started`/`success`.
 
+Cache Operations includes **Origin fetches by dispatch path** (panel 62), next to
+the per-family origin panels. It requires zalando/skipper#4387: `direct` means
+force-mode static-backend fetches that bypass the proxy pipeline, access log and
+backend metrics; `pipeline` means self-loopback through the proxy pipeline.
+Both cold misses and revalidations are counted. Before #4387 is deployed, or
+without origin fetches, the panel is optional (`Not exercised / no samples`)
+for `verify-metrics.py`. Historical screenshot sets do not include this panel;
+its screenshot slug is `origin-fetches-by-dispatch-path`.
+
 ## Workloads and reports
 
 `make load SCENARIO=smoke` runs for 2 minutes; `SCENARIO=soak` for 30 minutes;

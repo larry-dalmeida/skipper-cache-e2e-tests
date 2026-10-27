@@ -1,0 +1,7373 @@
+{
+  "utc": "2026-10-26T19:46:13.575267+00:00",
+  "skipper_sha": "d767f6362226c6260e4288120e21136a3102cb26",
+  "scenario": "smoke",
+  "units": "per-panel: req/s for outcome rates, seconds for latency, bytes for L1",
+  "resolved_rate_interval": "1m (4 x configured 5s scrape interval minimum exceeded)",
+  "panels": [
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 44,
+      "panel": "Client RPS",
+      "query": "sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1793043972.819,
+            "49.062182692469754"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 45,
+      "panel": "Cache hit ratio",
+      "query": "sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".+\",result=\"hit\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) / (sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".+\",result=~\"hit|miss|stale\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1793043972.827,
+            "0.8367875647668394"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 46,
+      "panel": "Cache miss ratio",
+      "query": "sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".+\",result=\"miss\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) / (sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".+\",result=~\"hit|miss|stale\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1793043972.837,
+            "0.0925240562546262"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 47,
+      "panel": "Cache stale ratio",
+      "query": "sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".+\",result=\"stale\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) / (sum(rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".+\",result=~\"hit|miss|stale\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1793043972.843,
+            "0.07068837897853442"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 48,
+      "panel": "Origin offload %",
+      "query": "clamp(1 - (sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)), 0, 1)",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1793043972.85,
+            "0.8299010200340841"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 49,
+      "panel": "Origin RPS",
+      "query": "sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1793043972.857,
+            "8.345454545454546"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 3,
+      "panel": "Skipper scrape health",
+      "query": "min by (instance) (up{job=\"skipper-local\",instance=~\".+\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043972.862,
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 4,
+      "panel": "Origin scrape health",
+      "query": "min by (instance) (up{job=\"mock-origin\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9091"
+          },
+          "value": [
+            1793043972.868,
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 7,
+      "panel": "Request rate",
+      "query": "sum by (instance) (rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043972.876,
+            "49.062477953224516"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 8,
+      "panel": "Responses by route and status",
+      "query": "sum by (instance, route, code) (rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "r0"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.41818942162584777"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0.20000363642975327"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "1.0727467772141313"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.527282314223895"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.5091001654575538"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__hr_HR"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.7272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "1.5091183476063204"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__sk_SK"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.47273586792487143"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.2181857851960945"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "1.8727613229331443"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "1.0000181821487664"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "1.2545682648775434"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0.6727395043546247"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "2.436407934689722"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0.5818287605229187"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_spaces__all"
+          },
+          "value": [
+            1793043972.928,
+            "17.745777195949017"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.16363933889707089"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.3818251240931654"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.23636793396243572"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.18182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.5454644629902362"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.40000727285950655"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_images__all"
+          },
+          "value": [
+            1793043972.928,
+            "0.6727395043546247"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "1.2727504136438845"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.18182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.18182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.436371570392189"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.23636793396243572"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.6363752068219423"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.20000363642975327"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.16363933889707089"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "site_meta__all"
+          },
+          "value": [
+            1793043972.928,
+            "0.32727867779414177"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "static_assets__all"
+          },
+          "value": [
+            1793043972.928,
+            "0.6000109092892598"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.056152575689392234"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__fr_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.2181857851960945"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "1.2727504136438845"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.12727504136438844"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0.14545719013072966"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.2727322314951181"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__lt_LT"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.018717525229797412"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.7818323969526719"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.36364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.436371570392189"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0.14545719013072966"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__sv_SE"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.14545719013072966"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.2727322314951181"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "static_head__all"
+          },
+          "value": [
+            1793043972.928,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "304",
+            "instance": "host.minikube.internal:9911",
+            "route": "static_assets__all"
+          },
+          "value": [
+            1793043972.928,
+            "0.47273586792487143"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__pl_PL"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.019010509143798662"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.12727504136438844"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__fi_FI"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__sv_SE"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.2545500827287769"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__sk_SK"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.16363933889707089"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__sv_SE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_DE"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__da_DK"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__fr_FR"
+          },
+          "value": [
+            1793043972.928,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__fi_FI"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__sk_SK"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__da_DK"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__nl_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0.019401155964458072"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__it_IT"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__sv_SE"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__fr_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.3818251240931654"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__hr_HR"
+          },
+          "value": [
+            1793043972.928,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__lt_LT"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__sv_SE"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.4545537191585302"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__nl_NL"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__es_ES"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__en_GB"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fr_BE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__da_DK"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__sk_SK"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__sv_SE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__no_NO"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__lt_LT"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__sk_SK"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__lt_LT"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__sv_SE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__lt_LT"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__fi_FI"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__lt_LT"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__fr_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__en_GB"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__da_DK"
+          },
+          "value": [
+            1793043972.928,
+            "0.019401155964458072"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__sk_SK"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__en_GB"
+          },
+          "value": [
+            1793043972.928,
+            "0.019401155964458072"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__sk_SK"
+          },
+          "value": [
+            1793043972.928,
+            "0.14545719013072966"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__hr_HR"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__fi_FI"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__fi_FI"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__hu_HU"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__en_GB"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__cs_CZ"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__lv_LV"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__de_LU"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fr_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__sl_SI"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__no_NO"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__en_GB"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__hr_HR"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__da_DK"
+          },
+          "value": [
+            1793043972.928,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__hu_HU"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fi_FI"
+          },
+          "value": [
+            1793043972.928,
+            "0.12727504136438844"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__lv_LV"
+          },
+          "value": [
+            1793043972.928,
+            "0.054922"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__sl_SI"
+          },
+          "value": [
+            1793043972.928,
+            "0.054546446299023624"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__et_EE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__de_AT"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__sv_SE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__sl_SI"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__lt_LT"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__et_EE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__en_GB"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "503",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__hr_HR"
+          },
+          "value": [
+            1793043972.928,
+            "0.018489649564228997"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__hr_HR"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__ro_RO"
+          },
+          "value": [
+            1793043972.928,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__fi_FI"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__hu_HU"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fr_LU"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__da_DK"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__fr_CH"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__sl_SI"
+          },
+          "value": [
+            1793043972.928,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__sl_SI"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__lv_LV"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code": "200",
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__et_EE"
+          },
+          "value": [
+            1793043972.928,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 9,
+      "panel": "Latency p95 by route",
+      "query": "histogram_quantile(0.95, sum by (instance, route, le) (rate(skipper_serve_route_duration_seconds_bucket{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.04312499999999999"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__sv_SE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023560299457712795"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__en_GB"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__sk_SK"
+          },
+          "value": [
+            1793043972.994,
+            "0.00975"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__sk_SK"
+          },
+          "value": [
+            1793043972.994,
+            "0.023560299457712795"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.010642857142857174"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.019749999999999993"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__et_EE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "r0"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "static_assets__all"
+          },
+          "value": [
+            1793043972.994,
+            "0.021839285714285717"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__de_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.009957642597456816"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "0.024171780707652767"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__lt_LT"
+          },
+          "value": [
+            1793043972.994,
+            "0.00975"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__hr_HR"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fr_LU"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.020575000000000003"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.04312499999999998"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.023560299457712795"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.023125"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023560299457712795"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__de_LU"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.02389807612253394"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.03249999999999994"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__da_DK"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__et_EE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.020714285714285713"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.019749999999999993"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "0.046250000000000006"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__sl_SI"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__lv_LV"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.009949999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.023124999999999996"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__en_GB"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fi_FI"
+          },
+          "value": [
+            1793043972.994,
+            "0.04124999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__lv_LV"
+          },
+          "value": [
+            1793043972.994,
+            "0.024893089849108364"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__ro_RO"
+          },
+          "value": [
+            1793043972.994,
+            "0.022750000000000003"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__sk_SK"
+          },
+          "value": [
+            1793043972.994,
+            "0.0095"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "0.019450000000000002"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__fi_FI"
+          },
+          "value": [
+            1793043972.994,
+            "0.009957642597456816"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__sv_SE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fr_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.02233487318438235"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__sl_SI"
+          },
+          "value": [
+            1793043972.994,
+            "0.02487292779237045"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.017125000000000026"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.023560299457712795"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.037499999999999985"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "0.024100000000000003"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__sv_SE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__sl_SI"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__et_EE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__hu_HU"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.023312500000000003"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.03624999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__de_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.04124999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__fr_BE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.017499999999999984"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023928571428571428"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__lt_LT"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "0.022249999999999995"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "0.04375"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.04375"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "static_head__all"
+          },
+          "value": [
+            1793043972.994,
+            "0.04375"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__no_NO"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.020406249999999994"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.020312500000000004"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.023999999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__de_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__no_NO"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__en_GB"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__hr_HR"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__de_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.0475"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__lt_LT"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__fr_CH"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__pl_PL"
+          },
+          "value": [
+            1793043972.994,
+            "0.024946428571428567"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__fi_FI"
+          },
+          "value": [
+            1793043972.994,
+            "0.022750000000000003"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__hu_HU"
+          },
+          "value": [
+            1793043972.994,
+            "0.00975"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__fr_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__de_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.022750000000000003"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.02375"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.022750000000000003"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.0235"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__de_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.0235"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__sv_SE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__en_GB"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__ro_RO"
+          },
+          "value": [
+            1793043972.994,
+            "0.0205"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.019562499999999993"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.024074270612572654"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.04375"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__ro_RO"
+          },
+          "value": [
+            1793043972.994,
+            "0.0247458555847409"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "site_meta__all"
+          },
+          "value": [
+            1793043972.994,
+            "0.021625000000000005"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__lt_LT"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.016937499999999984"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__sk_SK"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__en_GB"
+          },
+          "value": [
+            1793043972.994,
+            "0.023999999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "0.021999999999999992"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__de_CH"
+          },
+          "value": [
+            1793043972.994,
+            "0.004957642597456817"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "0.02389807612253394"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_images__all"
+          },
+          "value": [
+            1793043972.994,
+            "0.021916666666666668"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.04499999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__sv_SE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023875"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__lt_LT"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__da_DK"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__sl_SI"
+          },
+          "value": [
+            1793043972.994,
+            "0.00975"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.02399999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_spaces__all"
+          },
+          "value": [
+            1793043972.994,
+            "0.007563636363636357"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "0.04875"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__sv_SE"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__sk_SK"
+          },
+          "value": [
+            1793043972.994,
+            "0.023560299457712795"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__sv_SE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__da_DK"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__lt_LT"
+          },
+          "value": [
+            1793043972.994,
+            "0.02401376888221661"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__sk_SK"
+          },
+          "value": [
+            1793043972.994,
+            "0.009957642597456816"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__lv_LV"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__en_GB"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__sl_SI"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.0925"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.024100000000000003"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__hr_HR"
+          },
+          "value": [
+            1793043972.994,
+            "0.021279197960449255"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "0.023125"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.04250000000000001"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.038750000000000014"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "0.023130501389141325"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.02375"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__hu_HU"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.02335"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__ro_RO"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.046875"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__ro_RO"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.021875000000000002"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.022214285714285714"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__da_DK"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__ro_RO"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__fr_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.020833333333333336"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__da_DK"
+          },
+          "value": [
+            1793043972.994,
+            "0.023875"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__fi_FI"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__ro_RO"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999986"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__nl_BE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023875"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__nl_NL"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__ro_RO"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_products__hr_HR"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__sv_SE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__da_DK"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_direct__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.01924999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__it_IT"
+          },
+          "value": [
+            1793043972.994,
+            "0.022000000000000002"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_mutations__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.021750000000000002"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.04625"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_personal__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.023499999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__es_ES"
+          },
+          "value": [
+            1793043972.994,
+            "0.020416666666666663"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.04124999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.023875"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_search__cs_CZ"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__sk_SK"
+          },
+          "value": [
+            1793043972.994,
+            "0.009957642597456816"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_footers_external__fr_BE"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__de_AT"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_promotions__de_DE"
+          },
+          "value": [
+            1793043972.994,
+            "0.023999999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__fr_FR"
+          },
+          "value": [
+            1793043972.994,
+            "0.019999999999999997"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__lt_LT"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "contentful_vouchers__fi_FI"
+          },
+          "value": [
+            1793043972.994,
+            "0.02425"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_categories__hr_HR"
+          },
+          "value": [
+            1793043972.994,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "route": "shop_navigation__hr_HR"
+          },
+          "value": [
+            1793043972.994,
+            "0.010003583412964714"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 11,
+      "panel": "Fresh hit ratio",
+      "query": "100 * ((sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=~\"cache\\\\.(hit)\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))) or on (instance) (0 * sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=~\"cache\\\\.(hit|miss|stale)\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))) / (sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=~\"cache\\\\.(hit|miss|stale)\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.063,
+            "83.67875647668394"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 12,
+      "panel": "Hit / miss / stale rate",
+      "query": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=~\"cache\\\\.(hit|miss|stale)\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "key": "cache.miss"
+          },
+          "value": [
+            1793043973.075,
+            "4.545537191585302"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "key": "cache.hit"
+          },
+          "value": [
+            1793043973.075,
+            "41.10983836069747"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911",
+            "key": "cache.stale"
+          },
+          "value": [
+            1793043973.075,
+            "3.4727904143711705"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 13,
+      "panel": "Cache result by status class",
+      "query": "sum by (instance, result, code_class) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".+\",result=~\"hit|miss\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "code_class": "2xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.083,
+            "4.07280132366043"
+          ]
+        },
+        {
+          "metric": {
+            "code_class": "2xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.083,
+            "41.09165621193113"
+          ]
+        },
+        {
+          "metric": {
+            "code_class": "4xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.083,
+            "0.2727322314951181"
+          ]
+        },
+        {
+          "metric": {
+            "code_class": "5xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.083,
+            "0.20000363642975327"
+          ]
+        },
+        {
+          "metric": {
+            "code_class": "4xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.083,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code_class": "5xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.083,
+            "0.018182148766341208"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 14,
+      "panel": "L1 / L2 hit rate",
+      "query": "sum by (instance, result, code_class) (rate(skipper_cache_result_total{job=\"skipper-local\",instance=~\".+\",result=~\"l1_hit|l2_hit\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "code_class": "2xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "l1_hit"
+          },
+          "value": [
+            1793043973.089,
+            "26.527755050091823"
+          ]
+        },
+        {
+          "metric": {
+            "code_class": "2xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "l2_hit"
+          },
+          "value": [
+            1793043973.089,
+            "25.0186367024855"
+          ]
+        },
+        {
+          "metric": {
+            "code_class": "4xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "l2_hit"
+          },
+          "value": [
+            1793043973.089,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "code_class": "5xx",
+            "instance": "host.minikube.internal:9911",
+            "result": "l2_hit"
+          },
+          "value": [
+            1793043973.089,
+            "0.018182148766341208"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 15,
+      "panel": "Origin request rate (all callers)",
+      "query": "sum by (origin) (rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "origin": "pegasus"
+          },
+          "value": [
+            1793043973.096,
+            "8.345454545454546"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful"
+          },
+          "value": [
+            1793043973.096,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 16,
+      "panel": "Origin responses by status (all callers)",
+      "query": "sum by (origin, status) (rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "0"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "200"
+          },
+          "value": [
+            1793043973.103,
+            "4.4363636363636365"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "304"
+          },
+          "value": [
+            1793043973.103,
+            "3.436363636363636"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "404"
+          },
+          "value": [
+            1793043973.103,
+            "0.2727272727272727"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "405"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "500"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "502"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "503"
+          },
+          "value": [
+            1793043973.103,
+            "0.19999999999999998"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "504"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "0"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "200"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "304"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "404"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "405"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "500"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "502"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "503"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "504"
+          },
+          "value": [
+            1793043973.103,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 50,
+      "panel": "Origin offload % over time",
+      "query": "clamp(1 - (sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)), 0, 1)",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1793043973.113,
+            "0.8299057431432302"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 18,
+      "panel": "Origin latency p95 (all callers)",
+      "query": "histogram_quantile(0.95, sum by (origin, status, le) (rate(mock_origin_request_duration_seconds_bucket{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "200"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "405"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "500"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "0"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "503"
+          },
+          "value": [
+            1793043973.124,
+            "0.0095"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "504"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "304"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "0"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "304"
+          },
+          "value": [
+            1793043973.124,
+            "0.0095"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "404"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "502"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "405"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "502"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "500"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "503"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "504"
+          },
+          "value": [
+            1793043973.124,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "200"
+          },
+          "value": [
+            1793043973.124,
+            "0.009500000000000001"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "404"
+          },
+          "value": [
+            1793043973.124,
+            "0.009499999999999998"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 19,
+      "panel": "Refresh errors / dropped jobs",
+      "query": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=~\"cache\\\\.(reval_error|reval_dropped)\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "NOT EXERCISED",
+      "proxy_status": "NOT EXERCISED",
+      "status": "NOT EXERCISED",
+      "samples": []
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 20,
+      "panel": "Refresh job duration p95",
+      "query": "histogram_quantile(0.95, sum by (instance, le) (rate(skipper_custom_duration_seconds_bucket{job=\"skipper-local\",instance=~\".+\",key=\"cache.reval_duration\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.138,
+            "0.041157407407407406"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 22,
+      "panel": "Resident memory",
+      "query": "max by (instance) (process_resident_memory_bytes{job=\"skipper-local\",instance=~\".+\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.144,
+            "108003328"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 23,
+      "panel": "CPU (cores)",
+      "query": "sum by (instance) (rate(process_cpu_seconds_total{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.15,
+            "0.06669801269113983"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 24,
+      "panel": "L1 cache bytes (whole cache)",
+      "query": "max by (instance) (skipper_custom_gauges{job=\"skipper-local\",instance=~\".+\",key=\"cache.lru_bytes\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.158,
+            "498371"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 25,
+      "panel": "L1 bytes (whole cache, de-duplicated)",
+      "query": "max by (instance) (skipper_cache_lru_bytes{job=\"skipper-local\",instance=~\".+\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.166,
+            "499227"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 52,
+      "panel": "Cache outcomes by route family",
+      "query": "sum by (family, result) (label_replace(rate(skipper_cache_route_result_total{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"(.+?)__.*\"))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_direct",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "4.981908761977491"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "17.654866452117314"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "1.5474849742727042"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "3.6201433797059903"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "0.6909216531209659"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_direct",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.12727504136438844"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_external",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.32748752902780054"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.23636793396243572"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.8188366568967926"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.2013620927206177"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_personal",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.47273586792487143"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "1.3636611574755906"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.16499779518793528"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.41818942162584777"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_assets",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head",
+            "result": "miss"
+          },
+          "value": [
+            1793043973.179,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_external",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "9.749653551165585"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "0.16363933889707089"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "0.527282314223895"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "0.3280796094476223"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "0.2181857851960945"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_assets",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "0.8545609920180368"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "0.41818942162584777"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head",
+            "result": "hit"
+          },
+          "value": [
+            1793043973.179,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_direct",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.6363752068219423"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.3093053802614593"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.14545719013072966"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.43658042162584776"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.25559433889707084"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_assets",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.18182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_external",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.6048525220277622"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search",
+            "result": "stale"
+          },
+          "value": [
+            1793043973.179,
+            "0.10909289259804725"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 53,
+      "panel": "Refresh outcomes by route family",
+      "query": "sum by (family, outcome) (label_replace(rate(skipper_cache_route_reval_total{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"(.+?)__.*\"))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "family": "contentful_footers_direct",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.6363752068219423"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.30930971359479265"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.14545719013072966"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.43658475495918114"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.25561600556373754"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_assets",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.18182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_direct",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.6363752068219423"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.30930971359479265"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.14545719013072966"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.43658475495918114"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.25561600556373754"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_assets",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.18182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_external",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.5866939659610119"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_external",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.5866939659610119"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head",
+            "outcome": "started"
+          },
+          "value": [
+            1793043973.192,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head",
+            "outcome": "success"
+          },
+          "value": [
+            1793043973.192,
+            "0.036364297532682416"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 54,
+      "panel": "Origin latency p95 by route family",
+      "query": "histogram_quantile(0.95, sum by (family, status_class, le) (label_replace(rate(skipper_cache_origin_duration_seconds_bucket{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"(.+?)__.*\")))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "family": "contentful_footers_external",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_direct",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004889705882352941"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004749999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_assets",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004749999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004750000000000001"
+          ]
+        },
+        {
+          "metric": {
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_direct",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004749999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "status_class": "5xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_personal",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.015250000000000003"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "status_class": "4xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.03249999999999994"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004749999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.006220640894923811"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004749999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_assets",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.00475"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004750000000000001"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004749999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_external",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004903910777141118"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004749999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004970740253630944"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products",
+            "status_class": "2xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004848958333333333"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.004749999999999999"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation",
+            "status_class": "3xx"
+          },
+          "value": [
+            1793043973.258,
+            "0.006998383135499997"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 55,
+      "panel": "Origin fetch-to-served ratio",
+      "query": "sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {},
+          "value": [
+            1793043973.322,
+            "0.17009050369851322"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 62,
+      "panel": "Origin fetches by dispatch path",
+      "query": "sum by (dispatch) (rate(skipper_cache_origin_duration_seconds_count{job=\"skipper-local\",instance=~\".+\",dispatch=~\"direct|pipeline\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "dispatch": "direct"
+          },
+          "value": [
+            1793043973.334,
+            "7.230135500889647"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 57,
+      "panel": "Cache-Control directives",
+      "query": "sum by (cache_control) (rate(skipper_cache_origin_cache_control_total{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "cache_control": "max-age"
+          },
+          "value": [
+            1793043973.343,
+            "4.290987108856525"
+          ]
+        },
+        {
+          "metric": {
+            "cache_control": "public"
+          },
+          "value": [
+            1793043973.343,
+            "4.054619174894089"
+          ]
+        },
+        {
+          "metric": {
+            "cache_control": "stale-if-error"
+          },
+          "value": [
+            1793043973.343,
+            "4.054619174894089"
+          ]
+        },
+        {
+          "metric": {
+            "cache_control": "stale-while-revalidate"
+          },
+          "value": [
+            1793043973.343,
+            "4.054619174894089"
+          ]
+        },
+        {
+          "metric": {
+            "cache_control": "no-store"
+          },
+          "value": [
+            1793043973.343,
+            "0.2545500827287769"
+          ]
+        },
+        {
+          "metric": {
+            "cache_control": "private"
+          },
+          "value": [
+            1793043973.343,
+            "0.4909180166912126"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 58,
+      "panel": "Cache entries",
+      "query": "max by (instance) (skipper_cache_lru_entries{job=\"skipper-local\",instance=~\".+\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.355,
+            "788"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 59,
+      "panel": "Cache bytes vs capacity",
+      "query": "max by (instance) (skipper_cache_lru_bytes{job=\"skipper-local\",instance=~\".+\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.367,
+            "499227"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 59,
+      "panel": "Cache bytes vs capacity",
+      "query": "max by (instance) (skipper_cache_lru_capacity_bytes{job=\"skipper-local\",instance=~\".+\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.376,
+            "2147483648"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 60,
+      "panel": "Cache evictions",
+      "query": "sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=\"cache.lru_eviction\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "NOT EXERCISED",
+      "proxy_status": "NOT EXERCISED",
+      "status": "NOT EXERCISED",
+      "samples": []
+    },
+    {
+      "dashboard": "cache-performance-local",
+      "panel_id": 61,
+      "panel": "Time to First Hit",
+      "query": "max by (instance) (skipper_cache_first_hit_seconds{job=\"skipper-local\",instance=~\".+\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9911"
+          },
+          "value": [
+            1793043973.392,
+            "1.9865380830000001"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "retail-application-local",
+      "panel_id": 3,
+      "panel": "Origin scrape health",
+      "query": "min by (instance) (up{job=\"mock-origin\"} and on (run_id) (max by (run_id) (up{job=~\"skipper-local|mock-origin\"}) == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "instance": "host.minikube.internal:9091"
+          },
+          "value": [
+            1793043973.398,
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "retail-application-local",
+      "panel_id": 4,
+      "panel": "Origin request rate by origin",
+      "query": "sum by (origin) (rate(mock_origin_requests_total{job=\"mock-origin\",origin=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "origin": "pegasus"
+          },
+          "value": [
+            1793043973.406,
+            "8.345454545454546"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful"
+          },
+          "value": [
+            1793043973.406,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "retail-application-local",
+      "panel_id": 5,
+      "panel": "Origin responses by origin and status",
+      "query": "sum by (origin, status) (rate(mock_origin_requests_total{job=\"mock-origin\",origin=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "0"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "200"
+          },
+          "value": [
+            1793043973.415,
+            "4.4363636363636365"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "304"
+          },
+          "value": [
+            1793043973.415,
+            "3.436363636363636"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "404"
+          },
+          "value": [
+            1793043973.415,
+            "0.2727272727272727"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "405"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "500"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "502"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "503"
+          },
+          "value": [
+            1793043973.415,
+            "0.19999999999999998"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "504"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "0"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "200"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "304"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "404"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "405"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "500"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "502"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "503"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "504"
+          },
+          "value": [
+            1793043973.415,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "retail-application-local",
+      "panel_id": 6,
+      "panel": "Origin latency p95 by origin",
+      "query": "histogram_quantile(0.95, sum by (origin, status, le) (rate(mock_origin_request_duration_seconds_bucket{job=\"mock-origin\",origin=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "0"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "405"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "503"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "0"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "304"
+          },
+          "value": [
+            1793043973.424,
+            "0.0095"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "405"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "404"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "503"
+          },
+          "value": [
+            1793043973.424,
+            "0.0095"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "504"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "200"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "304"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "500"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "502"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "200"
+          },
+          "value": [
+            1793043973.424,
+            "0.009500000000000001"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "502"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "504"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "404"
+          },
+          "value": [
+            1793043973.424,
+            "0.009499999999999998"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "500"
+          },
+          "value": [
+            1793043973.424,
+            "NaN"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "retail-application-local",
+      "panel_id": 7,
+      "panel": "Origin non-2xx/304 responses by origin",
+      "query": "sum by (origin, status) (rate(mock_origin_requests_total{job=\"mock-origin\",origin=~\".+\",status!~\"2..|304\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) or on (origin) (0 * sum by (origin) (rate(mock_origin_requests_total{job=\"mock-origin\",origin=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "0"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "404"
+          },
+          "value": [
+            1793043973.433,
+            "0.2727272727272727"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "405"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "500"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "502"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "503"
+          },
+          "value": [
+            1793043973.433,
+            "0.19999999999999998"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "pegasus",
+            "status": "504"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "0"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "404"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "405"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "500"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "502"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "503"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "origin": "contentful",
+            "status": "504"
+          },
+          "value": [
+            1793043973.433,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "retail-application-local",
+      "panel_id": 9,
+      "panel": "Requests by family",
+      "query": "sum by (family) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(.+)__(.+)\"}[1m]) and on (instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"^(.+)__.+$\"))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "family": "contentful_footers_direct"
+          },
+          "value": [
+            1793043973.442,
+            "5.763741158930163"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_external"
+          },
+          "value": [
+            1793043973.442,
+            "10.964725259804725"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces"
+          },
+          "value": [
+            1793043973.442,
+            "17.745777195949017"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers"
+          },
+          "value": [
+            1793043973.442,
+            "2.163675703194604"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories"
+          },
+          "value": [
+            1793043973.442,
+            "1.1280427719975783"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images"
+          },
+          "value": [
+            1793043973.442,
+            "0.6727395043546247"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation"
+          },
+          "value": [
+            1793043973.442,
+            "4.347536002826862"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_personal"
+          },
+          "value": [
+            1793043973.442,
+            "0.47273586792487143"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_products"
+          },
+          "value": [
+            1793043973.442,
+            "2.3465703201336323"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions"
+          },
+          "value": [
+            1793043973.442,
+            "0.6378797790944505"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search"
+          },
+          "value": [
+            1793043973.442,
+            "1.0378870519539571"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta"
+          },
+          "value": [
+            1793043973.442,
+            "0.32727867779414177"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_assets"
+          },
+          "value": [
+            1793043973.442,
+            "1.0727467772141313"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_mutations"
+          },
+          "value": [
+            1793043973.442,
+            "0.2931630257147295"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head"
+          },
+          "value": [
+            1793043973.442,
+            "0.09091074383170604"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "retail-application-local",
+      "panel_id": 10,
+      "panel": "Requests by locale",
+      "query": "sum by (locale) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(.+)__(.+)\"}[1m]) and on (instance) (up{job=\"skipper-local\"} == 1), \"locale\", \"$1\", \"route\", \"^.+__(.+)$\"))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "locale": "cs_CZ"
+          },
+          "value": [
+            1793043973.454,
+            "1.8909434716994857"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "de_AT"
+          },
+          "value": [
+            1793043973.454,
+            "0.5636466117565775"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "de_DE"
+          },
+          "value": [
+            1793043973.454,
+            "5.293268936833571"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "es_ES"
+          },
+          "value": [
+            1793043973.454,
+            "2.781868761250205"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "fr_FR"
+          },
+          "value": [
+            1793043973.454,
+            "2.6011261173113933"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "hr_HR"
+          },
+          "value": [
+            1793043973.454,
+            "0.12777736130640538"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "it_IT"
+          },
+          "value": [
+            1793043973.454,
+            "3.4182439680721473"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "nl_NL"
+          },
+          "value": [
+            1793043973.454,
+            "1.1469866114409006"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "pl_PL"
+          },
+          "value": [
+            1793043973.454,
+            "7.52740958926526"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "ro_RO"
+          },
+          "value": [
+            1793043973.454,
+            "0.8363788432516955"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "sk_SK"
+          },
+          "value": [
+            1793043973.454,
+            "0.2727322314951181"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "de_CH"
+          },
+          "value": [
+            1793043973.454,
+            "0.6909216531209659"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "all"
+          },
+          "value": [
+            1793043973.454,
+            "19.90945289914362"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "nl_BE"
+          },
+          "value": [
+            1793043973.454,
+            "0.9644084332255105"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "fr_BE"
+          },
+          "value": [
+            1793043973.454,
+            "0.018182148766341208"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "lt_LT"
+          },
+          "value": [
+            1793043973.454,
+            "0.10909289259804725"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "sv_SE"
+          },
+          "value": [
+            1793043973.454,
+            "0.20000363642975327"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "fi_FI"
+          },
+          "value": [
+            1793043973.454,
+            "0.2363679339624357"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "da_DK"
+          },
+          "value": [
+            1793043973.454,
+            "0.128786280525793"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "en_GB"
+          },
+          "value": [
+            1793043973.454,
+            "0.09242198299311057"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "no_NO"
+          },
+          "value": [
+            1793043973.454,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "fr_CH"
+          },
+          "value": [
+            1793043973.454,
+            "0.09091074383170604"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "hu_HU"
+          },
+          "value": [
+            1793043973.454,
+            "0.036364297532682416"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "lv_LV"
+          },
+          "value": [
+            1793043973.454,
+            "0.055448"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "de_LU"
+          },
+          "value": [
+            1793043973.454,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "sl_SI"
+          },
+          "value": [
+            1793043973.454,
+            "0.07272859506536483"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "et_EE"
+          },
+          "value": [
+            1793043973.454,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "locale": "fr_LU"
+          },
+          "value": [
+            1793043973.454,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "dashboard": "retail-application-local",
+      "panel_id": 11,
+      "panel": "Non-2xx responses by family",
+      "query": "sum by (family, code) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(.+)__(.+)\",code!~\"2..\"}[1m]) and on (instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"^(.+)__.+$\")) or on (family) (0 * sum by (family) (label_replace(rate(skipper_serve_route_count{job=\"skipper-local\",route=~\"(.+)__(.+)\"}[1m]) and on (instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"^(.+)__.+$\")))",
+      "direct_status": "PASS",
+      "proxy_status": "PASS",
+      "status": "PASS",
+      "samples": [
+        {
+          "metric": {
+            "code": "503",
+            "family": "shop_products"
+          },
+          "value": [
+            1793043973.469,
+            "0.1829074744492431"
+          ]
+        },
+        {
+          "metric": {
+            "code": "304",
+            "family": "static_assets"
+          },
+          "value": [
+            1793043973.469,
+            "0.47273586792487143"
+          ]
+        },
+        {
+          "metric": {
+            "code": "404",
+            "family": "shop_products"
+          },
+          "value": [
+            1793043973.469,
+            "0.2545500827287769"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_direct"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_footers_external"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_spaces"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "contentful_vouchers"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_categories"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_images"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_navigation"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_personal"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_promotions"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_search"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "site_meta"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "shop_mutations"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "family": "static_head"
+          },
+          "value": [
+            1793043973.469,
+            "0"
+          ]
+        }
+      ]
+    }
+  ],
+  "flat_counter_samples": [
+    {
+      "metric": {
+        "__name__": "skipper_custom_total",
+        "instance": "host.minikube.internal:9911",
+        "job": "skipper-local",
+        "key": "cache.miss",
+        "run_id": "local"
+      },
+      "value": [
+        1793043973.495,
+        "715"
+      ]
+    },
+    {
+      "metric": {
+        "__name__": "skipper_custom_total",
+        "instance": "host.minikube.internal:9911",
+        "job": "skipper-local",
+        "key": "cache.hit",
+        "run_id": "local"
+      },
+      "value": [
+        1793043973.495,
+        "5275"
+      ]
+    },
+    {
+      "metric": {
+        "__name__": "skipper_custom_total",
+        "instance": "host.minikube.internal:9911",
+        "job": "skipper-local",
+        "key": "cache.stale",
+        "run_id": "local"
+      },
+      "value": [
+        1793043973.495,
+        "327"
+      ]
+    }
+  ],
+  "absent_flat_counters_not_exercised": [
+    "cache.coalesce_bypass_error",
+    "cache.coalesce_error",
+    "cache.l2_get_error",
+    "cache.l2_set_fallback",
+    "cache.lru_eviction",
+    "cache.lru_oversized",
+    "cache.reval_dropped",
+    "cache.reval_error"
+  ],
+  "observed_result_code_classes": [
+    {
+      "result": "l2_miss",
+      "code_class": "n/a"
+    },
+    {
+      "result": "miss",
+      "code_class": "2xx"
+    },
+    {
+      "result": "hit",
+      "code_class": "2xx"
+    },
+    {
+      "result": "l1_hit",
+      "code_class": "2xx"
+    },
+    {
+      "result": "l2_hit",
+      "code_class": "2xx"
+    },
+    {
+      "result": "miss",
+      "code_class": "4xx"
+    },
+    {
+      "result": "miss",
+      "code_class": "5xx"
+    },
+    {
+      "result": "coalesce_bypass",
+      "code_class": "n/a"
+    },
+    {
+      "result": "hit",
+      "code_class": "4xx"
+    },
+    {
+      "result": "l2_hit",
+      "code_class": "4xx"
+    },
+    {
+      "result": "hit",
+      "code_class": "5xx"
+    },
+    {
+      "result": "l2_hit",
+      "code_class": "5xx"
+    },
+    {
+      "result": "stale",
+      "code_class": "2xx"
+    }
+  ],
+  "missing_outcomes": [],
+  "counts": {
+    "PASS": 42,
+    "NOT EXERCISED": 2
+  }
+}

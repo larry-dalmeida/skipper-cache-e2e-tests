@@ -1,0 +1,13 @@
+[2026-10-26 20:44:10,982] ZALANDO-71039/INFO/locust.main: Starting Locust 2.34.0
+[2026-10-26 20:44:10,982] ZALANDO-71039/WARNING/locust.main: Python 3.9 support is deprecated and will be removed soon
+[2026-10-26 20:44:10,986] ZALANDO-71039/INFO/locust.runners: Shape test starting.
+[2026-10-26 20:44:10,986] ZALANDO-71039/INFO/locust.runners: Shape worker starting
+[2026-10-26 20:44:10,987] ZALANDO-71039/INFO/locust.runners: Shape test updating to 59 users at 10.00 spawn rate
+[2026-10-26 20:44:10,987] ZALANDO-71039/INFO/locust.runners: Ramping to 59 users at a rate of 10.00 per second
+[2026-10-26 20:44:16,009] ZALANDO-71039/INFO/locust.runners: All users spawned: {"HardUser": 31, "SwrUser": 28} (59 total users)
+[2026-10-26 20:45:11,252] ZALANDO-71039/INFO/locust.runners: Shape test updating to 50 users at 10.00 spawn rate
+[2026-10-26 20:45:11,253] ZALANDO-71039/INFO/locust.runners: Ramping to 50 users at a rate of 10.00 per second
+[2026-10-26 20:45:11,255] ZALANDO-71039/INFO/locust.runners: All users spawned: {"HardUser": 26, "SwrUser": 24} (50 total users)
+[2026-10-26 20:46:11,542] ZALANDO-71039/INFO/locust.runners: Shape test stopping
+[2026-10-26 20:46:11,587] ZALANDO-71039/INFO/locust.main: --run-time limit reached, shutting down
+[2026-10-26 20:46:11,588] ZALANDO-71039/INFO/locust.main: Shutting down (exit code 0)
