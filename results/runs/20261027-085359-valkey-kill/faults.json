@@ -1,0 +1,29 @@
+{
+  "scenario": "valkey-kill",
+  "duration_seconds": 90,
+  "run_started_ms": 1793087639411,
+  "run_ended_ms": 1793087730552,
+  "faults": [
+    {
+      "action": "valkey-down",
+      "scheduled_offset": 27,
+      "actual_epoch_ms": 1793087666417,
+      "ended_epoch_ms": 1793087684417,
+      "detail": "valkey down"
+    },
+    {
+      "action": "valkey-up",
+      "scheduled_offset": 45,
+      "actual_epoch_ms": 1793087684417,
+      "ended_epoch_ms": 1793087684417,
+      "detail": "valkey up"
+    },
+    {
+      "action": "restore",
+      "scheduled_offset": null,
+      "actual_epoch_ms": 1793087730424,
+      "ended_epoch_ms": 1793087730424,
+      "detail": "origin: origin default case status 200; valkey: valkey up"
+    }
+  ]
+}
