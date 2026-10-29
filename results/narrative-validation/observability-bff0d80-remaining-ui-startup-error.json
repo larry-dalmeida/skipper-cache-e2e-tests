@@ -1,0 +1,885 @@
+{
+  "sha": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+  "mode": "integrated",
+  "status": "FAIL",
+  "cases": [
+    {
+      "name": "real L1 capacity eviction and finite positive dashboard rates",
+      "status": "PASS",
+      "seconds": 4.969086084000001,
+      "origin_calls": 400,
+      "cache_only_hits": 199,
+      "cache_only_misses": 201,
+      "evictions": 201.0,
+      "bytes": 156958.0,
+      "capacity": 358400,
+      "oversized_series": "absent"
+    },
+    {
+      "name": "HTTP-triggered L1 stale serving and real full-queue refresh drops",
+      "status": "PASS",
+      "seconds": 11.428598249999997,
+      "priming_origin": 260,
+      "stale_l1_responses": 260,
+      "blocked_worker": 1,
+      "queue_capacity_observed": 256,
+      "dropped": 3,
+      "completed_conditional_refreshes": 257,
+      "route_refresh_metrics": "PASS",
+      "total_origin_calls": 517,
+      "barrier_budget_seconds": 30,
+      "ttl_wait_seconds": 3.0993604169999998
+    },
+    {
+      "name": "bounded L1 stale-if-error HTTP faults and transport disconnect",
+      "status": "PASS",
+      "seconds": 3.416198332999997,
+      "within_window": [
+        {
+          "origin_fault": 500,
+          "response": {
+            "status": 200,
+            "cache": "STALE",
+            "body": {
+              "path": "/get",
+              "query": "case=sie-500-281ed888e6f24b249d42f9c8c72c466b",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "origin_calls": 2
+        },
+        {
+          "origin_fault": 502,
+          "response": {
+            "status": 200,
+            "cache": "STALE",
+            "body": {
+              "path": "/get",
+              "query": "case=sie-502-cc1d694de0bf4603bcd6bdc4c5e951cc",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "origin_calls": 2
+        },
+        {
+          "origin_fault": 503,
+          "response": {
+            "status": 200,
+            "cache": "STALE",
+            "body": {
+              "path": "/get",
+              "query": "case=sie-503-2246f1c3cfe746b4a808f3f4c56e6877",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "origin_calls": 2
+        },
+        {
+          "origin_fault": 504,
+          "response": {
+            "status": 200,
+            "cache": "STALE",
+            "body": {
+              "path": "/get",
+              "query": "case=sie-504-f16ef80b69274e54864ef121a6d44c63",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "origin_calls": 2
+        },
+        {
+          "origin_fault": "disconnect",
+          "response": {
+            "status": 200,
+            "cache": "STALE",
+            "body": {
+              "path": "/get",
+              "query": "case=sie-disconnect-1c4d45746e7b4488b62eb5200f2f3086",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "origin_calls": 2
+        }
+      ],
+      "beyond_window_http_faults": 4,
+      "ttl_seconds": 0.3,
+      "swr_seconds": 0.1,
+      "sie_seconds": 3,
+      "not_exercised": "exhaustive RFC directives and post-expiry transport fallback"
+    },
+    {
+      "name": "owned Valkey data-plane partition, L1 fallback and network recovery",
+      "status": "PASS",
+      "seconds": 19.534106042000005,
+      "probes": [
+        {
+          "name": "partition cache-only failure",
+          "response": {
+            "status": 504,
+            "cache": "MISS",
+            "body": null
+          },
+          "metric_deltas": {
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"response\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_request_total{\"result\":\"error\",\"tier\":\"none\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 0,
+          "seconds": 0.005664042000006475,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.821766
+            },
+            {
+              "command": "get",
+              "key": "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.8265421
+            }
+          ]
+        },
+        {
+          "name": "partition origin recovery with L1 persistence fallback",
+          "response": {
+            "status": 200,
+            "cache": "MISS",
+            "body": {
+              "path": "/get",
+              "query": "case=partition-a888c12241a54d29bc4c64de39625610&new=1",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "metric_deltas": {
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"response\"}": 2.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"set\",\"outcome\":\"error\",\"purpose\":\"response\"}": 1.0,
+            "skipper_cache_request_total{\"result\":\"error\",\"tier\":\"none\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 1,
+          "seconds": 0.020695707999998092,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.8360388
+            },
+            {
+              "command": "get",
+              "key": "c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.8414268
+            },
+            {
+              "command": "get",
+              "key": "c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.84461
+            },
+            {
+              "command": "set",
+              "key": "c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.8522072
+            }
+          ]
+        },
+        {
+          "name": "partition fallback serves fresh L1",
+          "response": {
+            "status": 200,
+            "cache": "HIT",
+            "body": {
+              "path": "/get",
+              "query": "case=partition-a888c12241a54d29bc4c64de39625610&new=1",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "metric_deltas": {
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_request_total{\"result\":\"fresh\",\"tier\":\"l1\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 0,
+          "seconds": 0.0037902079999980742,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.8604329
+            }
+          ]
+        },
+        {
+          "name": "partition invalidation remains best effort",
+          "response": {
+            "status": 200,
+            "cache": null,
+            "body": {
+              "path": "/get",
+              "query": "case=partition-a888c12241a54d29bc4c64de39625610",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "metric_deltas": {
+            "skipper_cache_l2_operations_total{\"operation\":\"delete\",\"outcome\":\"error\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_request_total{\"result\":\"bypass\",\"tier\":\"none\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"delete\",\"outcome\":\"error\",\"purpose\":\"response\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"metadata\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 1,
+          "seconds": 0.009413125000001799,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.868209
+            },
+            {
+              "command": "del",
+              "key": "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.871553
+            },
+            {
+              "command": "del",
+              "key": "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": false,
+              "fault": "disconnect",
+              "time": 1793268501.8740768
+            }
+          ]
+        },
+        {
+          "name": "network recovered shared entry is readable",
+          "response": {
+            "status": 200,
+            "cache": "HIT",
+            "body": {
+              "path": "/get",
+              "query": "case=partition-a888c12241a54d29bc4c64de39625610",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "metric_deltas": {
+            "skipper_cache_request_total{\"result\":\"fresh\",\"tier\":\"l2\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"miss\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"success\",\"purpose\":\"response\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 0,
+          "seconds": 0.007672083000002772,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": true,
+              "fault": null,
+              "time": 1793268501.879769
+            },
+            {
+              "command": "get",
+              "key": "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": true,
+              "fault": null,
+              "time": 1793268501.884959
+            }
+          ]
+        },
+        {
+          "name": "blackholed data commands fail within bounded HTTP budget",
+          "response": {
+            "status": 504,
+            "cache": "MISS",
+            "body": null
+          },
+          "metric_deltas": {
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"response\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_request_total{\"result\":\"error\",\"tier\":\"none\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 0,
+          "seconds": 6.8593384169999965,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": false,
+              "fault": "blackhole",
+              "time": 1793268501.891983
+            },
+            {
+              "command": "get",
+              "key": "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": false,
+              "fault": "blackhole",
+              "time": 1793268505.748855
+            }
+          ]
+        },
+        {
+          "name": "blackholed origin fetch persists via L1 fallback",
+          "response": {
+            "status": 200,
+            "cache": "MISS",
+            "body": {
+              "path": "/get",
+              "query": "case=partition-a888c12241a54d29bc4c64de39625610&blackhole=1",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "metric_deltas": {
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"response\"}": 2.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"set\",\"outcome\":\"error\",\"purpose\":\"response\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_request_total{\"result\":\"error\",\"tier\":\"none\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 1,
+          "seconds": 9.268215458,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:355816bb7ecc11c5a9eeb3a0ccaa6121fe89594749eb153441f4b444061eabc7",
+              "forwarded": false,
+              "fault": "blackhole",
+              "time": 1793268508.75624
+            },
+            {
+              "command": "get",
+              "key": "355816bb7ecc11c5a9eeb3a0ccaa6121fe89594749eb153441f4b444061eabc7",
+              "forwarded": false,
+              "fault": "blackhole",
+              "time": 1793268510.9933188
+            },
+            {
+              "command": "get",
+              "key": "355816bb7ecc11c5a9eeb3a0ccaa6121fe89594749eb153441f4b444061eabc7",
+              "forwarded": false,
+              "fault": "blackhole",
+              "time": 1793268514.0049012
+            },
+            {
+              "command": "set",
+              "key": "355816bb7ecc11c5a9eeb3a0ccaa6121fe89594749eb153441f4b444061eabc7",
+              "forwarded": false,
+              "fault": "blackhole",
+              "time": 1793268516.022561
+            }
+          ]
+        },
+        {
+          "name": "blackholed persistence fallback is fresh L1",
+          "response": {
+            "status": 200,
+            "cache": "HIT",
+            "body": {
+              "path": "/get",
+              "query": "case=partition-a888c12241a54d29bc4c64de39625610&blackhole=1",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "metric_deltas": {
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"error\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_request_total{\"result\":\"fresh\",\"tier\":\"l1\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 0,
+          "seconds": 3.0154534170000034,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:355816bb7ecc11c5a9eeb3a0ccaa6121fe89594749eb153441f4b444061eabc7",
+              "forwarded": false,
+              "fault": "blackhole",
+              "time": 1793268518.042293
+            }
+          ]
+        },
+        {
+          "name": "blackhole removed shared entry recovers",
+          "response": {
+            "status": 200,
+            "cache": "HIT",
+            "body": {
+              "path": "/get",
+              "query": "case=partition-a888c12241a54d29bc4c64de39625610",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "metric_deltas": {
+            "skipper_cache_request_total{\"result\":\"fresh\",\"tier\":\"l2\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"miss\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"success\",\"purpose\":\"response\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 0,
+          "seconds": 0.059507916999990584,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": true,
+              "fault": null,
+              "time": 1793268521.097897
+            },
+            {
+              "command": "get",
+              "key": "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae",
+              "forwarded": true,
+              "fault": null,
+              "time": 1793268521.1069078
+            }
+          ]
+        },
+        {
+          "name": "network recovered persistence succeeds",
+          "response": {
+            "status": 200,
+            "cache": "MISS",
+            "body": {
+              "path": "/get",
+              "query": "case=partition-a888c12241a54d29bc4c64de39625610&new=1",
+              "host": "observability.test",
+              "tokenClass": "none",
+              "version": "A",
+              "language": ""
+            }
+          },
+          "metric_deltas": {
+            "skipper_cache_request_total{\"result\":\"bypass\",\"tier\":\"none\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"get\",\"outcome\":\"miss\",\"purpose\":\"metadata\"}": 1.0,
+            "skipper_cache_l2_operations_total{\"operation\":\"set\",\"outcome\":\"success\",\"purpose\":\"response\"}": 1.0
+          },
+          "upper_metric_contract": "PASS",
+          "origin_delta": 1,
+          "seconds": 0.008794707999996376,
+          "wire_attempts": [
+            {
+              "command": "get",
+              "key": "vary:c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d",
+              "forwarded": true,
+              "fault": null,
+              "time": 1793268521.1165829
+            },
+            {
+              "command": "set",
+              "key": "c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d",
+              "forwarded": true,
+              "fault": null,
+              "time": 1793268521.1183329
+            }
+          ]
+        }
+      ],
+      "peer_response": {
+        "status": 200,
+        "cache": "HIT",
+        "body": {
+          "path": "/get",
+          "query": "case=partition-a888c12241a54d29bc4c64de39625610&new=1",
+          "host": "observability.test",
+          "tokenClass": "none",
+          "version": "A",
+          "language": ""
+        }
+      },
+      "peer_request_classification": "fresh/l2",
+      "origin_total": 5,
+      "monitor_data_commands": [
+        [
+          "get",
+          "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae"
+        ],
+        [
+          "get",
+          "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae"
+        ],
+        [
+          "get",
+          "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae"
+        ],
+        [
+          "set",
+          "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae"
+        ],
+        [
+          "get",
+          "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae"
+        ],
+        [
+          "get",
+          "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae"
+        ],
+        [
+          "get",
+          "vary:00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae"
+        ],
+        [
+          "get",
+          "00f1880ad818a620f30ddbd21f115bd6a0964b9a77f52ec0ff1cb848fc3b2fae"
+        ],
+        [
+          "get",
+          "vary:c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d"
+        ],
+        [
+          "set",
+          "c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d"
+        ],
+        [
+          "get",
+          "vary:c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d"
+        ],
+        [
+          "get",
+          "c7367e7b43ba8076267cdcbf431f07fbd7050b163a494a021ce0ba3b5aa3953d"
+        ]
+      ],
+      "retry_semantics": "net/valkey.go sets DisableRetry=true; metrics count client methods. Relay records visible attempts; failed methods may fail before transmission. Connection re-handshakes are not extra GET/SET/DEL operations."
+    }
+  ],
+  "errors": [
+    "AssertionError: owned local Grafana readiness"
+  ],
+  "scope": "owned LOCAL resources only; no production traffic",
+  "not_applicable": [],
+  "not_exercised": [
+    "24-hour wall-clock retention and production workload",
+    "exhaustive RFC directive/method/validator combinations",
+    "real retail locale taxonomy",
+    "encode and unknown-purpose StorageAPI cases: separately assigned to implementation child"
+  ],
+  "provenance": {
+    "version": "Skipper version v0.28.51-0.20261029100439-bff0d80c0a20 (commit: bff0d80c, runtime: go1.27.3)",
+    "build_info": "/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/skipper: go1.27.3\n\tpath\tgithub.com/zalando/skipper/cmd/skipper\n\tmod\tgithub.com/zalando/skipper\tv0.28.51-0.20261029100439-bff0d80c0a20\t\n\tdep\tcel.dev/expr\tv0.25.2\th1:K6j46C81hXtZQfuX60cVWQFBJahKSE2gfRbNuvr5bFs=\n\tdep\tcloud.google.com/go\tv0.123.0\th1:2NAUJwPR47q+E35uaJeYoNhuNEM9kM8SjgRgdeOJUSE=\n\tdep\tcloud.google.com/go/auth\tv0.20.0\th1:kXTssoVb4azsVDoUiF8KvxAqrsQcQtB53DcSgta74CA=\n\tdep\tcloud.google.com/go/auth/oauth2adapt\tv0.2.8\th1:keo8NaayQZ6wimpNSmW5OPc283g65QNIiLpZnkHRbnc=\n\tdep\tcloud.google.com/go/compute/metadata\tv0.9.0\th1:pDUj4QMoPejqq20dK0Pg2N4yG9zIkYGdBtwLoEkH9Zs=\n\tdep\tcloud.google.com/go/iam\tv1.5.3\th1:+vMINPiDF2ognBJ97ABAYYwRgsaqxPbQDlMnbHMjolc=\n\tdep\tcloud.google.com/go/monitoring\tv1.24.3\th1:dde+gMNc0UhPZD1Azu6at2e79bfdztVDS5lvhOdsgaE=\n\tdep\tcloud.google.com/go/storage\tv1.58.0\th1:PflFXlmFJjG/nBeR9B7pKddLQWaFaRWx4uUi/LyNxxo=\n\tdep\tcuelang.org/go\tv0.15.1\th1:MRnjc/KJE+K42rnJ3a+425f1jqXeOOgq9SK4tYRTtWw=\n\tdep\tgithub.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp\tv1.34.0\th1:yzIYdwuro811Z27D3T80Wkd3rqZzb0K43nner7Eh1yE=\n\tdep\tgithub.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric\tv0.54.0\th1:lhhYARPUu3LmHysQ/igznQphfzynnqI3D75oUyw1HXk=\n\tdep\tgithub.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping\tv0.54.0\th1:s0WlVbf9qpvkh1c/uDAPElam0WrL7fHRIidgZJ7UqZI=\n\tdep\tgithub.com/Jeffail/gabs/v2\tv2.7.0\th1:Y2edYaTcE8ZpRsR2AtmPu5xQdFDIthFG0jYhu5PY8kg=\n\tdep\tgithub.com/Jeffail/grok\tv1.1.0\th1:kiHmZ+0J5w/XUihRgU3DY9WIxKrNQCDjnfAb6bMLFaE=\n\tdep\tgithub.com/Jeffail/shutdown\tv1.1.0\th1:5Bm3llKt0hnRjmTUlxgBnFg/snFfwqTOUMp3So8jCLo=\n\tdep\tgithub.com/Masterminds/squirrel\tv1.5.4\th1:uUcX/aBc8O7Fg9kaISIUsHXdKuqehiXAMQTYX8afzqM=\n\tdep\tgithub.com/MicahParks/keyfunc\tv1.9.0\th1:lhKd5xrFHLNOWrDc4Tyb/Q1AJ4LCzQ48GVJyVIID3+o=\n\tdep\tgithub.com/OneOfOne/xxhash\tv1.2.8\th1:31czK/TI9sNkxIKfaUfGlU47BAxQ0ztGgd9vPyqimf8=\n\tdep\tgithub.com/abbot/go-http-auth\tv0.4.0\th1:QjmvZ5gSC7jm3Zg54DqWE/T5m1t2AfDu6QlXJT0EVT0=\n\tdep\tgithub.com/agnivade/levenshtein\tv1.2.1\th1:EHBY3UOn1gwdy/VbFwgo4cxecRznFk7fKWN1KOX7eoM=\n\tdep\tgithub.com/aryszka/jobqueue\tv0.0.3\th1:O5YbgzQCjRomudwnDTY5BrHUNJhvPHQHq7GfGpE+ybs=\n\tdep\tgithub.com/aws/aws-sdk-go-v2\tv1.41.5\th1:dj5kopbwUsVUVFgO4Fi5BIT3t4WyqIDjGKCangnV/yY=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/aws/protocol/eventstream\tv1.7.8\th1:eBMB84YGghSocM7PsjmmPffTa+1FBUeNvGvFou6V/4o=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/config\tv1.32.6\th1:hFLBGUKjmLAekvi1evLi5hVvFQtSo3GYwi+Bx4lpJf8=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/credentials\tv1.19.6\th1:F9vWao2TwjV2MyiyVS+duza0NIRtAslgLUM0vTA1ZaE=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/feature/ec2/imds\tv1.18.16\th1:80+uETIWS1BqjnN9uJ0dBUaETh+P1XwFy5vwHwK5r9k=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/feature/s3/manager\tv1.20.17\th1:fODjlj9c1zIfZYFxdC6Z4GX/plrZUYI/5EklgA/24Hw=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/internal/configsources\tv1.4.21\th1:Rgg6wvjjtX8bNHcvi9OnXWwcE0a2vGpbwmtICOsvcf4=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/internal/endpoints/v2\tv2.7.21\th1:PEgGVtPoB6NTpPrBgqSE5hE/o47Ij9qk/SEZFbUOe9A=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/internal/ini\tv1.8.4\th1:WKuaxf++XKWlHWu9ECbMlha8WOEGm0OUEZqm4K/Gcfk=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/internal/v4a\tv1.4.22\th1:rWyie/PxDRIdhNf4DzRk0lvjVOqFJuNnO8WwaIRVxzQ=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/internal/accept-encoding\tv1.13.7\th1:5EniKhLZe4xzL7a+fU3C2tfUN4nWIqlLesfrjkuPFTY=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/internal/checksum\tv1.9.13\th1:JRaIgADQS/U6uXDqlPiefP32yXTda7Kqfx+LgspooZM=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/internal/presigned-url\tv1.13.21\th1:c31//R3xgIJMSC8S6hEVq+38DcvUlgFY0FM6mSI5oto=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/internal/s3shared\tv1.19.21\th1:ZlvrNcHSFFWURB8avufQq9gFsheUgjVD9536obIknfM=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/s3\tv1.99.0\th1:hlSuz394kV0vhv9drL5lhuEFbEOEP1VyQpy15qWh1Pk=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/signin\tv1.0.4\th1:HpI7aMmJ+mm1wkSHIA2t5EaFFv5EFYXePW30p1EIrbQ=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/sqs\tv1.42.20\th1:qa+1W+Kon3WDwO+8ugco4D9KvO0Pf0KBTn1hN7opIFw=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/sso\tv1.30.8\th1:aM/Q24rIlS3bRAhTyFurowU8A0SMyGDtEOY/l/s/1Uw=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/ssooidc\tv1.35.12\th1:AHDr0DaHIAo8c9t1emrzAlVDFp+iMMKnPdYy6XO4MCE=\n\tdep\tgithub.com/aws/aws-sdk-go-v2/service/sts\tv1.41.5\th1:SciGFVNZ4mHdm7gpD1dgZYnCuVdX1s+lFTg4+4DOy70=\n\tdep\tgithub.com/aws/smithy-go\tv1.24.2\th1:FzA3bu/nt/vDvmnkg+R8Xl46gmzEDam6mZ1hzmwXFng=\n\tdep\tgithub.com/beorn7/perks\tv1.0.1\th1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=\n\tdep\tgithub.com/bombsimon/logrusr/v4\tv4.2.0\th1:PtF9HJuahhgABQyTLHoWn+ZSAQouOIR2RroymnmCrec=\n\tdep\tgithub.com/cenkalti/backoff/v4\tv4.3.0\th1:MyRJ/UdXutAwSAT+s3wNd7MfTIcy71VQueUuFK343L8=\n\tdep\tgithub.com/cenkalti/backoff/v5\tv5.0.3\th1:ZN+IMa753KfX5hd8vVaMixjnqRZ3y8CuJKRKj1xcsSM=\n\tdep\tgithub.com/cespare/xxhash/v2\tv2.3.0\th1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=\n\tdep\tgithub.com/cjoudrey/gluahttp\tv0.0.0-20201111170219-25003d9adfa9\th1:rdWOzitWlNYeUsXmz+IQfa9NkGEq3gA/qQ3mOEqBU6o=\n\tdep\tgithub.com/cjoudrey/gluaurl\tv0.0.0-20161028222611-31cbb9bef199\th1:cJ1E8ZwZLfercTX3dywnCAQDilbbi+m2cw3+8tCFpRo=\n\tdep\tgithub.com/clipperhouse/stringish\tv0.1.1\th1:+NSqMOr3GR6k1FdRhhnXrLfztGzuG+VuFDfatpWHKCs=\n\tdep\tgithub.com/clipperhouse/uax29/v2\tv2.3.0\th1:SNdx9DVUqMoBuBoW3iLOj4FQv3dN5mDtuqwuhIGpJy4=\n\tdep\tgithub.com/cncf/xds/go\tv0.0.0-20260202195803-dba9d589def2\th1:aBangftG7EVZoUb69Os8IaYg++6uMOdKK83QtkkvJik=\n\tdep\tgithub.com/cockroachdb/apd/v3\tv3.2.1\th1:U+8j7t0axsIgvQUqthuNm82HIrYXodOV2iWLWtEaIwg=\n\tdep\tgithub.com/containerd/containerd/v2\tv2.4.1\th1:DUx/ZJN7cEu0WuzHClDB+68H/bqMEH5pWoEjf0ae4hc=\n\tdep\tgithub.com/containerd/errdefs\tv1.0.0\th1:tg5yIfIlQIrxYtu9ajqY42W3lpS19XqdxRQeEwYG8PI=\n\tdep\tgithub.com/containerd/log\tv0.2.0\th1:BewD/umNgVnoczglOpX8eRMyEy5t5iPlu5AIpnWDONc=\n\tdep\tgithub.com/containerd/log/otel\tv0.1.0\th1:Az5rFFo0+c4v2yC8ROR63sWsZpKl/vhtUnUhqLSpE6U=\n\tdep\tgithub.com/containerd/platforms\tv1.0.0-rc.5\th1:vXd569rDrz8LeMXzAnBsy6LADV5YtsD8oyaRarxdmSU=\n\tdep\tgithub.com/containerd/ttrpc\tv1.2.9\th1:ha0ak962T0s3CA/RoZ6S6xiWZQF24GrBaEpiGX1uihg=\n\tdep\tgithub.com/containerd/typeurl/v2\tv2.3.0\th1:HZHPhRWo5XMy3QGQoPrUzbW/2ckwjfweHmOwlkIrPAQ=\n\tdep\tgithub.com/coreos/go-oidc/v3\tv3.21.0\th1:wZo4Q9Pum8dYEj0eMUPrqR+kvuGkeUplbLpNCkBqoWM=\n\tdep\tgithub.com/cpuguy83/go-md2man/v2\tv2.0.7\th1:zbFlGlXEAKlwXpmvle3d8Oe3YnkKIK4xSRTd3sHPnBo=\n\tdep\tgithub.com/dchest/siphash\tv1.2.3\th1:QXwFc8cFOR2dSa/gE6o/HokBMWtLUaNDVd+22aKHeEA=\n\tdep\tgithub.com/dgraph-io/badger/v4\tv4.9.1\th1:DocZXZkg5JJHJPtUErA0ibyHxOVUDVoXLSCV6t8NC8w=\n\tdep\tgithub.com/dgraph-io/ristretto/v2\tv2.3.0\th1:qTQ38m7oIyd4GAed/QkUZyPFNMnvVWyazGXRwvOt5zk=\n\tdep\tgithub.com/dgryski/go-jump\tv0.0.0-20211018200510-ba001c3ffce0\th1:0wH6nO9QEa02Qx8sIQGw6ieKdz+BXjpccSOo9vXNl4U=\n\tdep\tgithub.com/dgryski/go-mpchash\tv0.0.0-20200819201138-7382f34c4cd1\th1:De28BM16VaADXA2/F5qY+khGHWZkT70zLijZw8YYIYY=\n\tdep\tgithub.com/dgryski/go-rendezvous\tv0.0.0-20200823014737-9f7001d12a5f\th1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=\n\tdep\tgithub.com/dimfeld/httppath\tv0.0.0-20170720192232-ee938bf73598\th1:MGKhKyiYrvMDZsmLR/+RGffQSXwEkXgfLSA08qDn9AI=\n\tdep\tgithub.com/dustin/go-humanize\tv1.0.1\th1:GzkhY7T5VNhEkwH0PVJgjz+fX1rhBrR7pRT3mDkpeCY=\n\tdep\tgithub.com/envoyproxy/go-control-plane/envoy\tv1.40.0\th1:G4dcl8KE/HVPnZ25BBdvGZWi8JjyeBfQSvm95U5P1Qc=\n\tdep\tgithub.com/envoyproxy/protoc-gen-validate\tv1.3.3\th1:MVQghNeW+LZcmXe7SY1V36Z+WFMDjpqGAGacLe2T0ds=\n\tdep\tgithub.com/fatih/color\tv1.18.0\th1:S8gINlzdQ840/4pfAwic/ZE0djQEH3wM94VfqLTZcOM=\n\tdep\tgithub.com/felixge/httpsnoop\tv1.1.0\th1:3YtUj32ZZkqZtt3sZZsClsymw/QDuVfpNhoA31zeORc=\n\tdep\tgithub.com/fsnotify/fsnotify\tv1.10.1\th1:b0/UzAf9yR5rhf3RPm9gf3ehBPpf0oZKIjtpKrx59Ho=\n\tdep\tgithub.com/go-jose/go-jose/v4\tv4.1.6\th1:sNRkftxFJxwsILiQukqp5z83QBSmntVwmgRY7AqBDO4=\n\tdep\tgithub.com/go-logr/logr\tv1.4.4\th1:tG4xh9yMsRCAiodLVTxyrkzSZ9+o0L1Kg/+cPVcbP/8=\n\tdep\tgithub.com/go-logr/stdr\tv1.2.2\th1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=\n\tdep\tgithub.com/gobwas/glob\tv0.2.3\th1:A4xDbljILXROh+kObIiy5kIaPYD8e96x1tgBhUI5J+Y=\n\tdep\tgithub.com/gofrs/uuid\tv4.4.0+incompatible\th1:3qXRTX8/NbyulANqlc0lchS1gqAVxRgsuW1YrTJupqA=\n\tdep\tgithub.com/gofrs/uuid/v5\tv5.4.0\th1:EfbpCTjqMuGyq5ZJwxqzn3Cbr2d0rUZU7v5ycAk/e/0=\n\tdep\tgithub.com/gogo/protobuf\tv1.3.2\th1:Ov1cvc58UF3b5XjBnZv7+opcTcQFZebYjWzi34vdm4Q=\n\tdep\tgithub.com/golang-jwt/jwt/v4\tv4.5.2\th1:YtQM7lnr8iZ+j5q71MGKkNw9Mn7AjHM68uc9g5fXeUI=\n\tdep\tgithub.com/golang-jwt/jwt/v5\tv5.3.1\th1:kYf81DTWFe7t+1VvL7eS+jKFVWaUnK9cB1qbwn63YCY=\n\tdep\tgithub.com/golang/protobuf\tv1.5.4\th1:i7eJL8qZTpSEXOPTxNKhASYpMn+8e5Q6AdndVa1dWek=\n\tdep\tgithub.com/golang/snappy\tv1.0.0\th1:Oy607GVXHs7RtbggtPBnr2RmDArIsAefDwvrdWvRhGs=\n\tdep\tgithub.com/google/btree\tv1.1.3\th1:CVpQJjYgC4VbzxeGVHfvZrv1ctoYCAI8vbl07Fcxlyg=\n\tdep\tgithub.com/google/flatbuffers\tv25.9.23+incompatible\th1:rGZKv+wOb6QPzIdkM2KxhBZCDrA0DeN6DNmRDrqIsQU=\n\tdep\tgithub.com/google/pprof\tv0.0.0-20260402051712-545e8a4df936\th1:EwtI+Al+DeppwYX2oXJCETMO23COyaKGP6fHVpkpWpg=\n\tdep\tgithub.com/google/s2a-go\tv0.1.9\th1:LGD7gtMgezd8a/Xak7mEWL0PjoTQFvpRudN895yqKW0=\n\tdep\tgithub.com/google/uuid\tv1.6.0\th1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=\n\tdep\tgithub.com/googleapis/enterprise-certificate-proxy\tv0.3.15\th1:xolVQTEXusUcAA5UgtyRLjelpFFHWlPQ4XfWGc7MBas=\n\tdep\tgithub.com/googleapis/gax-go/v2\tv2.22.0\th1:PjIWBpgGIVKGoCXuiCoP64altEJCj3/Ei+kSU5vlZD4=\n\tdep\tgithub.com/gorilla/handlers\tv1.5.2\th1:cLTUSsNkgcwhgRqvCNmdbRWG0A3N4F+M2nWKdScwyEE=\n\tdep\tgithub.com/gorilla/mux\tv1.8.1\th1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=\n\tdep\tgithub.com/gorilla/websocket\tv1.5.4-0.20250319132907-e064f32e3674\th1:JeSE6pjso5THxAzdVpqr6/geYxZytqFMBCOtn/ujyeo=\n\tdep\tgithub.com/govalues/decimal\tv0.1.36\th1:dojDpsSvrk0ndAx8+saW5h9WDIHdWpIwrH/yhl9olyU=\n\tdep\tgithub.com/grpc-ecosystem/grpc-gateway/v2\tv2.31.0\th1:Bd7KaOxzULLxtZ/K5s1aLbWhR0+5RToO65TXHsf3bqQ=\n\tdep\tgithub.com/hashicorp/errwrap\tv1.1.0\th1:OxrOeh75EUXMY8TBjag2fzXGZ40LB6IKw45YeGUDY2I=\n\tdep\tgithub.com/hashicorp/go-immutable-radix\tv1.3.1\th1:DKHmCUm2hRBK510BaiZlwvpD40f8bJFeZnpfm2KLowc=\n\tdep\tgithub.com/hashicorp/go-metrics\tv0.7.0\th1:lLWieZTcbzZT+rY0zrqKbyryXG8RIajdUjmM0+R79eg=\n\tdep\tgithub.com/hashicorp/go-msgpack/v2\tv2.1.5\th1:Ue879bPnutj/hXfmUk6s/jtIK90XxgiUIcXRl656T44=\n\tdep\tgithub.com/hashicorp/go-multierror\tv1.1.1\th1:H5DkEtf6CXdFp0N0Em5UCwQpXMWke8IA0+lD48awMYo=\n\tdep\tgithub.com/hashicorp/go-sockaddr\tv1.0.7\th1:G+pTkSO01HpR5qCxg7lxfsFEZaG+C0VssTy/9dbT+Fw=\n\tdep\tgithub.com/hashicorp/golang-lru\tv1.0.2\th1:dV3g9Z/unq5DpblPpw+Oqcv4dU/1omnb4Ok8iPY6p1c=\n\tdep\tgithub.com/hashicorp/golang-lru/arc/v2\tv2.0.7\th1:QxkVTxwColcduO+LP7eJO56r2hFiG8zEbfAAzRv52KQ=\n\tdep\tgithub.com/hashicorp/golang-lru/v2\tv2.0.7\th1:a+bsQ5rvGLjzHuww6tVxozPZFVghXaHOwFs4luLUK2k=\n\tdep\tgithub.com/hashicorp/memberlist\tv0.7.0\th1:JfqTDFUIAzDEYKMhSc3Gpwe05zvSU3/cYtiZ3yW59TM=\n\tdep\tgithub.com/huandu/go-clone\tv1.7.3\th1:rtQODA+ABThEn6J5LBTppJfKmZy/FwfpMUWa8d01TTQ=\n\tdep\tgithub.com/huandu/go-sqlbuilder\tv1.39.1\th1:uUaj41yLNTQBe7ojNF6Im1RPbHCN4zCjMRySTEC2ooI=\n\tdep\tgithub.com/huandu/xstrings\tv1.5.0\th1:2ag3IFq9ZDANvthTwTiqSSZLjDc+BedvHPAp5tJy2TI=\n\tdep\tgithub.com/influxdata/go-syslog/v3\tv3.0.0\th1:jichmjSZlYK0VMmlz+k4WeOQd7z745YLsvGMqwtYt4I=\n\tdep\tgithub.com/instana/go-sensor\tv1.79.0\th1:dzEoRLYxgfuuZThN0beu7Kat5yleHJc3LpihRC6PovQ=\n\tdep\tgithub.com/itchyny/gojq\tv0.12.18\th1:gFGHyt/MLbG9n6dqnvlliiya2TaMMh6FFaR2b1H6Drc=\n\tdep\tgithub.com/itchyny/timefmt-go\tv0.1.7\th1:xyftit9Tbw+Dc/huSSPJaEmX1TVL8lw5vxjJLK4GMMA=\n\tdep\tgithub.com/jmespath/go-jmespath\tv0.4.0\th1:BEgLn5cpjn8UN1mAw4NjwDrS35OdebyEtFe+9YPoQUg=\n\tdep\tgithub.com/josharian/intern\tv1.0.0\th1:vlS4z54oSdjm0bgjRigI+G1HpF+tI+9rE5LLzOg8HmY=\n\tdep\tgithub.com/klauspost/compress\tv1.20.3\th1:zWNoFqq/lSuYQRim3dUXlXeA0IqwuZGicdG5ZTfY5j4=\n\tdep\tgithub.com/klauspost/pgzip\tv1.2.6\th1:8RXeL5crjEUFnR2/Sn6GJNWtSQ3Dk8pq4CL3jvdDyjU=\n\tdep\tgithub.com/lann/builder\tv0.0.0-20180802200727-47ae307949d0\th1:SOEGU9fKiNWd/HOJuq6+3iTQz8KNCLtVX6idSoTLdUw=\n\tdep\tgithub.com/lann/ps\tv0.0.0-20150810152359-62de8c46ede0\th1:P6pPBnrTSX3DEVR4fDembhRWSsG5rVo6hYhAB/ADZrk=\n\tdep\tgithub.com/lestrrat-go/blackmagic\tv1.0.4\th1:IwQibdnf8l2KoO+qC3uT4OaTWsW7tuRQXy9TRN9QanA=\n\tdep\tgithub.com/lestrrat-go/dsig\tv1.0.0\th1:OE09s2r9Z81kxzJYRn07TFM9XA4akrUdoMwr0L8xj38=\n\tdep\tgithub.com/lestrrat-go/httpcc\tv1.0.1\th1:ydWCStUeJLkpYyjLDHihupbn2tYmZ7m22BGkcvZZrIE=\n\tdep\tgithub.com/lestrrat-go/httprc/v3\tv3.0.2\th1:7u4HUaD0NQbf2/n5+fyp+T10hNCsAnwKfqn4A4Baif0=\n\tdep\tgithub.com/lestrrat-go/jwx/v3\tv3.0.13\th1:AdHKiPIYeCSnOJtvdpipPg/0SuFh9rdkN+HF3O0VdSk=\n\tdep\tgithub.com/lestrrat-go/option/v2\tv2.0.0\th1:XxrcaJESE1fokHy3FpaQ/cXW8ZsIdWcdFzzLOcID3Ss=\n\tdep\tgithub.com/lightstep/lightstep-tracer-common/golang/gogo\tv0.0.0-20210210170715-a8dfcb80d3a7\th1:YjW+hUb8Fh2S58z4av4t/0cBMK/Q0aP48RocCFsC8yI=\n\tdep\tgithub.com/lightstep/lightstep-tracer-go\tv0.26.0\th1:ZOw8meo7+7SvvUWrL0c4IRr3bd4YIGRtrAgDBaRH6ro=\n\tdep\tgithub.com/linkedin/goavro/v2\tv2.14.1\th1:/8VjDpd38PRsy02JS0jflAu7JZPfJcGTwqWgMkFS2iI=\n\tdep\tgithub.com/looplab/fsm\tv1.0.3\th1:qtxBsa2onOs0qFOtkqwf5zE0uP0+Te+wlIvXctPKpcw=\n\tdep\tgithub.com/mailru/easyjson\tv0.7.7\th1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0=\n\tdep\tgithub.com/matoous/go-nanoid/v2\tv2.1.0\th1:P64+dmq21hhWdtvZfEAofnvJULaRR1Yib0+PnU669bE=\n\tdep\tgithub.com/mattn/go-colorable\tv0.1.14\th1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=\n\tdep\tgithub.com/mattn/go-isatty\tv0.0.20\th1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=\n\tdep\tgithub.com/mattn/go-runewidth\tv0.0.19\th1:v++JhqYnZuu5jSKrk9RbgF5v4CGUjqRfBm05byFGLdw=\n\tdep\tgithub.com/miekg/dns\tv1.1.73\th1:uhT8nJxmTrPJYClxVxTCX+CVn6qnzSiybRk72Z6DgrE=\n\tdep\tgithub.com/moby/locker\tv1.0.1\th1:fOXqR41zeveg4fFODix+1Ch4mj/gT0NE1XJbp/epuBg=\n\tdep\tgithub.com/molecule-man/go-brrr\tv1.3.0\th1:KEGPkUk9PYFw5+Sv/evCOSU5OmMDXCGFqQ9YjRB7GeU=\n\tdep\tgithub.com/munnerz/goautoneg\tv0.0.0-20191010083416-a7dc8b61c822\th1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=\n\tdep\tgithub.com/ncruces/go-strftime\tv0.1.9\th1:bY0MQC28UADQmHmaF5dgpLmImcShSi2kHU9XLdhx/f4=\n\tdep\tgithub.com/nsf/jsondiff\tv0.0.0-20210926074059-1e845ec5d249\th1:NHrXEjTNQY7P0Zfx1aMrNhpgxHmow66XQtm0aQLY0AE=\n\tdep\tgithub.com/oklog/ulid\tv1.3.1\th1:EGfNDEx6MqHz8B3uNV6QAib1UR2Lm97sHi3ocA6ESJ4=\n\tdep\tgithub.com/olekukonko/cat\tv0.0.0-20250911104152-50322a0618f6\th1:zrbMGy9YXpIeTnGj4EljqMiZsIcE09mmF8XsD5AYOJc=\n\tdep\tgithub.com/olekukonko/errors\tv1.1.0\th1:RNuGIh15QdDenh+hNvKrJkmxxjV4hcS50Db478Ou5sM=\n\tdep\tgithub.com/olekukonko/ll\tv0.1.2\th1:lkg/k/9mlsy0SxO5aC+WEpbdT5K83ddnNhAepz7TQc0=\n\tdep\tgithub.com/olekukonko/tablewriter\tv1.1.0\th1:N0LHrshF4T39KvI96fn6GT8HEjXRXYNDrDjKFDB7RIY=\n\tdep\tgithub.com/olivere/elastic/v7\tv7.0.32\th1:R7CXvbu8Eq+WlsLgxmKVKPox0oOwAE/2T9Si5BnvK6E=\n\tdep\tgithub.com/open-policy-agent/eopa\tv1.46.1-0.20260410145035-769c001a4008\th1:Z/9y/nKhNW4sgn3giNjatJ2Tc41nsYmUAbZ3Qgc2WBw=\n\tdep\tgithub.com/open-policy-agent/opa\tv1.15.2\th1:dS9q+0Yvruq/VNvWJc5qCvCchn715OWc3HLHXn/UCCc=\n\tdep\tgithub.com/open-policy-agent/opa-envoy-plugin\tv1.15.2-envoy\th1:UTGjt/pTsCT7l8tGGg3DMVoGmdwPwLovZr5YWYObiO4=\n\tdep\tgithub.com/opencontainers/go-digest\tv1.0.0\th1:apOUWs51W5PlhuyGyz9FCeeBIOUDA/6nW8Oi/yOhh5U=\n\tdep\tgithub.com/opencontainers/image-spec\tv1.1.1\th1:y0fUlFfIZhPF1W537XOLg0/fcx6zcHCJwooC2xJA040=\n\tdep\tgithub.com/opentracing/basictracer-go\tv1.1.0\th1:Oa1fTSBvAl8pa3U+IJYqrKm0NALwH9OsgwOqDv4xJW0=\n\tdep\tgithub.com/opentracing/opentracing-go\tv1.2.0\th1:uEJPy/1a5RIPAJ0Ov+OIO8OxWu77jEv+1B0VhjKrZUs=\n\tdep\tgithub.com/peterh/liner\tv1.2.2\th1:aJ4AOodmL+JxOZZEL2u9iJf8omNRpqHc/EbrK+3mAXw=\n\tdep\tgithub.com/pierrec/lz4/v4\tv4.1.22\th1:cKFw6uJDK+/gfw5BcDL0JL5aBsAFdsIT18eRtLj7VIU=\n\tdep\tgithub.com/pires/go-proxyproto\tv0.15.0\th1:dTshmNbFm/D+0+sbrxUuddPOZ5Y0B7c5NhtsBkm6LqI=\n\tdep\tgithub.com/pkg/errors\tv0.9.1\th1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=\n\tdep\tgithub.com/prometheus/client_golang\tv1.25.0\th1:cDtW1TcFsMi1RJc8khwCKB4VhzwV04aKqbYtNOXuiK0=\n\tdep\tgithub.com/prometheus/client_model\tv0.6.3\th1:O0jaTVAYNxTHYInEPFJt5I3+sN8zqBtVMPTB1qyxiEo=\n\tdep\tgithub.com/prometheus/common\tv0.72.0\th1:tAYsE+sPJxIncDAobm4H5aQjmox9ZxEIIqPbiffa8G4=\n\tdep\tgithub.com/prometheus/otlptranslator\tv1.0.0\th1:s0LJW/iN9dkIH+EnhiD3BlkkP5QVIUVEoIwkU+A6qos=\n\tdep\tgithub.com/quipo/dependencysolver\tv0.0.0-20170801134659-2b009cb4ddcc\th1:hK577yxEJ2f5s8w2iy2KimZmgrdAUZUNftE1ESmg2/Q=\n\tdep\tgithub.com/rcrowley/go-metrics\tv0.0.0-20250401214520-65e299d6c5c9\th1:bsUq1dX0N8AOIL7EB/X911+m4EHsnWEHeJ0c+3TTBrg=\n\tdep\tgithub.com/redis/go-redis/v9\tv9.23.0\th1:/TTVdJa8BRNsybwwGGnmiYktHNlUXtbOQxlWpHBPL3s=\n\tdep\tgithub.com/redpanda-data/benthos/v4\tv4.63.0\th1:bi3uraD9OQhYXueRhOXpLlOf+kaJ3renPxC+qwmXCHo=\n\tdep\tgithub.com/remyoudompheng/bigfft\tv0.0.0-20230129092748-24d4a6f8daec\th1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=\n\tdep\tgithub.com/rickb777/period\tv1.0.21\th1:6Cn7+Nv00dmxcThwQi3Kl+HqsYe0dPs6PgwAE/TX73o=\n\tdep\tgithub.com/rickb777/plural\tv1.4.7\th1:rBRAxp9aTFYzWTLWIE/UTwKcaqSSAV2ml7aOUFYpAGo=\n\tdep\tgithub.com/rivo/uniseg\tv0.4.7\th1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=\n\tdep\tgithub.com/robfig/cron/v3\tv3.0.1\th1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=\n\tdep\tgithub.com/russross/blackfriday/v2\tv2.1.0\th1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=\n\tdep\tgithub.com/sarslanhan/cronmask\tv0.0.0-20230801193303-54e29300a091\th1:L644WnBAUw4546Wrt52yzuSPoV24t0ArlMwc5iRr8U0=\n\tdep\tgithub.com/sean-/seed\tv0.0.0-20170313163322-e2103e2c3529\th1:nn5Wsu0esKSJiIVhscUtVbo7ada43DJhG55ua/hjS5I=\n\tdep\tgithub.com/segmentio/ksuid\tv1.0.4\th1:sBo2BdShXjmcugAMwjugoGUdUV0pcxY5mW4xKRn3v4c=\n\tdep\tgithub.com/sirupsen/logrus\tv1.10.2\th1:G2SED73/qrAu6YwbdxOD6peLkCBI3z7L+ykJFTXJBBo=\n\tdep\tgithub.com/sony/gobreaker\tv1.0.0\th1:feX5fGGXSl3dYd4aHZItw+FpHLvvoaqkawKjVNiFMNQ=\n\tdep\tgithub.com/spiffe/go-spiffe/v2\tv2.8.1\th1:eXZMLsu+3MLEPJyGJkolqtVrteZfQdUpOWj6LTiDl/E=\n\tdep\tgithub.com/szuecs/rate-limit-buffer\tv0.9.0\th1:65fBCVsaJFh0E1G5C6/sInEPlYR6dXtF9J9bAv48lLg=\n\tdep\tgithub.com/tchap/go-patricia/v2\tv2.3.3\th1:xfNEsODumaEcCcY3gI0hYPZ/PcpVv5ju6RMAhgwZDDc=\n\tdep\tgithub.com/tidwall/gjson\tv1.20.0\th1:+agJ3rEzKcCXKDKo0ml26UROcpcAlnZyjq+TjbY5Fto=\n\tdep\tgithub.com/tidwall/match\tv1.1.1\th1:+Ho715JplO36QYgwN9PGYNhgZvoUSc9X2c80KVTi+GA=\n\tdep\tgithub.com/tidwall/pretty\tv1.2.0\th1:RWIZEg2iJ8/g6fDDYzMpobmaoGh5OLl4AXtGUGPcqCs=\n\tdep\tgithub.com/tilinna/z85\tv1.0.0\th1:uqFnJBlD01dosSeo5sK1G1YGbPuwqVHqR+12OJDRjUw=\n\tdep\tgithub.com/twmb/franz-go\tv1.20.5\th1:Gj9jdkvlddf8pdrehvtDHLPult5JS8q65oITUff6dXo=\n\tdep\tgithub.com/twmb/franz-go/pkg/kmsg\tv1.12.0\th1:CbatD7ers1KzDNgJqPbKOq0Bz/WLBdsTH75wgzeVaPc=\n\tdep\tgithub.com/uber/jaeger-client-go\tv2.30.0+incompatible\th1:D6wyKGCecFaSRUpo8lCVbaOOb6ThwMmTEbhRwtKR97o=\n\tdep\tgithub.com/uber/jaeger-lib\tv2.4.1+incompatible\th1:td4jdvLcExb4cBISKIpHuGoVXh+dVKhn2Um6rjCsSsg=\n\tdep\tgithub.com/urfave/cli/v2\tv2.27.7\th1:bH59vdhbjLv3LAvIu6gd0usJHgoTTPhCFib8qqOwXYU=\n\tdep\tgithub.com/valkey-io/valkey-go\tv1.0.79\th1:dryzYka/oOkSMOcNmOTjQI8zfu/4bUzDZNnFW9NlqNM=\n\tdep\tgithub.com/valkey-io/valkey-go/valkeyhook\tv1.0.79\th1:LELyvgwYWV66fjn1jogjy+raotlL7EtQCxU8ycB1o2U=\n\tdep\tgithub.com/valkey-io/valkey-go/valkeyotel\tv1.0.79\th1:pOQCNnXsijmtidW/5XnoK5eLHIg2GVVBTXkcQMCVG84=\n\tdep\tgithub.com/valyala/fastjson\tv1.6.7\th1:ZE4tRy0CIkh+qDc5McjatheGX2czdn8slQjomexVpBM=\n\tdep\tgithub.com/vektah/gqlparser/v2\tv2.5.32\th1:k9QPJd4sEDTL+qB4ncPLflqTJ3MmjB9SrVzJrawpFSc=\n\tdep\tgithub.com/vmihailenco/msgpack/v5\tv5.4.1\th1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=\n\tdep\tgithub.com/vmihailenco/tagparser/v2\tv2.0.0\th1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=\n\tdep\tgithub.com/xdg-go/scram\tv1.2.0\th1:bYKF2AEwG5rqd1BumT4gAnvwU/M9nBp2pTSxeZw7Wvs=\n\tdep\tgithub.com/xdg-go/stringprep\tv1.0.4\th1:XLI/Ng3O1Atzq0oBs3TWm+5ZVgkq2aqdlvP9JtoZ6c8=\n\tdep\tgithub.com/xeipuuv/gojsonpointer\tv0.0.0-20190905194746-02993c407bfb\th1:zGWFAtiMcyryUHoUjUJX0/lt1H2+i2Ka2n+D3DImSNo=\n\tdep\tgithub.com/xeipuuv/gojsonreference\tv0.0.0-20180127040603-bd5ef7bd5415\th1:EzJWgHovont7NscjpAxXsDA8S8BMYve8Y5+7cuRE7R0=\n\tdep\tgithub.com/xeipuuv/gojsonschema\tv1.2.0\th1:LhYJRs+L4fBtjZUfuSZIKGeVu0QRy8e5Xi7D17UxZ74=\n\tdep\tgithub.com/xrash/smetrics\tv0.0.0-20240521201337-686a1a2994c1\th1:gEOO8jv9F4OT7lGCjxCBTO/36wtF6j2nSip77qHd4x4=\n\tdep\tgithub.com/yashtewari/glob-intersection\tv0.2.0\th1:8iuHdN88yYuCzCdjt0gDe+6bAhUwBeEWqThExu54RFg=\n\tdep\tgithub.com/yookoala/gofast\tv0.8.0\th1:UmGTeBj2EF5gvS58ByE9HFdQ9MeYSUIwf7JN9aFno3Y=\n\tdep\tgithub.com/youmark/pkcs8\tv0.0.0-20240726163527-a2c0da244d78\th1:ilQV1hzziu+LLM3zUTJ0trRztfwgjqKnBWNtSRkbmwM=\n\tdep\tgithub.com/yuin/gopher-lua\tv1.1.2\th1:yF/FjE3hD65tBbt0VXLE13HWS9h34fdzJmrWRXwobGA=\n\tdep\tgo.opentelemetry.io/auto/sdk\tv1.2.1\th1:jXsnJ4Lmnqd11kwkBV2LgLoFMZKizbCi5fNZ/ipaZ64=\n\tdep\tgo.opentelemetry.io/contrib/bridges/prometheus\tv0.72.0\th1:OUIUu7ovHCEvG4IE5LQd2PNBH2eVYh50w/1ROwHEM7M=\n\tdep\tgo.opentelemetry.io/contrib/detectors/gcp\tv1.44.0\th1:NmLfL734pJhM0JKaYd2Y28+nY9dPRWYAAbxhRCrKXPw=\n\tdep\tgo.opentelemetry.io/contrib/exporters/autoexport\tv0.72.0\th1:TPXrl7vEkmh69tp7dHTpz+Y6AUenFg1Du3Nx3a6dlxY=\n\tdep\tgo.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc\tv0.71.0\th1:B2h3uqicet1CT2N5TOFhS+Gq++9i0/CLmaxvhmhtP5s=\n\tdep\tgo.opentelemetry.io/contrib/instrumentation/net/http/otelhttp\tv0.71.0\th1:3g7B90UzBltIDKq1/5mrTGxTnOFDV0ICOhLoxiZ8jlg=\n\tdep\tgo.opentelemetry.io/contrib/propagators/autoprop\tv0.72.0\th1:/Kv8DucXan87cGRpa3NeZtlk26kFahF2YrL6Sz3GFsI=\n\tdep\tgo.opentelemetry.io/contrib/propagators/aws\tv1.47.0\th1:n/2x/vQki1ojD7R2jYHdnNdI74Yx/OFdY4YXFFesm8M=\n\tdep\tgo.opentelemetry.io/contrib/propagators/b3\tv1.47.0\th1:vlKDmtjhe1R0d7kdov/+KVTKWOKeGLyohB+iXoDPRMQ=\n\tdep\tgo.opentelemetry.io/contrib/propagators/jaeger\tv1.47.0\th1:2lDw6AKPV33/7Qw9oN5YdxuSJIlUz7q3tkfSlJX5rh0=\n\tdep\tgo.opentelemetry.io/contrib/propagators/ot\tv1.47.0\th1:nZUqh0/8CMRh7fQMfJl3HWFW92vqJ4FcTRQ7lrubOO4=\n\tdep\tgo.opentelemetry.io/otel\tv1.47.0\th1:j7ALJ/zgkS7Z6aeJW09p8VC9804bC+PpeTfCD4XPnOM=\n\tdep\tgo.opentelemetry.io/otel/bridge/opentracing\tv1.47.0\th1:s3CJ/gi1BywMOOKLvu9m6nNDf26x8+Cf+OkNKtTIRPY=\n\tdep\tgo.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc\tv0.23.0\th1:5Ek4qQ5XX0PSQfY7lMW3CvcR36yy8YFDfGnYnaku8zE=\n\tdep\tgo.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp\tv0.23.0\th1:5WVp40k2fJHuc5BtNTgKk+EugKFT8Eg3lywFfCPI/nE=\n\tdep\tgo.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc\tv1.47.0\th1:LaLVGJtIzHcvHjVs2OftmKcc+M9mdOqS8vZ1fBD1Yes=\n\tdep\tgo.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp\tv1.47.0\th1:7kszRN4Ze5GeAkUnBjBSUIunVBMA+mZIG04auueqguM=\n\tdep\tgo.opentelemetry.io/otel/exporters/otlp/otlptrace\tv1.47.0\th1:julhjPeUH/q/7hinbSdDdqt5h7Zw9YWmRlWRhI0jd54=\n\tdep\tgo.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc\tv1.47.0\th1:UFpxOpYPmMNUtOWhdb+nC1WELIgVf8z9higURrbzYU4=\n\tdep\tgo.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp\tv1.47.0\th1:aXZXsZ012wOgVkqaiQv+Z/d8V0xKjmg70F6m4CE94lc=\n\tdep\tgo.opentelemetry.io/otel/exporters/prometheus\tv0.69.0\th1:LQVBTGnHvzrfGJpDoCSVTY7eaLZArvaTSq5l84Skxew=\n\tdep\tgo.opentelemetry.io/otel/exporters/stdout/stdoutlog\tv0.23.0\th1:PW/E9Tw6ZykC88pey0MZY8hKOUeEw+hX6PU+oXA4A9o=\n\tdep\tgo.opentelemetry.io/otel/exporters/stdout/stdoutmetric\tv1.47.0\th1:ww5DYBpMKcqLdxjWrhGUIh6O+ZfvZUaMk4niVyNQPEQ=\n\tdep\tgo.opentelemetry.io/otel/exporters/stdout/stdouttrace\tv1.47.0\th1:N3YQCxjxQ/bMjyc3heladfRm9t9RTksGQH8z4w6yU/0=\n\tdep\tgo.opentelemetry.io/otel/log\tv1.47.0\th1:cOTS1CcLbSQeZKanGJ+0JpF/+t4PELi3O3bbl2lqCcI=\n\tdep\tgo.opentelemetry.io/otel/metric\tv1.47.0\th1:4PptaldXx3Eat1XjMZ68pPJEs5wrhlemctZE9a3UdWY=\n\tdep\tgo.opentelemetry.io/otel/sdk\tv1.47.0\th1:zWXEr4j2lFefG87TU6Yg8a7ngfohIKFZHKp0Hf5hC6I=\n\tdep\tgo.opentelemetry.io/otel/sdk/log\tv1.47.0\th1:W4N/ZfgpkRRnmARnqYoQ6BrWA0mrj8IzVDNLlpmUJZY=\n\tdep\tgo.opentelemetry.io/otel/sdk/metric\tv1.47.0\th1:lfISg2j93VT6yqdk9OfUaZmw/GfcZqCCV3jdXtsPnKw=\n\tdep\tgo.opentelemetry.io/otel/trace\tv1.47.0\th1:JOjX/Oci8K94QHddo+bbfya/Ai/nf6/dt9ZfrFNWSrM=\n\tdep\tgo.opentelemetry.io/proto/otlp\tv1.11.1\th1:SCrPqH9NE5CmBrOqpjNCiT0X5mGwMyGERXdogfR7Yjw=\n\tdep\tgo.uber.org/atomic\tv1.12.0\th1:BvcXdFKuviU4fTL/f+SxdQ5qJX/Jix8pAkgdUcb3XOE=\n\tdep\tgo.uber.org/automaxprocs\tv1.6.0\th1:O3y2/QNTOdbF+e/dpXNNW7Rx2hZ4sTIPyybbxyNqTUs=\n\tdep\tgo.uber.org/multierr\tv1.11.0\th1:blXXJkSxSSfBVBlC76pxqeO+LN3aDfLQo+309xJstO0=\n\tdep\tgo.yaml.in/yaml/v2\tv2.4.4\th1:tuyd0P+2Ont/d6e2rl3be67goVK4R6deVxCUX5vyPaQ=\n\tdep\tgo.yaml.in/yaml/v3\tv3.0.5\th1:N6y/pJk8buWs9NY5ERU2HSMfm+IuD/OtfdAnq6kESPw=\n\tdep\tgo4.org/netipx\tv0.0.0-20231129151722-fdeea329fbba\th1:0b9z3AuHCjxk0x/opv64kcgZLBseWJUpBw5I82+2U4M=\n\tdep\tgolang.org/x/crypto\tv0.58.0\th1:COkYLr4k7nDI4r6QtMML2AfzeIswWHAJthLS6K/M/54=\n\tdep\tgolang.org/x/exp\tv0.0.0-20260908205506-85c1c2202aba\th1:Ck8QetSgk912qxWLMCKxd0in+aiyBQyDSMae6e/xmpU=\n\tdep\tgolang.org/x/net\tv0.61.0\th1:RR+6j/BTBCrggOLugxa+66R8FvoN6MHlzDlZIbN9YFw=\n\tdep\tgolang.org/x/oauth2\tv0.37.0\th1:JUlcxA8oAtauLfiH8FX2/FkAWHAdi0QtGCGc+hofE98=\n\tdep\tgolang.org/x/sync\tv0.24.0\th1:iqiDrGoDgyuvAKrhLQthUEzU/R378N78gXbBjxed7oA=\n\tdep\tgolang.org/x/sys\tv0.49.0\th1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA=\n\tdep\tgolang.org/x/text\tv0.43.0\th1:1QivrlhwAsnMOcqgOdl9my7s9OyZl8O5/UGUTJVXoWc=\n\tdep\tgolang.org/x/time\tv0.16.0\th1:vMb6ptszcQMkcwiRTAuNNU50gom6++Q/6gY2hDM6VDE=\n\tdep\tgolang.org/x/tools/godoc\tv0.1.0-deprecated\th1:o+aZ1BOj6Hsx/GBdJO/s815sqftjSnrZZwyYTHODvtk=\n\tdep\tgoogle.golang.org/api\tv0.278.0\th1:W7jiRvRi53VYFfZ/HoZjQBtJk7gOFbHD8ot1RzVZU6E=\n\tdep\tgoogle.golang.org/genproto\tv0.0.0-20260319201613-d00831a3d3e7\th1:XzmzkmB14QhVhgnawEVsOn6OFsnpyxNPRY9QV01dNB0=\n\tdep\tgoogle.golang.org/genproto/googleapis/api\tv0.0.0-20260928230214-8a89bd6388cc\th1:rZHRz0ogq4Pid1IKtA/ivHi8XONVF5tqUQXA2TtgpkE=\n\tdep\tgoogle.golang.org/genproto/googleapis/rpc\tv0.0.0-20260928230214-8a89bd6388cc\th1:4bNTbnb44EqGVy9HaQxSY2jnafSUdgV3qHtedvNpDKg=\n\tdep\tgoogle.golang.org/grpc\tv1.84.0\th1:soMyaPJ8pAak5PIQ0DGBUir0XRo2fRoMqhNWMLlLxO0=\n\tdep\tgoogle.golang.org/protobuf\tv1.36.12\th1:pJOKDDOyeXErUroCihFAd5LQuwXBSpVnKGrj5o/fwxc=\n\tdep\tgopkg.in/ini.v1\tv1.67.1\th1:tVBILHy0R6e4wkYOn3XmiITt/hEVH4TFMYvAX2Ytz6k=\n\tdep\tgopkg.in/natefinch/lumberjack.v2\tv2.2.1\th1:bBRl1b0OH9s/DuPhuXpNl+VtCaJXFZ5/uEFST95x9zc=\n\tdep\tgopkg.in/yaml.v2\tv2.4.0\th1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=\n\tdep\tgopkg.in/yaml.v3\tv3.0.1\th1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=\n\tdep\tlayeh.com/gopher-json\tv0.0.0-20201124131017-552bb3c4c3bf\th1:rRz0YsF7VXj9fXRF6yQgFI7DzST+hsI3TeFSGupntu0=\n\tdep\tmodernc.org/libc\tv1.66.10\th1:yZkb3YeLx4oynyR+iUsXsybsX4Ubx7MQlSYEw4yj59A=\n\tdep\tmodernc.org/mathutil\tv1.7.1\th1:GCZVGXdaN8gTqB1Mf/usp1Y/hSqgI2vAGGP4jZMCxOU=\n\tdep\tmodernc.org/memory\tv1.11.0\th1:o4QC8aMQzmcwCK3t3Ux/ZHmwFPzE6hf2Y5LbkRs+hbI=\n\tdep\tmodernc.org/sqlite\tv1.41.0\th1:bJXddp4ZpsqMsNN1vS0jWo4IJTZzb8nWpcgvyCFG9Ck=\n\tdep\toras.land/oras-go/v2\tv2.6.2\th1:N04RXngAp1LJKTG6ifz3xHPipasEkWr+hFmInja5YKo=\n\tdep\tsigs.k8s.io/yaml\tv1.6.0\th1:G8fkbMSAFqgEFgh4b1wmtzDnioxFCUgTZhlbj5P9QYs=\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=arm64\n\tbuild\tGOOS=darwin\n\tbuild\tGOARM64=v8.0\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=bff0d80c0a20c9f641562a4a0d6901e217397e77\n\tbuild\tvcs.time=2026-10-29T10:04:39Z\n\tbuild\tvcs.modified=false",
+    "binary_sha256": "5e3aa52e49c92b7a451ee36e5a34fb6a7b030b0c57dd54f13ec0f43d24a4ac1e",
+    "harness_sha256": "514f5f9c086051f33853a279abd50702fbc65d6febbf32ea198d8be2667fc35f",
+    "prometheus_version": "prometheus, version 2.55.1 (branch: HEAD, revision: 6d7569113f1ca814f1e149f74176656540043b8d)\n  build user:       root@451457a16044\n  build date:       20241106-10:10:47\n  go version:       go1.23.2\n  platform:         darwin/arm64\n  tags:             netgo,builtinassets,stringlabels",
+    "prometheus_sha256": "fe3091bf20675955bddd2f0ccb86b674e331ba492ea749b7dc7c281b797d1fc3",
+    "valkey_image": [
+      "valkey/valkey@sha256:6a57d58c0a37cf7acc3045ac0fd6dd91be339774106ab4d9ca088013a096a99f"
+    ],
+    "grafana_image": [
+      "grafana/grafana-oss@sha256:a0f881232a6fb71a0554a47d0fe2203b6888fe77f4cefb7ea62bed7eb54e13c3"
+    ]
+  },
+  "commands": {
+    "eviction": [
+      "/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/skipper",
+      "-address=127.0.0.1:65220",
+      "-support-listener=127.0.0.1:65221",
+      "-metrics-flavour=prometheus",
+      "-proxy-preserve-host",
+      "-cache-l1-max-memory-bytes=358400",
+      "-swarm-valkey-dial-timeout=2s",
+      "-swarm-valkey-conn-timeout=2s",
+      "-wait-for-healthcheck-interval=0",
+      "-routes-file=/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/eviction.eskip"
+    ],
+    "queue": [
+      "/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/skipper",
+      "-address=127.0.0.1:65224",
+      "-support-listener=127.0.0.1:65225",
+      "-metrics-flavour=prometheus",
+      "-proxy-preserve-host",
+      "-cache-l1-max-memory-bytes=8388608",
+      "-swarm-valkey-dial-timeout=2s",
+      "-swarm-valkey-conn-timeout=2s",
+      "-wait-for-healthcheck-interval=0",
+      "-routes-file=/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/queue.eskip"
+    ],
+    "sie": [
+      "/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/skipper",
+      "-address=127.0.0.1:65228",
+      "-support-listener=127.0.0.1:65229",
+      "-metrics-flavour=prometheus",
+      "-proxy-preserve-host",
+      "-cache-l1-max-memory-bytes=8388608",
+      "-swarm-valkey-dial-timeout=2s",
+      "-swarm-valkey-conn-timeout=2s",
+      "-wait-for-healthcheck-interval=0",
+      "-routes-file=/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/sie.eskip"
+    ],
+    "partition": [
+      "/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/skipper",
+      "-address=127.0.0.1:65235",
+      "-support-listener=127.0.0.1:65236",
+      "-metrics-flavour=prometheus",
+      "-proxy-preserve-host",
+      "-cache-l1-max-memory-bytes=8388608",
+      "-swarm-valkey-dial-timeout=2s",
+      "-swarm-valkey-conn-timeout=2s",
+      "-wait-for-healthcheck-interval=0",
+      "-routes-file=/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/partition.eskip",
+      "-enable-swarm",
+      "-enable-l2-cache",
+      "-cache-l1-ttl=0s",
+      "-swarm-valkey-urls=127.0.0.1:65234"
+    ],
+    "peer": [
+      "/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/skipper",
+      "-address=127.0.0.1:51485",
+      "-support-listener=127.0.0.1:51486",
+      "-metrics-flavour=prometheus",
+      "-proxy-preserve-host",
+      "-cache-l1-max-memory-bytes=8388608",
+      "-swarm-valkey-dial-timeout=2s",
+      "-swarm-valkey-conn-timeout=2s",
+      "-wait-for-healthcheck-interval=0",
+      "-routes-file=/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/peer.eskip",
+      "-enable-swarm",
+      "-enable-l2-cache",
+      "-cache-l1-ttl=0s",
+      "-swarm-valkey-urls=127.0.0.1:65234"
+    ]
+  },
+  "prometheus_command": [
+    "/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/prometheus-native/prometheus-2.55.1.darwin-arm64/prometheus",
+    "--config.file=/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/prometheus.yml",
+    "--storage.tsdb.path=/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/narrative-upper-remaining/tsdb",
+    "--web.listen-address=127.0.0.1:65241"
+  ],
+  "dashboard_queries": [
+    {
+      "panel": 31,
+      "title": "L1 evictions / oversized entries",
+      "expression": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=~\"cache\\\\.(lru_eviction|lru_oversized)\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "instance": "eviction",
+                "key": "cache.lru_eviction"
+              },
+              "value": [
+                1793268486.946,
+                "1.3720958333333335"
+              ]
+            }
+          ]
+        }
+      },
+      "evaluation_time": 1793268486.946128,
+      "required_labels": {
+        "instance": "eviction",
+        "key": "cache.lru_eviction"
+      }
+    },
+    {
+      "panel": 60,
+      "title": "Cache evictions",
+      "expression": "sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=\"cache.lru_eviction\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "instance": "eviction"
+              },
+              "value": [
+                1793268486.947,
+                "1.3723999999999998"
+              ]
+            }
+          ]
+        }
+      },
+      "evaluation_time": 1793268486.947381,
+      "required_labels": {
+        "instance": "eviction"
+      }
+    },
+    {
+      "panel": 19,
+      "title": "Refresh errors / dropped jobs",
+      "expression": "sum by (instance, key) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\".+\",key=~\"cache\\\\.(reval_error|reval_dropped)\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "instance": "queue",
+                "key": "cache.reval_dropped"
+              },
+              "value": [
+                1793268498.177,
+                "0.04010833333333333"
+              ]
+            }
+          ]
+        }
+      },
+      "evaluation_time": 1793268498.176637,
+      "required_labels": {
+        "instance": "queue",
+        "key": "cache.reval_dropped"
+      }
+    },
+    {
+      "panel": 34,
+      "title": "Refresh queue depth",
+      "expression": "max by (instance) (skipper_custom_gauges{job=\"skipper-local\",instance=~\".+\",key=\"cache.reval_queue_depth\"} and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+      "direct": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "instance": "queue"
+              },
+              "value": [
+                1793268498.178,
+                "256"
+              ]
+            },
+            {
+              "metric": {
+                "instance": "eviction"
+              },
+              "value": [
+                1793268498.178,
+                "0"
+              ]
+            },
+            {
+              "metric": {
+                "instance": "sie"
+              },
+              "value": [
+                1793268498.178,
+                "0"
+              ]
+            },
+            {
+              "metric": {
+                "instance": "partition"
+              },
+              "value": [
+                1793268498.178,
+                "0"
+              ]
+            }
+          ]
+        }
+      },
+      "evaluation_time": 1793268498.178041,
+      "required_labels": {
+        "instance": "queue"
+      }
+    },
+    {
+      "panel": 53,
+      "title": "Refresh outcomes by route family",
+      "expression": "sum by (family, outcome) (label_replace(rate(skipper_cache_route_reval_total{job=\"skipper-local\",instance=~\".+\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1), \"family\", \"$1\", \"route\", \"(.+?)__.*\"))",
+      "direct": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "family": "queue",
+                "outcome": "started"
+              },
+              "value": [
+                1793268498.179,
+                "0"
+              ]
+            },
+            {
+              "metric": {
+                "family": "queue",
+                "outcome": "dropped"
+              },
+              "value": [
+                1793268498.179,
+                "0.040125"
+              ]
+            }
+          ]
+        }
+      },
+      "evaluation_time": 1793268498.178727,
+      "required_labels": {
+        "family": "queue",
+        "outcome": "dropped"
+      }
+    }
+  ],
+  "grafana_container_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 1458321,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T10:08:43.850480215Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  }
+}

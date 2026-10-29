@@ -1,0 +1,31 @@
+{
+  "sha": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+  "status": "PASS",
+  "scope": "Actual upper-tip emitted Prometheus TSDB replayed into an owned native Prometheus; owned Grafana import, proxy and browser rendering. No new Skipper load or production resources.",
+  "grafana_version": "11.3.0",
+  "fix": "Private 64MiB /var/lib/grafana tmpfs, within existing 256MiB container limit, avoids slow overlay SQLite migration fsyncs.",
+  "method": "Browser canvas read_page, screenshot_page, same-origin datasource proxy fetch",
+  "dashboard": "cache-performance-local",
+  "panel_id": 60,
+  "panel_title": "Cache evictions",
+  "observed": "Rendered positive eviction ops/s sample with eviction legend, not a missing/no-data panel.",
+  "canvas_elements": 1,
+  "browser_proxy_http_status": 200,
+  "browser_proxy_expression": "sum by(instance)(rate(skipper_custom_total{key=\"cache.lru_eviction\"}[1m]))",
+  "browser_proxy_start": 1793268456.946,
+  "browser_proxy_end": 1793268508.178,
+  "browser_proxy_step_seconds": 1,
+  "browser_proxy_series": {
+    "instance": "eviction",
+    "finite_points": 25,
+    "positive_points": 24,
+    "maximum": 1.5275250000000002
+  },
+  "additional_rendered_panel": {
+    "id": 19,
+    "title": "Refresh errors / dropped jobs",
+    "legend": "queue cache.reval_dropped",
+    "observed": "Series and sample rendered. The existing 0..100 ops/s axis makes the small bounded drop rate appear close to zero; exact positive query samples are asserted in the Grafana replay report."
+  },
+  "limitations": "Visual inspection does not cover every dashboard panel or Loki/Tempo/retail links. The original upper Grafana startup failure remains preserved separately. Screenshot is retained in conversation tool evidence; this durable record captures the observation."
+}

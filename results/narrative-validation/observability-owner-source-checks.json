@@ -1,0 +1,111 @@
+{
+  "created_at": "2026-10-29T10:05:01.910341+00:00",
+  "branch": "larry-almeida-zse-cache-observability-consolidation",
+  "base": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+  "tip": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+  "old_tip": "ff7e9b03545203567dc40969b5b47d1da4f5760a",
+  "expected_remote_tip": "ff7e9b03545203567dc40969b5b47d1da4f5760a",
+  "observed_remote_tip": "ff7e9b03545203567dc40969b5b47d1da4f5760a",
+  "tree": "d434f896192040f858775198bac7850cc66a9bfb",
+  "exact_final_tree_equal": true,
+  "exact_correctness_base_tree_equal": true,
+  "clean_worktree": true,
+  "commit_count": 5,
+  "pushed": false,
+  "push_requires": "Explicit parent PUSHGATE after e2e verifies both rebuilt tips",
+  "commits": [
+    {
+      "sha": "cde1fe54857df8fd6bac530c8d4729dcb21b6faf",
+      "subject": "feat: expose cache occupancy and route outcomes",
+      "commands": [
+        "go build ./...",
+        "go test -short ./filters/cache ./metrics/... -skip '^TestValkeyStorage_'"
+      ],
+      "status": "PASS",
+      "log": "narrative-1-validation.log"
+    },
+    {
+      "sha": "5e1c72b46510f2cb03562897dc9aa521e076cc0a",
+      "subject": "feat: measure cache origin fetches and refresh outcomes",
+      "commands": [
+        "go build ./...",
+        "go test -short ./filters/cache ./metrics/... -skip '^TestValkeyStorage_'"
+      ],
+      "status": "PASS",
+      "log": "narrative-2-validation.log"
+    },
+    {
+      "sha": "3a9d401d63a9bccf9637208b5f2ca6654e094906",
+      "subject": "feat: count external clients without cache replay",
+      "commands": [
+        "go build ./...",
+        "go test -short ./filters/cache ./metrics/... -skip '^TestValkeyStorage_'",
+        "go test ./net -run '^TestConsumeInternalRequest$'",
+        "go test ./proxy -run 'ClientRequest'"
+      ],
+      "status": "PASS",
+      "log": "narrative-3-validation.log"
+    },
+    {
+      "sha": "1793051e8d222a268a029c7ccd7db116cc5f5510",
+      "subject": "feat: attribute cache reads and L2 operations",
+      "commands": [
+        "go build ./...",
+        "go test -short ./filters/cache ./metrics/... -skip '^TestValkeyStorage_'"
+      ],
+      "status": "PASS",
+      "log": "narrative-4-validation.log"
+    },
+    {
+      "sha": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+      "subject": "feat: record terminal cache decisions by serving tier",
+      "commands": [
+        "go build ./...",
+        "go test -short ./filters/cache ./metrics/... -skip '^TestValkeyStorage_'",
+        "go test ./net -run '^TestConsumeInternalRequest$'",
+        "go test ./proxy -run 'ClientRequest'"
+      ],
+      "status": "PASS",
+      "log": "narrative-5-validation.log"
+    }
+  ],
+  "additional_checks": {
+    "fmt_lint": {
+      "commands": [
+        "make fmt",
+        "make lint"
+      ],
+      "status": "PASS",
+      "log": "narrative-final-fmt-lint.log"
+    },
+    "race": {
+      "status": "PASS",
+      "log": "narrative-final-race.log"
+    },
+    "actual_valkey_storage_api": {
+      "layer_4": "PASS",
+      "layer_5_race": "PASS",
+      "logs": [
+        "narrative-4-storage-api.log",
+        "narrative-5-storage-api-race.log"
+      ],
+      "owned_container_removed": true
+    },
+    "shortcheck": {
+      "status": "FAIL_KNOWN_BASELINE",
+      "log": "narrative-final-shortcheck.log",
+      "failures": [
+        "testcontainers Docker provider unavailable (Redis/Valkey/etcd fixtures)",
+        "unrelated TestJwtMetrics"
+      ]
+    },
+    "benchmark": {
+      "count": 20,
+      "log": "narrative-final-benchmarks.log",
+      "summary": "narrative-final-benchstat.log",
+      "purpose_unattributed": "0.8649 ns/op, 0 B/op, 0 allocs/op",
+      "purpose_response": "34.52 ns/op, 48 B/op, 1 alloc/op",
+      "route_result": "47.95 ns/op, 0 B/op, 0 allocs/op"
+    }
+  }
+}

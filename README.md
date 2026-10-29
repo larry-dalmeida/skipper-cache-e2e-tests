@@ -262,6 +262,11 @@ Grafana 11.3.0 with anonymous Admin access for importing the local dashboard;
 it never connects to or modifies the shared Grafana. Services are removed
 on exit. `--ui-hold-seconds 180` temporarily holds that owned instance for
 browser inspection; creating `OUTPUT/browser-release` releases it early.
+Grafana's data uses a private 64MiB tmpfs within its 256MiB container budget,
+avoiding shared-overlay SQLite migration latency without persisting user data.
+`--grafana-replay PREVIOUS_OUTPUT/result.json` can retry only Grafana against
+that run's retained local Prometheus TSDB and exact historical query times;
+it does not rerun or replace core Skipper assertions.
 For the correctness-only layer, pass `--mode correctness` to
 `verify_cache_remaining.py`: HTTP/origin/socket assertions still run, while
 upper-only metric families and panel 53 are explicitly NOT APPLICABLE.

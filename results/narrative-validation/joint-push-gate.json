@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "gate": "Both reconstructed source tips independently built and exercised; source owners may proceed only with parent-controlled push sequence",
+  "correctness": {
+    "sha": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+    "baseline_sha": "2702aa036eda2dc3b7eeabc17b95a1086ca6b985",
+    "tree": "485e8a3e6d73a667ab060d3dca73903a378647eb",
+    "tree_equal": true,
+    "commits_above_base": 5,
+    "l1": "PASS",
+    "coalescing": "PASS",
+    "applicable_remaining_http_origin_wire_legacy_queries": "PASS",
+    "upper_only_metric_contracts": "NOT APPLICABLE",
+    "binary_sha256": "633fddc90fa851aeca72f2d589b7517b4f4742d2b29fe0e6965bdc52c5a27fad"
+  },
+  "observability": {
+    "sha": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+    "baseline_sha": "ff7e9b03545203567dc40969b5b47d1da4f5760a",
+    "tree": "d434f896192040f858775198bac7850cc66a9bfb",
+    "tree_equal": true,
+    "commits_above_correctness": 5,
+    "inter_layer_feature_diff_byte_identical": true,
+    "inter_layer_feature_diff_sha256": "4676d01a4516212fc3053b7546e5ae978cbe7043d0bc69b176bc4086a8a1db7d",
+    "l1": "PASS",
+    "coalescing": "PASS",
+    "request_l2_matrix": "PASS, 24 cases",
+    "dashboard_queries": "43 PASS; eviction NOT EXERCISED in this workload, independently PASS in pressure workload",
+    "remaining_core": "PASS, all four cases including held-socket blackhole",
+    "original_grafana_attempt": "FAIL: owned local readiness; raw report preserved",
+    "grafana_retry": "PASS, owned tmpfs + actual upper TSDB replay, five exact positive direct/proxy vectors",
+    "browser": "PASS, actual upper-emitted eviction series rendered; dropped-job legend rendered",
+    "storage_api": "PASS on exact upper SHA, source-owner executed actual Valkey/race evidence included",
+    "binary_sha256": "5e3aa52e49c92b7a451ee36e5a34fb6a7b030b0c57dd54f13ec0f43d24a4ac1e"
+  },
+  "harness_unit_tests": "PASS, 172",
+  "harness_sha256": {
+    "verify_l1_freshness.py": "c3517b699c00ac940f80d76c017d60ab546ba9ee7833addad8b1ac8bce44bea4",
+    "verify_candidate_behaviour.py": "bf9388953d89ab9ab5b6da9ca8f1bce618e3a6505473329ad1ed0f565d221586",
+    "verify_cache_observability.py": "af5eb02cc3e748d3c0b35fbbb98bac4b9e415b7b9ae3264fe18d15ecefe96bda",
+    "verify_cache_dashboards.py": "d8d79b81a2a90c7aad35bb56619b993de5b3d56ae801a5419939062cac433084",
+    "verify_cache_remaining.py": "37cbcd5f1b7e80f6e8f11ac477b315558275213dd274e1f1dd370fb2d01bd194"
+  },
+  "grafana_replay_command": "python3 verify_cache_remaining.py --checkout .runtime/skipper-narrative-observability --sha bff0d80c0a20c9f641562a4a0d6901e217397e77 --grafana-replay .runtime/narrative-upper-remaining/result.json --output .runtime/narrative-upper-grafana-retry --ui-hold-seconds 180",
+  "resource_check": {
+    "owned_acceptance_processes": [],
+    "owned_acceptance_containers": [],
+    "all_owned_resources_stopped_removed": true,
+    "production_or_shared_mutations": false
+  },
+  "remaining_limits": [
+    "24-hour wall-clock retention and production workload",
+    "Exhaustive RFC/method/validator/SIE Cartesian product",
+    "Every network topology/retry policy, including unreachable-listener dial distributions",
+    "Real retail locale taxonomy and every browser panel/link",
+    "Full Skipper shortcheck is not globally green: owner records known Docker-provider/etcd/JWT failures"
+  ],
+  "source_push_performed_by_this_session": false,
+  "publication": "Normal append to e2e feature branch; source push coordination belongs to parent and owning children"
+}

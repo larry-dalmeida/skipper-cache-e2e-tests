@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "layer": "observability",
+  "new_sha": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+  "baseline_sha": "ff7e9b03545203567dc40969b5b47d1da4f5760a",
+  "new_tree": "d434f896192040f858775198bac7850cc66a9bfb",
+  "baseline_tree": "d434f896192040f858775198bac7850cc66a9bfb",
+  "independent_tree_equality": true,
+  "source_checkout_clean": true,
+  "new_lower_sha": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+  "baseline_lower_sha": "2702aa036eda2dc3b7eeabc17b95a1086ca6b985",
+  "feature_diff_byte_identical": true,
+  "feature_diff_sha256": "4676d01a4516212fc3053b7546e5ae978cbe7043d0bc69b176bc4086a8a1db7d",
+  "commits": [
+    "bff0d80c0a20c9f641562a4a0d6901e217397e77 feat: record terminal cache decisions by serving tier",
+    "1793051e8d222a268a029c7ccd7db116cc5f5510 feat: attribute cache reads and L2 operations",
+    "3a9d401d63a9bccf9637208b5f2ca6654e094906 feat: count external clients without cache replay",
+    "5e1c72b46510f2cb03562897dc9aa521e076cc0a feat: measure cache origin fetches and refresh outcomes",
+    "cde1fe54857df8fd6bac530c8d4729dcb21b6faf feat: expose cache occupancy and route outcomes"
+  ],
+  "commands": [
+    "python3 verify_l1_freshness.py --checkout .runtime/skipper-narrative-observability --sha bff0d80c0a20c9f641562a4a0d6901e217397e77 --output .runtime/narrative-upper-l1",
+    "python3 verify_candidate_behaviour.py --l1-result .runtime/narrative-upper-l1/result.json --output .runtime/narrative-upper-coalescing",
+    "python3 verify_cache_observability.py --checkout .runtime/skipper-narrative-observability --sha bff0d80c0a20c9f641562a4a0d6901e217397e77 --mode integrated --output .runtime/narrative-upper-metrics",
+    "python3 verify_cache_dashboards.py --checkout .runtime/skipper-narrative-observability --sha bff0d80c0a20c9f641562a4a0d6901e217397e77 --output .runtime/narrative-upper-dashboards",
+    "python3 verify_cache_remaining.py --checkout .runtime/skipper-narrative-observability --sha bff0d80c0a20c9f641562a4a0d6901e217397e77 --output .runtime/narrative-upper-remaining --grafana",
+    "make test"
+  ],
+  "push_status_at_validation": "Unpushed source tip fetched directly from owning child local Git repository"
+}

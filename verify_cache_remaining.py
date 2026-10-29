@@ -60,6 +60,15 @@ def finite_positive(result, **labels):
     return selected
 
 
+def query_values(result):
+    values = {}
+    for sample in result["data"]["result"]:
+        labels = tuple(sorted(sample["metric"].items()))
+        check(labels not in values, "duplicate Prometheus vector labels")
+        values[labels] = tuple(float(v) for v in sample["value"])
+    return values
+
+
 def resp_command(data):
     """Return one complete RESP array of bulk strings, retaining fragmented input."""
     if not data:
@@ -157,6 +166,131 @@ def json_http(url, payload=None):
         headers={} if payload is None else {"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=30) as response:
         return json.load(response)
+
+
+def run_grafana(stack, output, prom_port, dashboard, report):
+    name = "remaining-grafana-" + uuid.uuid4().hex[:12]
+    image = json.loads(command("docker", "image", "inspect", GRAFANA))[0]
+    report["provenance"]["grafana_image"] = image["RepoDigests"]
+    command("docker", "run", "--detach", "--name", name,
+            "--memory=256m", "--cpus=0.5", "--publish", "127.0.0.1::3000",
+            "--tmpfs", "/var/lib/grafana:rw,noexec,nosuid,nodev,size=64m,uid=472,gid=0,mode=0770",
+            "--env", "GF_AUTH_ANONYMOUS_ENABLED=true",
+            "--env", "GF_AUTH_ANONYMOUS_ORG_ROLE=Admin",
+            "--env", "GF_AUTH_DISABLE_LOGIN_FORM=true",
+            "--env", "GF_ANALYTICS_REPORTING_ENABLED=false",
+            "--env", "GF_ANALYTICS_CHECK_FOR_UPDATES=false",
+            "--env", "GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES=false",
+            "--env", "GF_PLUGINS_PREINSTALL_DISABLED=true", GRAFANA)
+    stack.callback(command, "docker", "rm", "--force", name)
+    grafana_port = command("docker", "port", name, "3000/tcp").rsplit(":", 1)[1]
+    base = f"http://127.0.0.1:{grafana_port}"
+
+    def ready():
+        try:
+            return json_http(base + "/api/health")["database"] == "ok"
+        except OSError:
+            return False
+    try:
+        wait(ready, "owned local Grafana readiness", 60)
+    finally:
+        (output / "grafana.log").write_text(command("docker", "logs", name))
+        report["grafana_container_state"] = json.loads(command("docker", "inspect", name))[0]["State"]
+    json_http(base + "/api/datasources", {
+        "name": "local-prometheus", "uid": "local-prometheus", "type": "prometheus",
+        "access": "proxy", "url": f"http://host.docker.internal:{prom_port}",
+        "isDefault": True, "jsonData": {"httpMethod": "GET"}})
+    check(json_http(base + "/api/dashboards/db", {
+        "dashboard": dashboard, "overwrite": True})["status"] == "success",
+        "local dashboard import failed")
+    for entry in report["dashboard_queries"]:
+        params = urllib.parse.urlencode({
+            "query": entry["expression"], "timeout": "20s", "time": str(entry["evaluation_time"])})
+        proxy = json_http(base + "/api/datasources/proxy/uid/local-prometheus"
+                          "/api/v1/query?" + params)
+        finite_positive(proxy, **entry["required_labels"])
+        check(query_values(proxy) == query_values(entry["direct"]),
+              f"Grafana proxy/direct disagreement at panel {entry['panel']}")
+        entry["grafana_proxy"] = proxy
+    first = min(p["evaluation_time"] for p in report["dashboard_queries"])
+    last = max(p["evaluation_time"] for p in report["dashboard_queries"])
+    url = (base + "/d/cache-performance-local?" + urllib.parse.urlencode({
+        "from": str(int((first - 30) * 1000)), "to": str(int((last + 10) * 1000)), "refresh": ""}))
+    print("BROWSER_READY", url, flush=True)
+    return {"status": "PASS", "health": json_http(base + "/api/health"), "url": url,
+            "imported_uid": "cache-performance-local",
+            "proxy_panel_queries": len(report["dashboard_queries"]),
+            "ui_rendering": "not yet inspected"}
+
+
+def hold_browser(output, seconds):
+    deadline = time.monotonic() + seconds
+    while not (output / "browser-release").exists() and time.monotonic() < deadline:
+        time.sleep(.2)
+
+
+def replay_grafana(args):
+    output = Path(args.output).resolve()
+    output.mkdir(parents=True, exist_ok=True)
+    report = {"sha": args.sha, "status": "ERROR", "errors": [],
+              "scope": "Grafana-only replay of actual exact-SHA Prometheus TSDB; no new Skipper workload"}
+    try:
+        source = Path(args.grafana_replay).resolve()
+        original = json.loads(source.read_text())
+        check(original["sha"] == args.sha, "replay source SHA mismatch")
+        check(original["cases"] and all(c["status"] == "PASS" for c in original["cases"]),
+              "Grafana-only replay cannot substitute for failed core behaviour")
+        check(command("git", "-C", str(Path(args.checkout).resolve()), "rev-parse", "HEAD") == args.sha,
+              "replay checkout source SHA mismatch")
+        tsdb = source.parent / "tsdb"
+        check(tsdb.is_dir(), "original owned Prometheus TSDB missing")
+        report.update({
+            "original_report": str(source), "original_report_status": original["status"],
+            "original_report_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+            "original_errors": original["errors"],
+            "core_cases": [{"name": c["name"], "status": c["status"]} for c in original["cases"]],
+            "dashboard_queries": original["dashboard_queries"],
+            "provenance": original["provenance"],
+            "fix": "64MiB private Grafana tmpfs avoids slow overlay SQLite migration fsyncs",
+        })
+        with contextlib.ExitStack() as stack:
+            prom_port = port()
+            config = output / "prometheus.yml"
+            config.write_text("global:\n  scrape_interval: 1s\nscrape_configs: []\n")
+            prom_log = stack.enter_context((output / "prometheus.log").open("w"))
+            argv = [str(Path(args.prometheus_binary).resolve()), f"--config.file={config}",
+                    f"--storage.tsdb.path={tsdb}", f"--web.listen-address=127.0.0.1:{prom_port}"]
+            report["prometheus_command"] = argv
+            process = subprocess.Popen(argv, stdout=prom_log, stderr=subprocess.STDOUT)
+            stack.callback(stop, process)
+            base = f"http://127.0.0.1:{prom_port}"
+
+            def ready():
+                check(process.poll() is None, "replayed Prometheus exited")
+                try:
+                    return json_http(base + "/api/v1/query?query=vector(1)")["status"] == "success"
+                except OSError:
+                    return False
+            wait(ready, "owned historical Prometheus not ready", 20)
+            for entry in report["dashboard_queries"]:
+                params = urllib.parse.urlencode({
+                    "query": entry["expression"], "time": str(entry["evaluation_time"])})
+                current = json_http(base + "/api/v1/query?" + params)
+                check(query_values(current) == query_values(entry["direct"]),
+                      "replayed TSDB query differs from original actual source observations")
+            dashboard = json.loads((ROOT / "dashboards/cache-performance.json").read_text())
+            report["grafana"] = run_grafana(stack, output, prom_port, dashboard, report)
+            report["status"] = "PASS"
+            (output / "result.json").write_text(json.dumps(report, indent=2) + "\n")
+            hold_browser(output, args.ui_hold_seconds)
+        report["resources"] = "all owned processes stopped and Grafana container removed"
+    except Exception as error:
+        report["errors"].append(f"{type(error).__name__}: {error}")
+        report["status"] = "FAIL" if isinstance(error, AssertionError) else "ERROR"
+    (output / "result.json").write_text(json.dumps(report, indent=2) + "\n")
+    print(json.dumps({"status": report["status"], "errors": report["errors"],
+                      "output": str(output / "result.json")}), flush=True)
+    return 0 if report["status"] == "PASS" else 1
 
 
 def run(args):
@@ -608,56 +742,7 @@ def run(args):
 
             grafana = {"status": "NOT EXERCISED"}
             if args.grafana:
-                grafana_name = "remaining-grafana-" + uuid.uuid4().hex[:12]
-                image = json.loads(command("docker", "image", "inspect", GRAFANA))[0]
-                report["provenance"]["grafana_image"] = image["RepoDigests"]
-                command("docker", "run", "--detach", "--name", grafana_name,
-                        "--memory=256m", "--cpus=0.5", "--publish", "127.0.0.1::3000",
-                        "--env", "GF_AUTH_ANONYMOUS_ENABLED=true",
-                        "--env", "GF_AUTH_ANONYMOUS_ORG_ROLE=Admin",
-                        "--env", "GF_AUTH_DISABLE_LOGIN_FORM=true",
-                        "--env", "GF_ANALYTICS_REPORTING_ENABLED=false",
-                        "--env", "GF_ANALYTICS_CHECK_FOR_UPDATES=false",
-                        "--env", "GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES=false",
-                        "--env", "GF_PLUGINS_PREINSTALL_DISABLED=true", GRAFANA)
-                stack.callback(command, "docker", "rm", "--force", grafana_name)
-                grafana_port = command("docker", "port", grafana_name, "3000/tcp").rsplit(":", 1)[1]
-                grafana_url = f"http://127.0.0.1:{grafana_port}"
-
-                def grafana_ready():
-                    try:
-                        return json_http(grafana_url + "/api/health")["database"] == "ok"
-                    except OSError:
-                        return False
-                try:
-                    wait(grafana_ready, "owned local Grafana readiness", 60)
-                finally:
-                    (output / "grafana.log").write_text(command("docker", "logs", grafana_name))
-                    report["grafana_container_state"] = json.loads(
-                        command("docker", "inspect", grafana_name))[0]["State"]
-                json_http(grafana_url + "/api/datasources", {
-                    "name": "local-prometheus", "uid": "local-prometheus", "type": "prometheus",
-                    "access": "proxy", "url": f"http://host.docker.internal:{prom_port}",
-                    "isDefault": True, "jsonData": {"httpMethod": "GET"}})
-                check(json_http(grafana_url + "/api/dashboards/db", {
-                    "dashboard": dashboard, "overwrite": True})["status"] == "success",
-                    "local dashboard import failed")
-                for entry in report["dashboard_queries"]:
-                    params = urllib.parse.urlencode({
-                        "query": entry["expression"], "timeout": "20s",
-                        "time": str(entry["evaluation_time"])})
-                    proxy = json_http(grafana_url + "/api/datasources/proxy/uid/local-prometheus"
-                                      "/api/v1/query?" + params)
-                    finite_positive(proxy, **entry["required_labels"])
-                    check(proxy["data"]["result"] == entry["direct"]["data"]["result"],
-                          f"Grafana proxy/direct disagreement at panel {entry['panel']}")
-                    entry["grafana_proxy"] = proxy
-                grafana = {"status": "PASS", "health": json_http(grafana_url + "/api/health"),
-                           "url": grafana_url + "/d/cache-performance-local?from=now-5m&to=now",
-                           "imported_uid": "cache-performance-local",
-                           "proxy_panel_queries": len(report["dashboard_queries"]),
-                           "ui_rendering": "not yet inspected"}
-                print("BROWSER_READY", grafana["url"], flush=True)
+                grafana = run_grafana(stack, output, prom_port, dashboard, report)
             report["grafana"] = grafana
             for name, url in (("eviction", eviction_metrics), ("queue", queue_metrics),
                               ("sie", sie_metrics), ("partition", partition_metrics)):
@@ -665,10 +750,7 @@ def run(args):
             report["status"] = "PASS"
             (output / "result.json").write_text(json.dumps(report, indent=2) + "\n")
             if args.ui_hold_seconds and args.grafana:
-                release = output / "browser-release"
-                deadline = time.monotonic() + args.ui_hold_seconds
-                while not release.exists() and time.monotonic() < deadline:
-                    time.sleep(.2)
+                hold_browser(output, args.ui_hold_seconds)
         report["resources"] = "all owned processes stopped and containers removed"
     except Exception as error:
         report["errors"].append(f"{type(error).__name__}: {error}")
@@ -688,5 +770,7 @@ if __name__ == "__main__":
     parser.add_argument("--prometheus-binary", default=str(
         ROOT / ".runtime/prometheus-native/prometheus-2.55.1.darwin-arm64/prometheus"))
     parser.add_argument("--grafana", action="store_true")
+    parser.add_argument("--grafana-replay", help="Replay actual prior result.json/TSDB without rerunning load")
     parser.add_argument("--ui-hold-seconds", type=float, default=0)
-    raise SystemExit(run(parser.parse_args()))
+    args = parser.parse_args()
+    raise SystemExit(replay_grafana(args) if args.grafana_replay else run(args))

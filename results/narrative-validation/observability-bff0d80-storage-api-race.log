@@ -1,0 +1,27 @@
+PONG
+=== RUN   TestValkeyStorage_StorageAPIObservability
+=== RUN   TestValkeyStorage_StorageAPIObservability/encode/unknown
+    l2_storage_api_test.go:108: StorageAPI-only encode/unknown: Valkey SET/GET/DEL delta=0, processing error=1, no operation/duration/fallback
+=== RUN   TestValkeyStorage_StorageAPIObservability/encode/response
+    l2_storage_api_test.go:108: StorageAPI-only encode/response: Valkey SET/GET/DEL delta=0, processing error=1, no operation/duration/fallback
+=== RUN   TestValkeyStorage_StorageAPIObservability/encode/metadata
+    l2_storage_api_test.go:108: StorageAPI-only encode/metadata: Valkey SET/GET/DEL delta=0, processing error=1, no operation/duration/fallback
+=== RUN   TestValkeyStorage_StorageAPIObservability/unknown/absent
+    l2_storage_api_test.go:162: StorageAPI-only unknown/absent: Valkey INFO deltas SET=1 GET=3 DEL=1; actual Prometheus operation/duration counts match
+=== RUN   TestValkeyStorage_StorageAPIObservability/unknown/explicit_unknown
+    l2_storage_api_test.go:162: StorageAPI-only unknown/explicit unknown: Valkey INFO deltas SET=1 GET=3 DEL=1; actual Prometheus operation/duration counts match
+=== RUN   TestValkeyStorage_StorageAPIObservability/unknown/invalid_value
+    l2_storage_api_test.go:162: StorageAPI-only unknown/invalid value: Valkey INFO deltas SET=1 GET=3 DEL=1; actual Prometheus operation/duration counts match
+=== RUN   TestValkeyStorage_StorageAPIObservability/unknown/wrong_type
+    l2_storage_api_test.go:162: StorageAPI-only unknown/wrong type: Valkey INFO deltas SET=1 GET=3 DEL=1; actual Prometheus operation/duration counts match
+--- PASS: TestValkeyStorage_StorageAPIObservability (0.42s)
+    --- PASS: TestValkeyStorage_StorageAPIObservability/encode/unknown (0.01s)
+    --- PASS: TestValkeyStorage_StorageAPIObservability/encode/response (0.00s)
+    --- PASS: TestValkeyStorage_StorageAPIObservability/encode/metadata (0.00s)
+    --- PASS: TestValkeyStorage_StorageAPIObservability/unknown/absent (0.05s)
+    --- PASS: TestValkeyStorage_StorageAPIObservability/unknown/explicit_unknown (0.01s)
+    --- PASS: TestValkeyStorage_StorageAPIObservability/unknown/invalid_value (0.02s)
+    --- PASS: TestValkeyStorage_StorageAPIObservability/unknown/wrong_type (0.27s)
+PASS
+ok  	github.com/zalando/skipper/filters/cache	2.432s
+skipper-narrative4-d2348fe5

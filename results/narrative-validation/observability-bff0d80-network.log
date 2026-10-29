@@ -1,0 +1,47 @@
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="Expose metrics in format: \"prometheus\""
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="enable swarm: true"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="Valkey based swarm with 1 shards"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="Replacing tee filter specification"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="Replacing teenf filter specification"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="Replacing teeResponse filter specification"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="support listener on 127.0.0.1:65236"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="Dataclients are updated once, first load complete"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="Listen on 127.0.0.1:65235"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="route settings, reset, route: partition__cache: PathSubtree(\"/get\") -> cache(\"60s\", \"1s\", \"30s\", \"60s\") -> \"http://127.0.0.1:65218\""
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="TLS settings not found, defaulting to HTTP"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="route settings, reset, route: ready: Path(\"/ready\") -> healthcheck() -> status(200) -> <shunt>"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="route settings received, id: 1"
+[APP]time="2026-10-29T11:07:55+01:00" level=info msg="route settings applied, id: 1"
+127.0.0.1 - - [29/Oct/2026:11:07:55 +0100] "GET /ready HTTP/1.1" 200 0 "-" "Python-urllib/3.9" 0 observability.test - -
+127.0.0.1 - - [29/Oct/2026:11:08:21 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610 HTTP/1.1" 200 160 "-" "Python-urllib/3.9" 24 observability.test - -
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Get failed, treating as miss" error=EOF
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Get failed, treating as miss" error=EOF
+127.0.0.1 - - [29/Oct/2026:11:08:21 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610 HTTP/1.1" 504 0 "-" "Python-urllib/3.9" 5 observability.test - -
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Get failed, treating as miss" error=EOF
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Get failed, treating as miss" error=EOF
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Get failed, treating as miss" error=EOF
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Set failed, falling back to L1" error=EOF
+127.0.0.1 - - [29/Oct/2026:11:08:21 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610&new=1 HTTP/1.1" 200 166 "-" "Python-urllib/3.9" 20 observability.test - -
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Get failed, treating as miss" error=EOF
+127.0.0.1 - - [29/Oct/2026:11:08:21 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610&new=1 HTTP/1.1" 200 166 "-" "Python-urllib/3.9" 3 observability.test - -
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Get failed, treating as miss" error=EOF
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Delete failed" error=EOF
+[APP]time="2026-10-29T11:08:21+01:00" level=error msg="cache: L2 Delete failed" error=EOF
+127.0.0.1 - - [29/Oct/2026:11:08:21 +0100] "POST /get?case=partition-a888c12241a54d29bc4c64de39625610 HTTP/1.1" 200 160 "-" "Python-urllib/3.9" 8 observability.test - -
+127.0.0.1 - - [29/Oct/2026:11:08:21 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610 HTTP/1.1" 200 160 "-" "Python-urllib/3.9" 7 observability.test - -
+[APP]time="2026-10-29T11:08:25+01:00" level=error msg="cache: L2 Get failed, treating as miss" error="i/o timeout"
+[APP]time="2026-10-29T11:08:28+01:00" level=error msg="cache: L2 Get failed, treating as miss" error="i/o timeout"
+127.0.0.1 - - [29/Oct/2026:11:08:21 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610 HTTP/1.1" 504 0 "-" "Python-urllib/3.9" 6858 observability.test - -
+[APP]time="2026-10-29T11:08:30+01:00" level=error msg="cache: L2 Get failed, treating as miss" error="i/o timeout"
+[APP]time="2026-10-29T11:08:33+01:00" level=error msg="cache: L2 Get failed, treating as miss" error="i/o timeout"
+[APP]time="2026-10-29T11:08:36+01:00" level=error msg="cache: L2 Get failed, treating as miss" error="read tcp 127.0.0.1:51452->127.0.0.1:65234: i/o timeout"
+[APP]time="2026-10-29T11:08:38+01:00" level=error msg="cache: L2 Set failed, falling back to L1" error="read tcp 127.0.0.1:51457->127.0.0.1:65234: i/o timeout"
+127.0.0.1 - - [29/Oct/2026:11:08:28 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610&blackhole=1 HTTP/1.1" 200 172 "-" "Python-urllib/3.9" 9267 observability.test - -
+[APP]time="2026-10-29T11:08:41+01:00" level=error msg="cache: L2 Get failed, treating as miss" error="i/o timeout"
+127.0.0.1 - - [29/Oct/2026:11:08:38 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610&blackhole=1 HTTP/1.1" 200 172 "-" "Python-urllib/3.9" 3014 observability.test - -
+127.0.0.1 - - [29/Oct/2026:11:08:41 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610 HTTP/1.1" 200 160 "-" "Python-urllib/3.9" 58 observability.test - -
+127.0.0.1 - - [29/Oct/2026:11:08:41 +0100] "GET /get?case=partition-a888c12241a54d29bc4c64de39625610&new=1 HTTP/1.1" 200 166 "-" "Python-urllib/3.9" 8 observability.test - -
+[APP]time="2026-10-29T11:09:48+01:00" level=info msg="Got shutdown signal for Shutdown predicates"
+[APP]time="2026-10-29T11:09:48+01:00" level=info msg="Got shutdown signal, wait 0s for health check"
+[APP]time="2026-10-29T11:09:48+01:00" level=info msg="Start shutdown"
+[APP]time="2026-10-29T11:09:48+01:00" level=info msg=done.

@@ -30,6 +30,7 @@ test_malformed_resp_is_explicit_failure (test_cache_remaining.RemainingAcceptanc
 test_no_samples_zero_nan_inf_are_not_success (test_cache_remaining.RemainingAcceptanceOracles) ... ok
 test_pipelined_resp_preserves_the_next_command (test_cache_remaining.RemainingAcceptanceOracles) ... ok
 test_positive_query_must_include_exact_exercised_series (test_cache_remaining.RemainingAcceptanceOracles) ... ok
+test_query_vectors_compare_labels_and_values_not_iteration_order (test_cache_remaining.RemainingAcceptanceOracles) ... ok
 test_scalar_requires_observed_single_sample (test_cache_remaining.RemainingAcceptanceOracles) ... ok
 test_check_unit_runs_all_offline_suites (test_cachectl.CachectlTests) ... ok
 test_check_verify_passes_through_arguments (test_cachectl.CachectlTests) ... ok
@@ -59,15 +60,15 @@ test_unreachable_grafana_warns_and_returns_false (test_chaos.AnnotateTest) ... c
 ok
 test_report_includes_fault_timeline_when_present (test_chaos.FaultTimelineReportTest) ... ok
 test_report_omits_fault_section_without_faults_json (test_chaos.FaultTimelineReportTest) ... ok
-test_action_failure_is_recorded_and_run_continues (test_chaos.RunScheduleTest) ... 11:01:49 chaos origin-503: down
-11:01:49 chaos origin-503 failed: boom
-11:01:49 chaos origin-200: up
+test_action_failure_is_recorded_and_run_continues (test_chaos.RunScheduleTest) ... 11:14:43 chaos origin-503: down
+11:14:43 chaos origin-503 failed: boom
+11:14:43 chaos origin-200: up
 ok
-test_restore_runs_even_when_a_step_raises_outside_actions (test_chaos.RunScheduleTest) ... 11:01:50 chaos origin-503: down
+test_restore_runs_even_when_a_step_raises_outside_actions (test_chaos.RunScheduleTest) ... 11:14:43 chaos origin-503: down
 ok
 test_stop_before_first_fault_skips_steps_but_restores (test_chaos.RunScheduleTest) ... ok
-test_writes_faults_json_with_actions_and_restore (test_chaos.RunScheduleTest) ... 11:01:50 chaos origin-503: down
-11:01:50 chaos origin-200: up
+test_writes_faults_json_with_actions_and_restore (test_chaos.RunScheduleTest) ... 11:14:43 chaos origin-503: down
+11:14:43 chaos origin-200: up
 ok
 test_base_duration_uses_declared_offsets (test_chaos.ScheduleTest) ... ok
 test_every_scenario_action_has_a_kind (test_chaos.ScheduleTest) ... ok
@@ -186,6 +187,6 @@ test_endless_run_without_end_has_no_range (test_report.Window) ... ok
 test_legacy_timed_run_uses_planned_end (test_report.Window) ... ok
 
 ----------------------------------------------------------------------
-Ran 171 tests in 2.144s
+Ran 172 tests in 2.524s
 
 OK

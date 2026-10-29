@@ -4,7 +4,9 @@ import socketserver
 import threading
 import unittest
 
-from verify_cache_remaining import FaultRelay, finite_positive, resp_command, samples, scalar
+from verify_cache_remaining import (
+    FaultRelay, finite_positive, query_values, resp_command, samples, scalar,
+)
 
 
 class RemainingAcceptanceOracles(unittest.TestCase):
@@ -77,3 +79,11 @@ class RemainingAcceptanceOracles(unittest.TestCase):
                 client.sendall(frame)
                 self.assertEqual(client.recv(1024), b"$5\r\nvalue\r\n")
             self.assertTrue(relay.events[1]["forwarded"])
+
+    def test_query_vectors_compare_labels_and_values_not_iteration_order(self):
+        a = {"metric": {"instance": "a"}, "value": [1, "2"]}
+        b = {"metric": {"instance": "b"}, "value": [1, "3"]}
+        self.assertEqual(query_values({"data": {"result": [a, b]}}),
+                         query_values({"data": {"result": [b, a]}}))
+        with self.assertRaises(AssertionError):
+            query_values({"data": {"result": [a, a]}})
