@@ -1,6 +1,10 @@
+import contextlib
+import socket
+import socketserver
+import threading
 import unittest
 
-from verify_cache_remaining import finite_positive, resp_command, samples, scalar
+from verify_cache_remaining import FaultRelay, finite_positive, resp_command, samples, scalar
 
 
 class RemainingAcceptanceOracles(unittest.TestCase):
@@ -44,3 +48,32 @@ class RemainingAcceptanceOracles(unittest.TestCase):
                 {"metric": {}, "value": [1, value]}]}}
             with self.subTest(value=value), self.assertRaises(AssertionError):
                 finite_positive(result)
+
+    def test_blackhole_holds_socket_without_forwarding_and_new_connection_recovers(self):
+        class Backend(socketserver.BaseRequestHandler):
+            def handle(self):
+                if self.request.recv(1024):
+                    self.request.sendall(b"$5\r\nvalue\r\n")
+
+        with contextlib.ExitStack() as stack:
+            backend = socketserver.ThreadingTCPServer(("127.0.0.1", 0), Backend)
+            backend.daemon_threads = True
+            relay = FaultRelay(backend.server_address)
+            for server in (backend, relay):
+                threading.Thread(target=server.serve_forever, daemon=True).start()
+                stack.callback(server.server_close)
+                stack.callback(server.shutdown)
+            frame = b"*2\r\n$3\r\nGET\r\n$3\r\nkey\r\n"
+            relay.blackholed.set()
+            with socket.create_connection(relay.server_address, timeout=1) as client:
+                client.settimeout(.1)
+                client.sendall(frame)
+                with self.assertRaises(socket.timeout):
+                    client.recv(1024)
+            self.assertEqual(relay.events[0]["fault"], "blackhole")
+            self.assertFalse(relay.events[0]["forwarded"])
+            relay.blackholed.clear()
+            with socket.create_connection(relay.server_address, timeout=1) as client:
+                client.sendall(frame)
+                self.assertEqual(client.recv(1024), b"$5\r\nvalue\r\n")
+            self.assertTrue(relay.events[1]["forwarded"])

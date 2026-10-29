@@ -79,6 +79,56 @@ The initial remaining-coverage attempt failed on an invalid **test fixture**
 Its failure report/log are retained. The corrected positive-100ms-SWR
 scenario actually ran and passed; this was not a Skipper runtime defect.
 
+## Blackhole follow-up
+
+The follow-up on exact `ff7e9b03545203567dc40969b5b47d1da4f5760a`
+also **holds connections open and suppresses data-command responses**,
+instead of immediately disconnecting them. A real-socket unit check proves
+that this helper times out rather than returning EOF and permits a fresh
+connection after restoration.
+
+[`ff7-blackhole-result.json`](ff7-blackhole-result.json) records the full
+remaining-behaviour workload, including this addition. Cache-only returns
+504/MISS and `error/none` after **6.182s** with two GET-error observations;
+cold fetch returns 200/MISS and `error/none` after **9.975s**, with one origin,
+three GET errors and one SET error, then successful L1 fallback.
+The next request is 200/HIT and `fresh/l1` after its metadata lookup times
+out (**3.014s**). Removing the blackhole restores `fresh/l2`, successful
+shared persistence and the fresh-peer read.
+
+Every blackholed operation has exactly one observed wire attempt: two for
+cache-only, four for cold fetch and one for the subsequent L1 hit. None is
+forwarded to actual Valkey, and no decode/encode error is invented.
+The final network workload has five origin calls, including the additional
+blackholed cold request. Raw relay traces, MONITOR and Skipper timeout logs
+are saved alongside the report.
+
+The configured two-second socket/connection budgets are **not a single
+two-second end-to-end HTTP deadline**. Sequential metadata/representation/
+persistence calls and client reconnection bookkeeping are included in these
+observed timings. The bounded integration assertions allow 8s cache-only and
+12s cold recovery; they do not assert that every logical operation lasts
+exactly two seconds or that retries are represented by L2 operation counters.
+
+```bash
+python3 verify_cache_remaining.py --checkout .runtime/skipper-observability-ff7 --sha ff7e9b03545203567dc40969b5b47d1da4f5760a --output .runtime/remaining-ff7-blackhole-final
+python3 verify_cache_observability.py --checkout .runtime/skipper-observability-ff7 --sha ff7e9b03545203567dc40969b5b47d1da4f5760a --mode integrated --output .runtime/ff7-publication-metrics
+python3 verify_cache_dashboards.py --checkout .runtime/skipper-observability-ff7 --sha ff7e9b03545203567dc40969b5b47d1da4f5760a --output .runtime/ff7-publication-dashboards
+```
+
+The same exact ff7 tip passes the full 24-case metric matrix and the existing
+43-query dashboard workload (eviction remains unexercised **in that separate
+workload**, already exercised by the pressure fixture). All **171** harness
+unit tests pass.
+
+An earlier blackhole run passed every behavioural probe but its optional
+Grafana container failed the 60-second readiness budget. Its genuine
+infrastructure failure report is retained as
+`ff7-blackhole-grafana-readiness-error.json`, not relabelled PASS.
+The final blackhole run does not launch a redundant Grafana instance;
+the earlier successful same-time proxy and real-browser evidence remains
+valid for that separately recorded workload.
+
 ## Still not claimed
 
 - Twenty-four hours of wall-clock retention, production workload or traffic,
@@ -86,9 +136,9 @@ scenario actually ran and passed; this was not a Skipper runtime defect.
 - Exhaustive RFC directive/method/validator combinations or every SIE timing
   permutation. Common HTTP faults, a transport fault and the expiry boundary
   are now exercised, not an exhaustive Cartesian product.
-- Blackholed/unreachable Valkey dial/read timeout distributions. The measured
-  network fault is an immediate data-plane connection cut with exact wire
-  observations; explicit two-second budgets are configured.
+- Unreachable-listener dial failure and statistical timeout distributions.
+  Immediate disconnect and held-socket/read-blackhole failures are both now
+  exercised; this is not every network topology or retry policy.
 - Full browser rendering of every panel, Loki/Tempo/retail links. This fixture
   scrapes only Skipper; missing origin scrape/traffic is explicit, not green.
 - A globally passing Skipper source suite: unrelated full-shortcheck failures

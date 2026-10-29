@@ -97,17 +97,18 @@ class FaultRelay(socketserver.ThreadingTCPServer):
     def __init__(self, target):
         self.target = target
         self.partitioned = threading.Event()
+        self.blackholed = threading.Event()
         self.lock = threading.Lock()
         self.events = []
         super().__init__(("127.0.0.1", 0), RelayHandler)
 
-    def record(self, values, forwarded):
+    def record(self, values, forwarded, fault):
         name = values[0].decode().lower()
         if name in ("get", "set", "del"):
             with self.lock:
                 self.events.append({
                     "command": name, "key": values[1].decode(),
-                    "forwarded": forwarded, "time": time.time(),
+                    "forwarded": forwarded, "fault": fault, "time": time.time(),
                 })
 
 
@@ -116,6 +117,7 @@ class RelayHandler(socketserver.BaseRequestHandler):
         with socket.create_connection(self.server.target, timeout=2) as upstream:
             upstream.settimeout(2)
             pending = b""
+            blocked = False
             while True:
                 readable, _, _ = select.select([self.request, upstream], [], [], 1)
                 for source in readable:
@@ -126,6 +128,8 @@ class RelayHandler(socketserver.BaseRequestHandler):
                     if not chunk:
                         return
                     if source is upstream:
+                        if blocked:
+                            continue
                         try:
                             self.request.sendall(chunk)
                         except OSError:
@@ -137,10 +141,14 @@ class RelayHandler(socketserver.BaseRequestHandler):
                         data, pending = pending[:end], pending[end:]
                         name = values[0].decode().lower()
                         cut = self.server.partitioned.is_set() and name in ("get", "set", "del")
-                        self.server.record(values, not cut)
+                        if self.server.blackholed.is_set() and name in ("get", "set", "del"):
+                            blocked = True
+                        fault = "disconnect" if cut else "blackhole" if blocked else None
+                        self.server.record(values, not (cut or blocked), fault)
                         if cut:
                             return
-                        upstream.sendall(data)
+                        if not blocked:
+                            upstream.sendall(data)
 
 
 def json_http(url, payload=None):
@@ -474,15 +482,19 @@ def run(args):
                     check(not any(k.startswith(FAMILIES[2]) for k in delta),
                           "network failure incorrectly counted as processing failure")
                     trace = relay.events[offset:]
+                    faulted = relay.partitioned.is_set() or relay.blackholed.is_set()
                     check(all(not event["forwarded"] for event in trace)
-                          if relay.partitioned.is_set() else all(event["forwarded"] for event in trace),
+                          if faulted else all(event["forwarded"] for event in trace),
                           "fault relay transmission mode mismatch")
-                    if relay.partitioned.is_set():
+                    if faulted:
                         for op in ("get", "set", "del"):
                             logical = sum(n for operation, _, _, n in expected_operations
                                           if operation == {"del": "delete"}.get(op, op))
                             check(sum(e["command"] == op for e in trace) <= logical,
                                   "visible retransmission exceeded logical invocation count")
+                            if relay.blackholed.is_set():
+                                check(sum(e["command"] == op for e in trace) == logical,
+                                      "blackhole wire attempts differ from logical operation count")
                     cases.append({"name": name, "response": result, "metric_deltas": delta,
                                   "origin_delta": origins, "seconds": elapsed, "wire_attempts": trace})
 
@@ -510,6 +522,35 @@ def run(args):
                       {"result": "fresh", "tier": "l2"},
                       [("get", "metadata", "miss", 1), ("get", "response", "success", 1)],
                       0, cache="HIT")
+                relay.blackholed.set()
+                try:
+                    probe("blackholed data commands fail within bounded HTTP budget", url,
+                          {"Cache-Control": "only-if-cached"},
+                          {"result": "error", "tier": "none"},
+                          [("get", "metadata", "error", 1), ("get", "response", "error", 1)],
+                          0, 504, "MISS")
+                    timed = cases[-1]
+                    check(1.8 <= timed["seconds"] <= 8,
+                          f"blackhole exceeded bounded HTTP test budget: {timed['seconds']}")
+                    check(timed["wire_attempts"] and
+                          all(e["fault"] == "blackhole" for e in timed["wire_attempts"]),
+                          "timeout did not consume actual blackholed socket commands")
+                    timed_cold = url + "&blackhole=1"
+                    probe("blackholed origin fetch persists via L1 fallback", timed_cold, {},
+                          {"result": "error", "tier": "none"},
+                          [("get", "metadata", "error", 1), ("get", "response", "error", 2),
+                           ("set", "response", "error", 1)], 1, cache="MISS")
+                    check(1.8 <= cases[-1]["seconds"] <= 12,
+                          "cold blackhole fallback exceeded bounded storage-call budgets")
+                    probe("blackholed persistence fallback is fresh L1", timed_cold, {},
+                          {"result": "fresh", "tier": "l1"},
+                          [("get", "metadata", "error", 1)], 0, cache="HIT")
+                finally:
+                    relay.blackholed.clear()
+                probe("blackhole removed shared entry recovers", url, {"Cache-Control": "only-if-cached"},
+                      {"result": "fresh", "tier": "l2"},
+                      [("get", "metadata", "miss", 1), ("get", "response", "success", 1)],
+                      0, cache="HIT")
                 probe("network recovered persistence succeeds", cold, {"Cache-Control": "no-cache"},
                       {"result": "bypass", "tier": "none"},
                       [("get", "metadata", "miss", 1), ("set", "response", "success", 1)],
@@ -522,7 +563,7 @@ def run(args):
                       "recovered write was not available to a fresh peer")
                 check(scalar(exposition(peer_metrics), FAMILIES[0], result="fresh", tier="l2") == 1,
                       "peer must serve the recovered shared representation from L2")
-                check(origin_count(control, marker) == 4, "peer unexpectedly reached origin")
+                check(origin_count(control, marker) == 5, "peer unexpectedly reached origin")
                 text = exposition(partition_metrics)
                 (output / "partition-final.prom").write_text(text)
                 trace = [e for case in cases for e in case["wire_attempts"]]
@@ -565,7 +606,12 @@ def run(args):
                         return json_http(grafana_url + "/api/health")["database"] == "ok"
                     except OSError:
                         return False
-                wait(grafana_ready, "owned local Grafana readiness", 60)
+                try:
+                    wait(grafana_ready, "owned local Grafana readiness", 60)
+                finally:
+                    (output / "grafana.log").write_text(command("docker", "logs", grafana_name))
+                    report["grafana_container_state"] = json.loads(
+                        command("docker", "inspect", grafana_name))[0]["State"]
                 json_http(grafana_url + "/api/datasources", {
                     "name": "local-prometheus", "uid": "local-prometheus", "type": "prometheus",
                     "access": "proxy", "url": f"http://host.docker.internal:{prom_port}",
