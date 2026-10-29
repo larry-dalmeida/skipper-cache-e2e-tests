@@ -1,0 +1,13 @@
+{
+  "scope": "Authorized owner evidence copied byte-for-byte; raw Go-test whitespace deliberately retained.",
+  "sha256": {
+    "jwt-fix-cache-metrics-race.log": "3958fc2c56b451ab7ec5f39a3d9007c9320f40c1e93d95cf3c16b6ff9ce0bf29",
+    "jwt-fix-validation.json": "01f002ac32b15fe17e01abda25388cbce4228ac105cd88dd0175bcc53ed0ebb9",
+    "jwt-fix-final-lint.log": "3a0f9bcdc0bc6a639fbd0e5ecd138aa4f958b9b777bb6307830d27875772e215",
+    "jwt-fix-shortcheck.log": "c56af9f396cafbb4cee9330ff05a95fb6572ab3e4460fc14d91ebd95083ebbd3",
+    "jwt-before-fix.log": "614f8a14c30fed6bd722c40dcbbb52bb0c4fbe3c8920ebb7e62fb6792e1f77ea",
+    "jwt-fix-table-race.log": "023365e27be8c93c98462ccbe63e93cc4e750a1fb537a9819dae112786e7d3ce",
+    "jwt-fix.patch": "5957339e4916a667a3fb8567ae569a482bd7c93e6aee6c538f36803b50696d9a",
+    "jwt-fix-proxy-race.log": "4bc0bf6ba54b2f1af1a7bb1ea90594fe9b151a5e1a1ce3d615b73c650b48bb3d"
+  }
+}

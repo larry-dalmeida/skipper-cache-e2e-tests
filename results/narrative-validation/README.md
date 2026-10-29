@@ -120,3 +120,129 @@ SIE combinations, every network topology, real retail locale taxonomy and
 every browser panel/link remain outside this bounded acceptance. None is
 fabricated as a successful zero. All owned resources are stopped/removed;
 no production or shared resources were modified.
+
+## Published panel screenshots
+
+These are actual Grafana 11.3.0 screenshots of **bff0d80c** producer data,
+not older Oct25/26 captures, synthetic plots, or a new Skipper workload.
+The retained upper-run TSDB was reopened with native Prometheus and the same
+owned/private-tmpfs Grafana fixture. Historical display time is
+**2026-10-29 10:07:36.946 to 10:08:58.178 UTC**.
+Installed Chrome 156.0.8078.73 captured each solo panel at 1280x720 with an
+isolated user-data directory. Only the private imported dashboard's legend
+was changed to show max/last values with three decimals; original PromQL,
+axis defaults, samples and the repository dashboard are unchanged.
+
+| Actual panel | Screenshot |
+|---|---|
+| 60: Cache evictions, instance `eviction` | [PNG](screenshots/bff0d80-cache-evictions.png) |
+| 19: Refresh errors / dropped jobs, instance `queue` | [PNG](screenshots/bff0d80-refresh-drops.png) |
+| 7: Request rate using the external-client counter | [PNG](screenshots/bff0d80-client-rps.png) |
+
+[`observability-bff0d80-panel-captures.json`](observability-bff0d80-panel-captures.json)
+records source SHA, historical bounds, PNG digests/dimensions, unchanged
+targets and independent positive same-origin query-range responses.
+The browser's coarser query step and one-second verification queries sample
+different instants, so their maxima need not be identical.
+The replay and its owned services are removed after capture.
+
+## JWT shortcheck correction and test-only successor
+
+The original copied owner report called `TestJwtMetrics` unrelated. That
+classification was **incorrect**: the 401/403 whole-counter-map assertions
+omitted the new `client.requests = 1` entry. This is a coupled test-expectation
+regression, not an unrelated timing failure. The source owner folded its
+minimal expectation/comment correction into the third narrative commit,
+replaying commits four and five.
+
+The new upper tip is `3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1`.
+Independent comparison against bff shows exactly one changed path,
+`filters/auth/jwt_metrics_test.go`; all producer and documentation bytes
+are unchanged. The five-commit upper narrative and lower parent are retained.
+The new SHA is rebuilt and checked with L1, unchanged coalescing, the full
+24-case metric matrix and the focused JWT test. The complete bff remaining/
+Grafana coverage and screenshots remain attributed to bff, with reuse
+justified by producer-byte equality, not relabelled as new-SHA runtime runs.
+See [`observability-3c14f75-test-only-gate.json`](observability-3c14f75-test-only-gate.json).
+Docker-provider/etcd fixture failures remain a distinct source-shortcheck
+environment limitation; this does not assert that the full suite is green.
+The owner's single final full-shortcheck audit now passes `filters/auth`;
+eight packages still fail Docker fixture setup: root `skipper`, `etcd/etcdtest`,
+`filters/cache`, `net`, `net/redistest`, `net/valkeytest`, `proxy` and `ratelimit`.
+No clean-foundation full-suite comparison was run, so these are **not proved
+pre-existing**. The attributed [owner validation](jwt-owner/jwt-fix-validation.json),
+[original JWT failure](jwt-owner/jwt-before-fix.log) and
+[final full-shortcheck log](jwt-owner/jwt-fix-shortcheck.log) retain the evidence.
+
+## Fresh-clone verification commands
+
+These commands use the public harness without the shared minikube stack,
+Locust or production resources. The tested host is **macOS arm64 with Docker
+Desktop**, Python 3.9+, Make, Git, curl and an installed Go toolchain that
+supports `GOTOOLCHAIN=auto`; the source requires Go 1.27.3. Docker must be
+running and images/releases downloadable. Linux needs a matching native
+Prometheus binary and Docker host networking adaptation for Grafana's
+`host.docker.internal`; it is not claimed validated by this command block.
+The new source SHA becomes fetchable from GitHub after its gated owner push.
+Harness code is pinned to 737258ec; this follow-up changes evidence/docs only.
+
+```bash
+set -e
+git clone --branch larry-almeida-zse-l1-freshness-e2e-reproduction --single-branch \
+  https://github.com/larry-dalmeida/skipper-cache-e2e-tests.git skipper-cache-validation
+cd skipper-cache-validation
+git checkout --detach 737258ec03a184b4f04bec1844669a33698834e2
+export GOTOOLCHAIN=auto
+mkdir -p .runtime/prometheus-native
+curl -fL --retry 2 -o .runtime/prometheus-native/prometheus-2.55.1.darwin-arm64.tar.gz \
+  https://github.com/prometheus/prometheus/releases/download/v2.55.1/prometheus-2.55.1.darwin-arm64.tar.gz
+curl -fL --retry 2 -o .runtime/prometheus-native/sha256sums.txt \
+  https://github.com/prometheus/prometheus/releases/download/v2.55.1/sha256sums.txt
+(
+  cd .runtime/prometheus-native
+  grep 'prometheus-2.55.1.darwin-arm64.tar.gz$' sha256sums.txt | shasum -a 256 -c -
+  tar -xzf prometheus-2.55.1.darwin-arm64.tar.gz
+)
+PROM="$PWD/.runtime/prometheus-native/prometheus-2.55.1.darwin-arm64/prometheus"
+docker pull valkey/valkey:8.1.1-alpine@sha256:6a57d58c0a37cf7acc3045ac0fd6dd91be339774106ab4d9ca088013a096a99f
+# Inspected as provenance by the dashboard launcher; runtime Prometheus is native.
+docker pull prom/prometheus:v2.55.1
+docker pull grafana/grafana-oss@sha256:a0f881232a6fb71a0554a47d0fe2203b6888fe77f4cefb7ea62bed7eb54e13c3
+make test
+```
+
+Correctness layer, from that same directory/shell:
+
+```bash
+git clone --filter=blob:none --no-checkout https://github.com/zalando/skipper.git .runtime/skipper-lower
+git -C .runtime/skipper-lower fetch origin f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec
+git -C .runtime/skipper-lower checkout --detach f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec
+python3 verify_l1_freshness.py --checkout .runtime/skipper-lower --sha f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec --output .runtime/lower-l1
+python3 verify_candidate_behaviour.py --l1-result .runtime/lower-l1/result.json --output .runtime/lower-coalescing
+python3 verify_cache_remaining.py --checkout .runtime/skipper-lower --sha f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec --mode correctness --prometheus-binary "$PROM" --output .runtime/lower-remaining
+```
+
+Final upper layer, from that same directory/shell:
+
+```bash
+git clone --filter=blob:none --no-checkout https://github.com/zalando/skipper.git .runtime/skipper-upper
+git -C .runtime/skipper-upper fetch origin 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1
+git -C .runtime/skipper-upper checkout --detach 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1
+python3 verify_l1_freshness.py --checkout .runtime/skipper-upper --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --output .runtime/upper-l1
+python3 verify_candidate_behaviour.py --l1-result .runtime/upper-l1/result.json --output .runtime/upper-coalescing
+python3 verify_cache_observability.py --checkout .runtime/skipper-upper --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --mode integrated --output .runtime/upper-metrics
+python3 verify_cache_dashboards.py --checkout .runtime/skipper-upper --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --prometheus-binary "$PROM" --output .runtime/upper-dashboards
+python3 verify_cache_remaining.py --checkout .runtime/skipper-upper --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --prometheus-binary "$PROM" --output .runtime/upper-remaining --grafana
+(cd .runtime/skipper-upper && go test -race -count=1 ./filters/auth -run '^TestJwtMetrics$')
+```
+
+Every verifier exits nonzero on failure. L1, metrics, dashboards and remaining
+coverage write `result.json`; coalescing writes `coalescing.json` and
+`provenance.json` under its explicit output directory. The Grafana workload
+asserts proxy queries and stops services automatically; add
+`--ui-hold-seconds 180` only when inspecting
+its printed `BROWSER_READY` URL. A fresh clone runs the real workload rather
+than relying on the unuploaded historical TSDB. To reproduce the original
+upper producer baseline instead, use exact SHA
+`bff0d80c0a20c9f641562a4a0d6901e217397e77` for the upper checkout and every
+upper `--sha` argument; its known JWT expectation failure is then expected.

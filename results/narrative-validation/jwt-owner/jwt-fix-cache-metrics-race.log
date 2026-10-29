@@ -1,0 +1,3 @@
+ok  	github.com/zalando/skipper/filters/cache	5.154s
+ok  	github.com/zalando/skipper/metrics	3.682s
+ok  	github.com/zalando/skipper/metrics/metricstest	1.741s

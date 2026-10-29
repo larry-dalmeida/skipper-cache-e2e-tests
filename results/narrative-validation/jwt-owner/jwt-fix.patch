@@ -1,0 +1,15 @@
+diff --git a/filters/auth/jwt_metrics_test.go b/filters/auth/jwt_metrics_test.go
+index f2f7d7ed..4d9d97a5 100644
+--- a/filters/auth/jwt_metrics_test.go
++++ b/filters/auth/jwt_metrics_test.go
+@@ -409,8 +409,9 @@ func TestJwtMetrics(t *testing.T) {
+ 			}
+ 
+ 			m.WithCounters(func(counters map[string]int64) {
+-				// add incoming counter to simplify comparison
++				// Add proxy counters to simplify comparison.
+ 				tc.expected["incoming.HTTP/1.1"] = 1
++				tc.expected["client.requests"] = 1
+ 
+ 				assert.Equal(t, tc.expected, counters)
+ 			})

@@ -1,0 +1,37 @@
+{
+  "baseline": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+  "baseline_tree": "d434f896192040f858775198bac7850cc66a9bfb",
+  "tip": "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1",
+  "tree": "8cb148960b33580aaa26f016125edf0c437dd22f",
+  "base": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+  "commits": [
+    "cde1fe54857df8fd6bac530c8d4729dcb21b6faf",
+    "5e1c72b46510f2cb03562897dc9aa521e076cc0a",
+    "b6c7c49c17f8081062c696bd78d7b860f3bedcd7",
+    "32019ad83867e9ff701fcda2f1a1e93885a45506",
+    "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1"
+  ],
+  "change": {
+    "file": "filters/auth/jwt_metrics_test.go",
+    "patch": "jwt-fix.patch",
+    "scope": "Add expected client.requests=1 to the full-table exact metrics map; update adjacent comment. Preserve all JWT and incoming counter assertions.",
+    "all_other_files_byte_identical_to_baseline": true,
+    "producer_behavior_changed": false
+  },
+  "diagnosis_correction": "Earlier reports called TestJwtMetrics unrelated/timing. That was incorrect. Its exact whole-counter assertion was incompatible with the intentional universal client.requests counter, a tightly coupled test regression. Reproduced at original logical commit three before correcting it.",
+  "checks": {
+    "original_failure_reproduced": "jwt-before-fix.log",
+    "new_commit_3": "make fmt; go build ./...; go test -race -count=5 ./filters/auth -run '^TestJwtMetrics$'; go test -race -count=1 ./proxy -run 'ClientRequest'; go test -short ./filters/cache ./metrics/... -skip '^TestValkeyStorage_' -- PASS",
+    "new_commit_4": "go build ./...; go test -short ./filters/cache ./metrics/... -skip '^TestValkeyStorage_' -- PASS",
+    "new_commit_5": "go build ./...; make fmt; make lint; full JWT table race count=5; proxy ClientRequest race; cache+metrics focused race count=1 -- PASS",
+    "logs": ["jwt-fix-final-lint.log", "jwt-fix-table-race.log", "jwt-fix-proxy-race.log", "jwt-fix-cache-metrics-race.log"],
+    "plugins": "make -B check-plugins -- PASS (jwt-fix-plugins.log)",
+    "full_shortcheck_once": "FAIL_FIXTURE_ONLY (jwt-fix-shortcheck.log). filters/auth PASS in full suite. Eight failing packages all have Docker provider setup failures: skipper root, etcd/etcdtest, filters/cache, net, net/redistest, net/valkeytest, proxy, ratelimit.",
+    "no_clean_foundation_full_suite_comparison": true
+  },
+  "branch_clean": true,
+  "recovery_ref": "refs/recovery/observability-before-jwt-fix-bff0d80c",
+  "observed_remote": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+  "pushed": false,
+  "push_gate": "Hold until parent explicit authorization and new-SHA evidence"
+}

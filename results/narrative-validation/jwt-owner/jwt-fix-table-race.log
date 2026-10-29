@@ -1,0 +1,737 @@
+=== RUN   TestJwtMetrics
+=== RUN   TestJwtMetrics/ignores_401_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(401) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_403_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(403) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_404_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(404) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_with_one_claim_key
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics() -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bat: ball}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_when_no_full_claim_matches
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_without_opt-out
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("oauth.disabled", "this endpoint is public") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("jwtMetrics.disabled", "skip jwt metrics collection") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_missing-token_when_annotation_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_state_bag
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [tokeninfo]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [does.not.match]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_host_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+--- PASS: TestJwtMetrics (0.05s)
+    --- PASS: TestJwtMetrics/ignores_401_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_403_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_404_response (0.00s)
+    --- PASS: TestJwtMetrics/missing-token (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/missing-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_with_one_claim_key (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_when_no_full_claim_matches (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_without_opt-out (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_annotation (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation (0.00s)
+    --- PASS: TestJwtMetrics/counts_missing-token_when_annotation_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_state_bag (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_host_does_not_match (0.00s)
+=== RUN   TestJwtMetrics
+=== RUN   TestJwtMetrics/ignores_401_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(401) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_403_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(403) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_404_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(404) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_with_one_claim_key
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics() -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bat: ball}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_when_no_full_claim_matches
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_without_opt-out
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("oauth.disabled", "this endpoint is public") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("jwtMetrics.disabled", "skip jwt metrics collection") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_missing-token_when_annotation_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_state_bag
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [tokeninfo]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [does.not.match]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_host_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+--- PASS: TestJwtMetrics (0.04s)
+    --- PASS: TestJwtMetrics/ignores_401_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_403_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_404_response (0.00s)
+    --- PASS: TestJwtMetrics/missing-token (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/missing-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_with_one_claim_key (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_when_no_full_claim_matches (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_without_opt-out (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_annotation (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation (0.00s)
+    --- PASS: TestJwtMetrics/counts_missing-token_when_annotation_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_state_bag (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_host_does_not_match (0.00s)
+=== RUN   TestJwtMetrics
+=== RUN   TestJwtMetrics/ignores_401_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(401) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_403_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(403) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_404_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(404) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_with_one_claim_key
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics() -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bat: ball}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_when_no_full_claim_matches
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_without_opt-out
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("oauth.disabled", "this endpoint is public") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("jwtMetrics.disabled", "skip jwt metrics collection") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_missing-token_when_annotation_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_state_bag
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [tokeninfo]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [does.not.match]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_host_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+--- PASS: TestJwtMetrics (0.14s)
+    --- PASS: TestJwtMetrics/ignores_401_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_403_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_404_response (0.00s)
+    --- PASS: TestJwtMetrics/missing-token (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type_with_claims (0.10s)
+    --- PASS: TestJwtMetrics/invalid-token (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/missing-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_with_one_claim_key (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_when_no_full_claim_matches (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_without_opt-out (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_annotation (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation (0.00s)
+    --- PASS: TestJwtMetrics/counts_missing-token_when_annotation_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_state_bag (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_host_does_not_match (0.00s)
+=== RUN   TestJwtMetrics
+=== RUN   TestJwtMetrics/ignores_401_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(401) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_403_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(403) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_404_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(404) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_with_one_claim_key
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics() -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bat: ball}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_when_no_full_claim_matches
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_without_opt-out
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("oauth.disabled", "this endpoint is public") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("jwtMetrics.disabled", "skip jwt metrics collection") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_missing-token_when_annotation_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_state_bag
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [tokeninfo]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [does.not.match]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_host_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+--- PASS: TestJwtMetrics (0.04s)
+    --- PASS: TestJwtMetrics/ignores_401_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_403_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_404_response (0.00s)
+    --- PASS: TestJwtMetrics/missing-token (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/missing-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_with_one_claim_key (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_when_no_full_claim_matches (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_without_opt-out (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_annotation (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation (0.00s)
+    --- PASS: TestJwtMetrics/counts_missing-token_when_annotation_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_state_bag (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_host_does_not_match (0.00s)
+=== RUN   TestJwtMetrics
+=== RUN   TestJwtMetrics/ignores_401_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(401) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_403_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(403) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/ignores_404_response
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(404) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token-type_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-token_with_claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-issuer
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_with_one_claim_key
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics() -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-issuer_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_first
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bat: ball}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_matches_second
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/invalid-claims_when_no_full_claim_matches
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{claims: [{iss: foo, bar: baz}, {iss: bar}]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/missing-token_without_opt-out
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("oauth.disabled", "this endpoint is public") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("jwtMetrics.disabled", "skip jwt metrics collection") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_missing-token_when_annotation_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> annotate("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutAnnotations: [oauth.disabled, jwtMetrics.disabled]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_opted-out_by_state_bag
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [tokeninfo]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> oauthTokeninfoAnyKV("foo", "bar") -> jwtMetrics("{issuers: [foo, bar], optOutStateBag: [does.not.match]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+=== RUN   TestJwtMetrics/counts_invalid-token_when_host_does_not_match
+2026/10/29 11:50:11 route settings, reset, route: : * -> jwtMetrics("{issuers: [foo, bar], optOutHosts: [ '^.+[.]domain[.]test$', '^exact[.]test$' ]}") -> status(200) -> <shunt>
+2026/10/29 11:50:11 route settings received, id: 1
+2026/10/29 11:50:11 route settings applied, id: 1
+--- PASS: TestJwtMetrics (0.04s)
+    --- PASS: TestJwtMetrics/ignores_401_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_403_response (0.00s)
+    --- PASS: TestJwtMetrics/ignores_404_response (0.00s)
+    --- PASS: TestJwtMetrics/missing-token (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token-type_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token (0.00s)
+    --- PASS: TestJwtMetrics/invalid-token_with_claims (0.00s)
+    --- PASS: TestJwtMetrics/missing-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-issuer (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_with_one_claim_key (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-issuer_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_first (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_matches_second (0.00s)
+    --- PASS: TestJwtMetrics/invalid-claims_when_no_full_claim_matches (0.00s)
+    --- PASS: TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys (0.00s)
+    --- PASS: TestJwtMetrics/missing-token_without_opt-out (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_annotation (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation (0.00s)
+    --- PASS: TestJwtMetrics/counts_missing-token_when_annotation_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_opted-out_by_state_bag (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain (0.00s)
+    --- PASS: TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly (0.00s)
+    --- PASS: TestJwtMetrics/counts_invalid-token_when_host_does_not_match (0.00s)
+PASS
+ok  	github.com/zalando/skipper/filters/auth	2.486s

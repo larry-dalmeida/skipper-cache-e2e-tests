@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "new_sha": "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1",
+  "new_tree": "8cb148960b33580aaa26f016125edf0c437dd22f",
+  "producer_baseline_sha": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+  "producer_baseline_tree": "d434f896192040f858775198bac7850cc66a9bfb",
+  "lower_sha": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+  "upper_commit_count": 5,
+  "lower_ancestor": true,
+  "changed_paths": [
+    "filters/auth/jwt_metrics_test.go"
+  ],
+  "all_other_paths_byte_identical": true,
+  "independent_diff": "diff --git a/filters/auth/jwt_metrics_test.go b/filters/auth/jwt_metrics_test.go\nindex f2f7d7ed..4d9d97a5 100644\n--- a/filters/auth/jwt_metrics_test.go\n+++ b/filters/auth/jwt_metrics_test.go\n@@ -409,8 +409,9 @@ func TestJwtMetrics(t *testing.T) {\n \t\t\t}\n \n \t\t\tm.WithCounters(func(counters map[string]int64) {\n-\t\t\t\t// add incoming counter to simplify comparison\n+\t\t\t\t// Add proxy counters to simplify comparison.\n \t\t\t\ttc.expected[\"incoming.HTTP/1.1\"] = 1\n+\t\t\t\ttc.expected[\"client.requests\"] = 1\n \n \t\t\t\tassert.Equal(t, tc.expected, counters)\n \t\t\t})\n",
+  "classification": "Coupled JWT whole-counter-map expectation regression: client.requests=1 was missing for 401/403. Corrected expectation/comment only; producer unchanged.",
+  "actual_new_sha_runtime": {
+    "l1": "PASS: both fresh shared B probes HTTP200/HIT, origin delta0, total origins2",
+    "coalescing": "PASS: single/burst origin1, Vary-star origin3",
+    "metrics": "PASS: all24 integrated cases with independent origin/MONITOR/error oracles",
+    "jwt": "PASS: go test -race -count=1 ./filters/auth -run ^TestJwtMetrics$"
+  },
+  "commands": [
+    "python3 verify_l1_freshness.py --checkout .runtime/skipper-narrative-jwt --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --output .runtime/narrative-jwt-l1",
+    "python3 verify_candidate_behaviour.py --l1-result .runtime/narrative-jwt-l1/result.json --output .runtime/narrative-jwt-coalescing",
+    "python3 verify_cache_observability.py --checkout .runtime/skipper-narrative-jwt --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --mode integrated --output .runtime/narrative-jwt-metrics",
+    "(cd .runtime/skipper-narrative-jwt && go test -race -count=1 ./filters/auth -run '^TestJwtMetrics$')"
+  ],
+  "reused_producer_runtime_evidence": {
+    "source_sha": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+    "reason": "All producer bytes identical by independent git diff; no repeated full remaining workload requested.",
+    "joint_gate": "joint-push-gate.json",
+    "coverage": [
+      "full dashboard contract",
+      "capacity/eviction",
+      "queue saturation/drops",
+      "SIE faults and expiry",
+      "Valkey disconnect/blackhole/recovery",
+      "Grafana proxy/UI/PNG capture",
+      "source owner StorageAPI"
+    ]
+  },
+  "screenshots_producer_sha": "bff0d80c0a20c9f641562a4a0d6901e217397e77",
+  "screenshots_manifest": "observability-bff0d80-panel-captures.json",
+  "source_push_at_validation": "Unpushed SHA fetched read-only from source owner local Git path; parent controls push release.",
+  "cleanup": {
+    "grafana_and_prometheus_ports_closed": [
+      32885,
+      56689
+    ],
+    "headless_profile_processes": 0,
+    "replay_resources": "all owned processes stopped and Grafana container removed"
+  },
+  "full_shortcheck": "Not asserted globally green; Docker/etcd fixture failures separately tracked by source owner.",
+  "harness_code": "Unchanged since737258ec03a184b4f04bec1844669a33698834e2; prior172unitPASS remains applicable."
+}

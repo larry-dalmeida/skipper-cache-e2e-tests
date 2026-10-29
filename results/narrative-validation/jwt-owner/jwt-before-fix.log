@@ -1,0 +1,526 @@
+--- FAIL: TestJwtMetrics (0.02s)
+    --- FAIL: TestJwtMetrics/ignores_401_response (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/ignores_401_response
+    --- FAIL: TestJwtMetrics/ignores_403_response (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/ignores_403_response
+    --- FAIL: TestJwtMetrics/ignores_404_response (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/ignores_404_response
+    --- FAIL: TestJwtMetrics/missing-token (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-token":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-token":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/missing-token
+    --- FAIL: TestJwtMetrics/missing-token_with_claims (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-token":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-token":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/missing-token_with_claims
+    --- FAIL: TestJwtMetrics/invalid-token-type (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token-type":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token-type":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/invalid-token-type
+    --- FAIL: TestJwtMetrics/invalid-token-type_with_claims (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token-type":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token-type":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/invalid-token-type_with_claims
+    --- FAIL: TestJwtMetrics/invalid-token (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/invalid-token
+    --- FAIL: TestJwtMetrics/invalid-token_with_claims (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/invalid-token_with_claims
+    --- FAIL: TestJwtMetrics/missing-issuer (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-issuer":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-issuer":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/missing-issuer
+    --- FAIL: TestJwtMetrics/invalid-issuer (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-issuer":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-issuer":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/invalid-issuer
+    --- FAIL: TestJwtMetrics/invalid-claims_with_one_claim_key (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-claims":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-claims":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/invalid-claims_with_one_claim_key
+    --- FAIL: TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_invalid-issuer_for_empty_issuers/claims
+    --- FAIL: TestJwtMetrics/no_invalid-issuer_when_matches_first (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_invalid-issuer_when_matches_first
+    --- FAIL: TestJwtMetrics/no_invalid-issuer_when_matches_second (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_invalid-issuer_when_matches_second
+    --- FAIL: TestJwtMetrics/no_invalid-claims_when_matches_first (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_invalid-claims_when_matches_first
+    --- FAIL: TestJwtMetrics/no_invalid-claims_when_matches_second (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_invalid-claims_when_matches_second
+    --- FAIL: TestJwtMetrics/invalid-claims_when_no_full_claim_matches (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-claims":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-claims":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/invalid-claims_when_no_full_claim_matches
+    --- FAIL: TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_invalid-claims_when_full_claim_matches_and_token_has_extra_keys
+    --- FAIL: TestJwtMetrics/missing-token_without_opt-out (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-token":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-token":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/missing-token_without_opt-out
+    --- FAIL: TestJwtMetrics/no_metrics_when_opted-out_by_annotation (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_metrics_when_opted-out_by_annotation
+    --- FAIL: TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_metrics_when_opted-out_by_alternative_annotation
+    --- FAIL: TestJwtMetrics/counts_missing-token_when_annotation_does_not_match (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-token":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.missing-token":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/counts_missing-token_when_annotation_does_not_match
+    --- FAIL: TestJwtMetrics/no_metrics_when_opted-out_by_state_bag (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_metrics_when_opted-out_by_state_bag
+    --- FAIL: TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/counts_invalid-token_when_state_bag_does_not_match
+    --- FAIL: TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_metrics_when_host_matches_opted-out_domain
+    --- FAIL: TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_metrics_when_second_level_host_matches_opted-out_domain
+    --- FAIL: TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=1) {
+            	            	+(map[string]int64) (len=2) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1
+            	Test:       	TestJwtMetrics/no_metrics_when_host_matches_opted-out_host_exactly
+    --- FAIL: TestJwtMetrics/counts_invalid-token_when_host_does_not_match (0.00s)
+        jwt_metrics_test.go:415: 
+            	Error Trace:	/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:415
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/metrics/metricstest/metricsmock.go:37
+            	            				/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-stack-project/larry-almeida-zse-studious-bassoon/filters/auth/jwt_metrics_test.go:411
+            	Error:      	Not equal: 
+            	            	expected: map[string]int64{"incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token":1}
+            	            	actual  : map[string]int64{"client.requests":1, "incoming.HTTP/1.1":1, "jwtMetrics.custom.GET.foo_test.200.invalid-token":1}
+            	            	
+            	            	Diff:
+            	            	--- Expected
+            	            	+++ Actual
+            	            	@@ -1,2 +1,3 @@
+            	            	-(map[string]int64) (len=2) {
+            	            	+(map[string]int64) (len=3) {
+            	            	+ (string) (len=15) "client.requests": (int64) 1,
+            	            	  (string) (len=17) "incoming.HTTP/1.1": (int64) 1,
+            	Test:       	TestJwtMetrics/counts_invalid-token_when_host_does_not_match
+FAIL
+FAIL	github.com/zalando/skipper/filters/auth	1.178s
+FAIL
