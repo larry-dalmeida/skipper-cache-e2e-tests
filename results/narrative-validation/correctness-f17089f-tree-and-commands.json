@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "layer": "correctness",
+  "new_sha": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+  "baseline_sha": "2702aa036eda2dc3b7eeabc17b95a1086ca6b985",
+  "new_tree": "485e8a3e6d73a667ab060d3dca73903a378647eb",
+  "baseline_tree": "485e8a3e6d73a667ab060d3dca73903a378647eb",
+  "independent_tree_equality": true,
+  "source_checkout_clean": true,
+  "commits": [
+    "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec fix(cache): consult L2 after L1 freshness expires",
+    "1fcfc607ebf1b0b3d2403f81b6aa1e7785259cd9 fix(cache): honor backend phase timeouts for origin fetches",
+    "87e782b06a1c326973efe1ba41f10c24858218b3 fix(cache): retain last-good responses across failed refreshes",
+    "3cd458c79c743aca316173b0ab7c620866c3ddc6 fix(cache): isolate Vary variants and preserve 304 representations",
+    "8caa8f3eebb6176d536b00b90ad4881aaf847bc9 fix(cache): normalize origin dispatch and preserve follower bodies"
+  ],
+  "commands": [
+    "python3 verify_l1_freshness.py --checkout .runtime/skipper-narrative-correctness --sha f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec --output .runtime/narrative-correctness-l1",
+    "python3 verify_candidate_behaviour.py --l1-result .runtime/narrative-correctness-l1/result.json --output .runtime/narrative-correctness-coalescing",
+    "python3 verify_cache_remaining.py --checkout .runtime/skipper-narrative-correctness --sha f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec --mode correctness --output .runtime/narrative-correctness-remaining"
+  ],
+  "l1_report": "correctness-f17089f-l1.json",
+  "coalescing_report": "correctness-f17089f-coalescing.json",
+  "not_applicable": [
+    "Upper-layer request/L2/client metrics and dashboard contracts: not required in correctness layer"
+  ],
+  "resources": "All owned processes and disposable Valkey containers removed",
+  "push_status_at_validation": "Unpushed source tip fetched directly from owning child local Git repository",
+  "remaining_report": "correctness-f17089f-remaining.json"
+}

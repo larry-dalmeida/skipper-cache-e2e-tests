@@ -1,5 +1,13 @@
 # PR 4392 / 4393 runtime accuracy comparison
 
+Publication follow-up: the user subsequently authorised publishing the companion
+e2e branch. Commits `534c0df` and `52b27bc`, plus the earlier uncommitted L1
+harness/docs/reports, were published with `33dd7d1`; blackhole coverage followed
+in `ab3f9f1`. The local/uncommitted notes below describe the initial validation
+state, not the current publication state. See
+[remaining coverage](../remaining-coverage/README.md) for subsequent tests and
+explicit limits. No additional pull request or production changes were made.
+
 Recorded 29 October 2026 using clean native macOS/arm64 Skipper builds,
 Go's selected `go1.27.3` toolchain, fresh controlled origins and separate
 Valkey containers. No production resources or candidate sources changed.

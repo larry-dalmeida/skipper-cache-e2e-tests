@@ -1,4 +1,23 @@
-# E2E Cache Testing Report: Latest Findings (25 October 2026)
+# E2E cache testing reports
+
+## Focused regression and metric accuracy reports (29 October 2026)
+
+- [L1 freshness reproduction and correctness comparison](../README.md#focused-l1-freshness-regression):
+  independently pinned upstream/PR failures and fixed-candidate HTTP/origin evidence.
+- [PR 4392/4393 request and L2 metric accuracy](pr439x/README.md):
+  24-case source-versus-integrated matrices with independent origin and Valkey oracles.
+- [Remaining behaviours](remaining-coverage/README.md):
+  real eviction, refresh overflow, L1 SIE, Valkey disconnect/blackhole/recovery,
+  local Grafana proxy/UI, and direct StorageAPI encode/unknown-purpose evidence.
+- [Reconstructed source history validation](narrative-validation/README.md):
+  independent Git tree preservation and exact new-SHA runtime reports per layer.
+
+These are bounded owned-resource checks, not production coverage or an exhaustive
+cache state-space proof. Failed setup attempts and source-suite limitations remain
+explicit. The older load-test observations below retain their original date and
+scope; references to a running soak are historical, not a current resource status.
+
+## Historical load testing report (25 October 2026)
 
 Synthetic local load testing with observability dashboards, chaos fault injection,
 and full-screen Grafana panel screenshots. Covers [PR #4365](https://github.com/zalando/skipper/pull/4365)

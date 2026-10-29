@@ -262,6 +262,10 @@ Grafana 11.3.0 with anonymous Admin access for importing the local dashboard;
 it never connects to or modifies the shared Grafana. Services are removed
 on exit. `--ui-hold-seconds 180` temporarily holds that owned instance for
 browser inspection; creating `OUTPUT/browser-release` releases it early.
+For the correctness-only layer, pass `--mode correctness` to
+`verify_cache_remaining.py`: HTTP/origin/socket assertions still run, while
+upper-only metric families and panel 53 are explicitly NOT APPLICABLE.
+The default integrated mode continues to require those metrics.
 
 [PR 4392/4393 accuracy evidence](results/pr439x/README.md) records independent
 source-head comparisons and integrated request/storage classifications.

@@ -162,8 +162,13 @@ def json_http(url, payload=None):
 def run(args):
     output = Path(args.output).resolve()
     output.mkdir(parents=True, exist_ok=True)
-    report = {"sha": args.sha, "status": "ERROR", "cases": [], "errors": [],
+    integrated = args.mode == "integrated"
+    report = {"sha": args.sha, "mode": args.mode, "status": "ERROR", "cases": [], "errors": [],
               "scope": "owned LOCAL resources only; no production traffic",
+              "not_applicable": [] if integrated else [
+                  "Upper-layer request/L2 operation metrics, route refresh outcomes, L1 entries/capacity gauges",
+                  "Panel 53: route refresh outcomes are introduced only in the upper layer",
+              ],
               "not_exercised": [
                   "24-hour wall-clock retention and production workload",
                   "exhaustive RFC directive/method/validator combinations",
@@ -249,6 +254,9 @@ def run(args):
                         f"-swarm-valkey-urls=127.0.0.1:{relay.server_address[1]}"]
             partition, partition_metrics = launch(
                 "partition", 'cache("60s","1s","30s","60s")', 8 * 1024 * 1024, l2_flags)
+            if not integrated:
+                check(not counters(exposition(partition_metrics)),
+                      "correctness mode unexpectedly contains upper-layer metric families")
             monitor_file = output / "valkey-monitor.log"
             monitor_log = stack.enter_context(monitor_file.open("w"))
             monitor = subprocess.Popen(["docker", "exec", container, "valkey-cli", "MONITOR"],
@@ -341,11 +349,14 @@ def run(args):
                 check(misses == evicted, f"eviction oracle: absent={misses}, counter={evicted}")
                 check(origin_count(control, marker) == len(paths), "cache-only probes reached origin")
                 text = exposition(eviction_metrics)
-                entries = scalar(text, "skipper_cache_lru_entries", route="eviction__cache")
                 used = scalar(text, "skipper_cache_lru_bytes", route="eviction__cache")
-                capacity = scalar(text, "skipper_cache_lru_capacity_bytes")
-                check(entries == hits and 0 < used <= capacity == 256 * 1400,
-                      "actual retained entries/bytes differ from independent membership oracle")
+                capacity = 256 * 1400
+                check(0 < used <= capacity, "actual retained bytes exceed configured capacity")
+                if integrated:
+                    check(scalar(text, "skipper_cache_lru_entries", route="eviction__cache") == hits,
+                          "entries gauge differs from independent membership oracle")
+                    check(scalar(text, "skipper_cache_lru_capacity_bytes") == capacity,
+                          "capacity gauge differs from process argument")
                 time.sleep(2.2)
                 panel_query(31, instance="eviction", key="cache.lru_eviction")
                 panel_query(60, instance="eviction")
@@ -389,29 +400,34 @@ def run(args):
                     time.sleep(2.2)
                     panel_query(19, instance="queue", key="cache.reval_dropped")
                     panel_query(34, instance="queue")
-                    panel_query(53, family="queue", outcome="dropped")
+                    if integrated:
+                        panel_query(53, family="queue", outcome="dropped")
                     saturated = text
                 finally:
                     json_http(control + "/release", {"case": marker})
-                wait(lambda: samples(exposition(queue_metrics), "skipper_cache_route_reval_total",
-                                     route="queue__cache", outcome="success") == [
-                                         {"labels": {"route": "queue__cache", "outcome": "success"},
-                                          "value": 257.0}],
-                     "accepted jobs did not finish successfully", 20)
+                wait(lambda: origin_count(control, marker) == 517 and events(marker)["inflight"] == 0,
+                     "accepted jobs did not finish at origin", 20)
                 text = exposition(queue_metrics)
-                for outcome, expected in (("started", 257), ("success", 257), ("dropped", 3)):
-                    check(scalar(text, "skipper_cache_route_reval_total",
-                                 route="queue__cache", outcome=outcome) == expected,
-                          f"refresh {outcome} mismatch")
+                if integrated:
+                    wait(lambda: scalar(exposition(queue_metrics), "skipper_cache_route_reval_total",
+                                        route="queue__cache", outcome="success") == 257,
+                         "accepted jobs did not finish successfully", 5)
+                    for outcome, expected in (("started", 257), ("success", 257), ("dropped", 3)):
+                        check(scalar(exposition(queue_metrics), "skipper_cache_route_reval_total",
+                                     route="queue__cache", outcome=outcome) == expected,
+                              f"refresh {outcome} mismatch")
                 check(origin_count(control, marker) == 517, "accepted refresh origin count mismatch")
                 actual = events(marker)
+                check(all(e["status"] == 304 for e in actual["events"][260:]),
+                      "accepted refreshes must have real conditional 304 responses")
                 dropped_paths = {urllib.parse.urlsplit(p).path for p in paths[257:]}
                 check(sum(e["path"] in dropped_paths for e in actual["events"]) == 3,
                       "a dropped key was refreshed")
                 (output / "queue-saturated.prom").write_text(saturated)
                 return {"priming_origin": 260, "stale_l1_responses": 260,
                         "blocked_worker": 1, "queue_capacity_observed": 256,
-                        "dropped": 3, "refresh_started": 257, "refresh_success": 257,
+                        "dropped": 3, "completed_conditional_refreshes": 257,
+                        "route_refresh_metrics": "PASS" if integrated else "NOT APPLICABLE",
                         "total_origin_calls": 517,
                         "barrier_budget_seconds": 30, "ttl_wait_seconds": delay}
 
@@ -437,8 +453,9 @@ def run(args):
                     check(origin_count(control, marker) == 2, "SIE must actually attempt origin")
                     results.append({"origin_fault": status, "response": response, "origin_calls": 2})
                 text = exposition(sie_metrics)
-                check(scalar(text, FAMILIES[0], result="stale", tier="l1") == 5,
-                      "SIE results must be stale/l1")
+                if integrated:
+                    check(scalar(text, FAMILIES[0], result="stale", tier="l1") == 5,
+                          "SIE results must be stale/l1")
                 time.sleep(max(0, probes[-1][4] + 3.4 - time.monotonic()))
                 for status, marker, url, body, _ in probes[:4]:
                     response = request(url)
@@ -470,11 +487,15 @@ def run(args):
                     delta = changes(before, after)
                     request_delta = {k: v for k, v in delta.items() if k.startswith(FAMILIES[0])}
                     storage_delta = {k: v for k, v in delta.items() if k.startswith(FAMILIES[1])}
-                    check(request_delta == {metric_key(FAMILIES[0], **expected_request): 1},
-                          f"{name}: request classification {request_delta}")
                     expected = {metric_key(FAMILIES[1], operation=op, purpose=purpose, outcome=outcome): n
                                 for op, purpose, outcome, n in expected_operations}
-                    check(storage_delta == expected, f"{name}: storage counts {storage_delta}, expected {expected}")
+                    if integrated:
+                        check(request_delta == {metric_key(FAMILIES[0], **expected_request): 1},
+                              f"{name}: request classification {request_delta}")
+                        check(storage_delta == expected,
+                              f"{name}: storage counts {storage_delta}, expected {expected}")
+                    else:
+                        check(not delta, "upper-layer metric families must remain absent in correctness mode")
                     check(result["status"] == status and (cache is None or result["cache"] == cache),
                           f"{name}: HTTP outcome {result}")
                     check(origin_count(control, marker) - origin_before == origins,
@@ -496,6 +517,7 @@ def run(args):
                                 check(sum(e["command"] == op for e in trace) == logical,
                                       "blackhole wire attempts differ from logical operation count")
                     cases.append({"name": name, "response": result, "metric_deltas": delta,
+                                  "upper_metric_contract": "PASS" if integrated else "NOT APPLICABLE",
                                   "origin_delta": origins, "seconds": elapsed, "wire_attempts": trace})
 
                 relay.partitioned.set()
@@ -561,8 +583,9 @@ def run(args):
                 peer_response = request(peer + "/get?case=" + marker + "&new=1")
                 check(peer_response["status"] == 200 and peer_response["cache"] == "HIT",
                       "recovered write was not available to a fresh peer")
-                check(scalar(exposition(peer_metrics), FAMILIES[0], result="fresh", tier="l2") == 1,
-                      "peer must serve the recovered shared representation from L2")
+                if integrated:
+                    check(scalar(exposition(peer_metrics), FAMILIES[0], result="fresh", tier="l2") == 1,
+                          "peer must serve the recovered shared representation from L2")
                 check(origin_count(control, marker) == 5, "peer unexpectedly reached origin")
                 text = exposition(partition_metrics)
                 (output / "partition-final.prom").write_text(text)
@@ -574,7 +597,7 @@ def run(args):
                 check(len([e for e in wire if e[0] == "set"]) == 2,
                       "partition SETs unexpectedly reached actual Valkey")
                 return {"probes": cases, "peer_response": peer_response,
-                        "peer_request_classification": "fresh/l2",
+                        "peer_request_classification": "fresh/l2" if integrated else "NOT APPLICABLE",
                         "origin_total": origin_count(control, marker),
                         "monitor_data_commands": wire,
                         "retry_semantics": "net/valkey.go sets DisableRetry=true; metrics count client methods. "
@@ -660,6 +683,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkout", required=True)
     parser.add_argument("--sha", default=SHA)
+    parser.add_argument("--mode", choices=("correctness", "integrated"), default="integrated")
     parser.add_argument("--output", default=".runtime/remaining372b")
     parser.add_argument("--prometheus-binary", default=str(
         ROOT / ".runtime/prometheus-native/prometheus-2.55.1.darwin-arm64/prometheus"))
