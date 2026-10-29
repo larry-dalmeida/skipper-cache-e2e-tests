@@ -153,7 +153,7 @@
     {
       "type": "stat",
       "title": "Client RPS",
-      "description": "Skipper route requests per second over the last 1m, summed across selected instances.",
+      "description": "Completed external client requests per second over the last 1m, including non-cacheable, non-cache and failed requests. Excludes authenticated internal cache replays and requests explicitly marked by healthcheck().",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -205,7 +205,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "expr": "sum(rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"client.requests\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
           "legendFormat": "Client RPS"
         }
       ],
@@ -397,7 +397,7 @@
     {
       "type": "stat",
       "title": "Origin offload %",
-      "description": "1 - (origin RPS / client RPS) over the last 1m, clamped to [0,1]. No data when client RPS is 0.",
+      "description": "1 - (all-caller origin RPS / completed external client RPS) over the last 1m, clamped to [0,1]. Client RPS includes non-cache routes and failures, excluding authenticated cache replays and explicit healthcheck() requests. Origin traffic includes refreshes and callers outside Skipper, so this is not cache hit ratio; use the unclamped fetch-to-client ratio to inspect amplification. No data when client RPS is 0.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -449,7 +449,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "clamp(1 - (sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)), 0, 1)",
+          "expr": "clamp(1 - (sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[1m]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"client.requests\"}[1m]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)), 0, 1)",
           "legendFormat": "Origin offload"
         }
       ],
@@ -822,7 +822,7 @@
     {
       "type": "timeseries",
       "title": "Request rate",
-      "description": "Requests served by Skipper ingress, per instance. LOCAL synthetic test traffic only, combined across every LOCAL acceptance run in the selected window (not one acceptance run, not production). Every counter is rated per series before summing; current-value series are kept only while their own scrape target reports up == 1. Absent data means unknown or not exercised, never a healthy zero.",
+      "description": "Completed external client requests per second by instance, including non-cache routes, uncacheable responses and failures. Excludes authenticated cache replays and explicit healthcheck() requests. LOCAL synthetic traffic only. Every counter is rated before summing and requires its own live scrape target. Absent data means unknown or not exercised, never a healthy zero.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -914,7 +914,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum by (instance) (rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
+          "expr": "sum by (instance) (rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"client.requests\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1))",
           "legendFormat": "{{instance}}"
         }
       ],
@@ -1750,7 +1750,7 @@
     {
       "type": "timeseries",
       "title": "Origin offload % over time",
-      "description": "1 - (origin RPS / client RPS), clamped to [0,1]. Same formula as the Origin offload % stat, over $__rate_interval.",
+      "description": "1 - (all-caller origin RPS / completed external client RPS), clamped to [0,1]. Same scope and caveats as the Origin offload % stat, over $__rate_interval. The client denominator excludes authenticated cache replays and explicit healthcheck() requests; this is not cache hit ratio.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -1786,7 +1786,7 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "clamp(1 - (sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)), 0, 1)",
+          "expr": "clamp(1 - (sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"client.requests\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)), 0, 1)",
           "legendFormat": "Origin offload"
         }
       ],
@@ -3986,8 +3986,8 @@
     },
     {
       "type": "timeseries",
-      "title": "Origin fetch-to-served ratio",
-      "description": "Origin requests (mock_origin_requests_total, all callers) divided by Skipper served requests (skipper_serve_route_count). Uses existing metrics only. Values near 0 mean the cache serves most traffic; equals 1 - origin offload % when origin RPS is below client RPS.",
+      "title": "Origin fetch-to-client ratio",
+      "description": "All-caller origin requests divided by completed external client requests, including non-cache routes and failures but excluding authenticated cache replays and explicit healthcheck() requests. Background refreshes and callers outside Skipper contribute to the numerator. This is not cache hit ratio or per-route cache effectiveness; values may exceed 1 and expose amplification that the clamped offload panels cannot show. No data when client RPS is 0.",
       "datasource": {
         "type": "prometheus",
         "uid": "local-prometheus"
@@ -4022,8 +4022,8 @@
             "type": "prometheus",
             "uid": "local-prometheus"
           },
-          "expr": "sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_serve_route_count{job=\"skipper-local\",instance=~\"${instance:regex}\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
-          "legendFormat": "origin / served"
+          "expr": "sum(rate(mock_origin_requests_total{job=\"mock-origin\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"mock-origin\"} == 1)) / (sum(rate(skipper_custom_total{job=\"skipper-local\",instance=~\"${instance:regex}\",key=\"client.requests\"}[$__rate_interval]) and on (run_id, instance) (up{job=\"skipper-local\"} == 1)) > 0)",
+          "legendFormat": "origin / client"
         }
       ],
       "id": 55
