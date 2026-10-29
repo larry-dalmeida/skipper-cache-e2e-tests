@@ -1,0 +1,863 @@
+# HELP go_gc_duration_seconds A summary of the wall-time pause (stop-the-world) duration in garbage collection cycles.
+# TYPE go_gc_duration_seconds summary
+go_gc_duration_seconds{quantile="0"} 3.3166e-05
+go_gc_duration_seconds{quantile="0.25"} 6.4791e-05
+go_gc_duration_seconds{quantile="0.5"} 9.0251e-05
+go_gc_duration_seconds{quantile="0.75"} 0.000124751
+go_gc_duration_seconds{quantile="1"} 0.000159208
+go_gc_duration_seconds_sum 0.000541792
+go_gc_duration_seconds_count 6
+# HELP go_gc_gogc_percent Heap size target percentage configured by the user, otherwise 100. This value is set by the GOGC environment variable, and the runtime/debug.SetGCPercent function. Sourced from /gc/gogc:percent.
+# TYPE go_gc_gogc_percent gauge
+go_gc_gogc_percent 100
+# HELP go_gc_gomemlimit_bytes Go runtime memory limit configured by the user, otherwise math.MaxInt64. This value is set by the GOMEMLIMIT environment variable, and the runtime/debug.SetMemoryLimit function. Sourced from /gc/gomemlimit:bytes.
+# TYPE go_gc_gomemlimit_bytes gauge
+go_gc_gomemlimit_bytes 9.223372036854776e+18
+# HELP go_goroutines Number of goroutines that currently exist.
+# TYPE go_goroutines gauge
+go_goroutines 30
+# HELP go_info Information about the Go environment.
+# TYPE go_info gauge
+go_info{version="go1.27.3"} 1
+# HELP go_memstats_alloc_bytes Number of bytes allocated in heap and currently in use. Equals to /memory/classes/heap/objects:bytes.
+# TYPE go_memstats_alloc_bytes gauge
+go_memstats_alloc_bytes 2.0688016e+07
+# HELP go_memstats_alloc_bytes_total Total number of bytes allocated in heap until now, even if released already. Equals to /gc/heap/allocs:bytes.
+# TYPE go_memstats_alloc_bytes_total counter
+go_memstats_alloc_bytes_total 3.7621952e+07
+# HELP go_memstats_buck_hash_sys_bytes Number of bytes used by the profiling bucket hash table. Equals to /memory/classes/profiling/buckets:bytes.
+# TYPE go_memstats_buck_hash_sys_bytes gauge
+go_memstats_buck_hash_sys_bytes 1.474024e+06
+# HELP go_memstats_frees_total Total number of heap objects frees. Equals to /gc/heap/frees:objects + /gc/heap/tiny/allocs:objects.
+# TYPE go_memstats_frees_total counter
+go_memstats_frees_total 251161
+# HELP go_memstats_gc_sys_bytes Number of bytes used for garbage collection system metadata. Equals to /memory/classes/metadata/other:bytes.
+# TYPE go_memstats_gc_sys_bytes gauge
+go_memstats_gc_sys_bytes 4.195568e+06
+# HELP go_memstats_heap_alloc_bytes Number of heap bytes allocated and currently in use, same as go_memstats_alloc_bytes. Equals to /memory/classes/heap/objects:bytes.
+# TYPE go_memstats_heap_alloc_bytes gauge
+go_memstats_heap_alloc_bytes 2.0688016e+07
+# HELP go_memstats_heap_idle_bytes Number of heap bytes waiting to be used. Equals to /memory/classes/heap/released:bytes + /memory/classes/heap/free:bytes.
+# TYPE go_memstats_heap_idle_bytes gauge
+go_memstats_heap_idle_bytes 5.382144e+06
+# HELP go_memstats_heap_inuse_bytes Number of heap bytes that are in use. Equals to /memory/classes/heap/objects:bytes + /memory/classes/heap/unused:bytes
+# TYPE go_memstats_heap_inuse_bytes gauge
+go_memstats_heap_inuse_bytes 2.666496e+07
+# HELP go_memstats_heap_objects Number of currently allocated objects. Equals to /gc/heap/objects:objects.
+# TYPE go_memstats_heap_objects gauge
+go_memstats_heap_objects 142102
+# HELP go_memstats_heap_released_bytes Number of heap bytes released to OS. Equals to /memory/classes/heap/released:bytes.
+# TYPE go_memstats_heap_released_bytes gauge
+go_memstats_heap_released_bytes 5.24288e+06
+# HELP go_memstats_heap_sys_bytes Number of heap bytes obtained from system. Equals to /memory/classes/heap/objects:bytes + /memory/classes/heap/unused:bytes + /memory/classes/heap/released:bytes + /memory/classes/heap/free:bytes.
+# TYPE go_memstats_heap_sys_bytes gauge
+go_memstats_heap_sys_bytes 3.2047104e+07
+# HELP go_memstats_last_gc_time_seconds Number of seconds since 1970 of last garbage collection.
+# TYPE go_memstats_last_gc_time_seconds gauge
+go_memstats_last_gc_time_seconds 1.7932661867552981e+09
+# HELP go_memstats_mallocs_total Total number of heap objects allocated, both live and gc-ed. Semantically a counter version for go_memstats_heap_objects gauge. Equals to /gc/heap/allocs:objects + /gc/heap/tiny/allocs:objects.
+# TYPE go_memstats_mallocs_total counter
+go_memstats_mallocs_total 393263
+# HELP go_memstats_mcache_inuse_bytes Number of bytes in use by mcache structures. Equals to /memory/classes/metadata/mcache/inuse:bytes.
+# TYPE go_memstats_mcache_inuse_bytes gauge
+go_memstats_mcache_inuse_bytes 22960
+# HELP go_memstats_mcache_sys_bytes Number of bytes used for mcache structures obtained from system. Equals to /memory/classes/metadata/mcache/inuse:bytes + /memory/classes/metadata/mcache/free:bytes.
+# TYPE go_memstats_mcache_sys_bytes gauge
+go_memstats_mcache_sys_bytes 32144
+# HELP go_memstats_mspan_inuse_bytes Number of bytes in use by mspan structures. Equals to /memory/classes/metadata/mspan/inuse:bytes.
+# TYPE go_memstats_mspan_inuse_bytes gauge
+go_memstats_mspan_inuse_bytes 377440
+# HELP go_memstats_mspan_sys_bytes Number of bytes used for mspan structures obtained from system. Equals to /memory/classes/metadata/mspan/inuse:bytes + /memory/classes/metadata/mspan/free:bytes.
+# TYPE go_memstats_mspan_sys_bytes gauge
+go_memstats_mspan_sys_bytes 391680
+# HELP go_memstats_next_gc_bytes Number of heap bytes when next garbage collection will take place. Equals to /gc/heap/goal:bytes.
+# TYPE go_memstats_next_gc_bytes gauge
+go_memstats_next_gc_bytes 2.9540394e+07
+# HELP go_memstats_other_sys_bytes Number of bytes used for other system allocations. Equals to /memory/classes/other:bytes.
+# TYPE go_memstats_other_sys_bytes gauge
+go_memstats_other_sys_bytes 2.051744e+06
+# HELP go_memstats_stack_inuse_bytes Number of bytes obtained from system for stack allocator in non-CGO environments. Equals to /memory/classes/heap/stacks:bytes.
+# TYPE go_memstats_stack_inuse_bytes gauge
+go_memstats_stack_inuse_bytes 1.507328e+06
+# HELP go_memstats_stack_sys_bytes Number of bytes obtained from system for stack allocator. Equals to /memory/classes/heap/stacks:bytes + /memory/classes/os-stacks:bytes.
+# TYPE go_memstats_stack_sys_bytes gauge
+go_memstats_stack_sys_bytes 1.507328e+06
+# HELP go_memstats_sys_bytes Number of bytes obtained from system. Equals to /memory/classes/total:byte.
+# TYPE go_memstats_sys_bytes gauge
+go_memstats_sys_bytes 4.1699592e+07
+# HELP go_sched_gomaxprocs_threads The current runtime.GOMAXPROCS setting, or the number of operating system threads that can execute user-level Go code simultaneously. Sourced from /sched/gomaxprocs:threads.
+# TYPE go_sched_gomaxprocs_threads gauge
+go_sched_gomaxprocs_threads 10
+# HELP go_threads Number of OS threads created.
+# TYPE go_threads gauge
+go_threads 16
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 0.151696
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 122880
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 14
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 7.9495168e+07
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.793266181e+09
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 4.47306203136e+11
+# HELP process_virtual_memory_max_bytes Maximum amount of virtual memory available in bytes.
+# TYPE process_virtual_memory_max_bytes gauge
+process_virtual_memory_max_bytes 9.223372036854776e+18
+# HELP skipper_backend_combined_duration_seconds Duration in seconds of a proxy backend combined.
+# TYPE skipper_backend_combined_duration_seconds histogram
+skipper_backend_combined_duration_seconds_bucket{le="0.005"} 6
+skipper_backend_combined_duration_seconds_bucket{le="0.01"} 6
+skipper_backend_combined_duration_seconds_bucket{le="0.025"} 6
+skipper_backend_combined_duration_seconds_bucket{le="0.05"} 6
+skipper_backend_combined_duration_seconds_bucket{le="0.1"} 6
+skipper_backend_combined_duration_seconds_bucket{le="0.25"} 6
+skipper_backend_combined_duration_seconds_bucket{le="0.5"} 6
+skipper_backend_combined_duration_seconds_bucket{le="1"} 6
+skipper_backend_combined_duration_seconds_bucket{le="2.5"} 6
+skipper_backend_combined_duration_seconds_bucket{le="5"} 6
+skipper_backend_combined_duration_seconds_bucket{le="10"} 6
+skipper_backend_combined_duration_seconds_bucket{le="+Inf"} 6
+skipper_backend_combined_duration_seconds_sum 0.004389543
+skipper_backend_combined_duration_seconds_count 6
+# HELP skipper_backend_duration_seconds Duration in seconds of a proxy backend.
+# TYPE skipper_backend_duration_seconds histogram
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="0.005"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="0.01"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="0.025"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="0.05"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="0.1"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="0.25"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="0.5"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="1"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="2.5"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="5"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="10"} 5
+skipper_backend_duration_seconds_bucket{host="",route="normal",zone="",le="+Inf"} 5
+skipper_backend_duration_seconds_sum{host="",route="normal",zone=""} 0.003858293
+skipper_backend_duration_seconds_count{host="",route="normal",zone=""} 5
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="0.005"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="0.01"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="0.025"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="0.05"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="0.1"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="0.25"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="0.5"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="1"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="2.5"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="5"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="10"} 1
+skipper_backend_duration_seconds_bucket{host="",route="rfc",zone="",le="+Inf"} 1
+skipper_backend_duration_seconds_sum{host="",route="rfc",zone=""} 0.00053125
+skipper_backend_duration_seconds_count{host="",route="rfc",zone=""} 1
+# HELP skipper_backend_request_header_bytes Size of a backend request header.
+# TYPE skipper_backend_request_header_bytes histogram
+skipper_backend_request_header_bytes_bucket{host="_unknownhost_",le="4096"} 6
+skipper_backend_request_header_bytes_bucket{host="_unknownhost_",le="8192"} 6
+skipper_backend_request_header_bytes_bucket{host="_unknownhost_",le="16384"} 6
+skipper_backend_request_header_bytes_bucket{host="_unknownhost_",le="65536"} 6
+skipper_backend_request_header_bytes_bucket{host="_unknownhost_",le="+Inf"} 6
+skipper_backend_request_header_bytes_sum{host="_unknownhost_"} 1062
+skipper_backend_request_header_bytes_count{host="_unknownhost_"} 6
+# HELP skipper_cache_first_hit_seconds Seconds from this metrics backend's initialisation to its first cache hit; absent until the first hit.
+# TYPE skipper_cache_first_hit_seconds gauge
+skipper_cache_first_hit_seconds 1.587716125
+# HELP skipper_cache_l2_operations_total Completed L2 client invocations by operation, entry purpose and client outcome; excludes L1-only accesses.
+# TYPE skipper_cache_l2_operations_total counter
+skipper_cache_l2_operations_total{operation="delete",outcome="error",purpose="metadata"} 1
+skipper_cache_l2_operations_total{operation="delete",outcome="error",purpose="response"} 1
+skipper_cache_l2_operations_total{operation="delete",outcome="success",purpose="metadata"} 1
+skipper_cache_l2_operations_total{operation="delete",outcome="success",purpose="response"} 1
+skipper_cache_l2_operations_total{operation="get",outcome="error",purpose="metadata"} 1
+skipper_cache_l2_operations_total{operation="get",outcome="error",purpose="response"} 1
+skipper_cache_l2_operations_total{operation="get",outcome="miss",purpose="metadata"} 29
+skipper_cache_l2_operations_total{operation="get",outcome="miss",purpose="response"} 27
+skipper_cache_l2_operations_total{operation="get",outcome="success",purpose="metadata"} 2
+skipper_cache_l2_operations_total{operation="get",outcome="success",purpose="response"} 11
+skipper_cache_l2_operations_total{operation="set",outcome="error",purpose="metadata"} 1
+skipper_cache_l2_operations_total{operation="set",outcome="error",purpose="response"} 2
+skipper_cache_l2_operations_total{operation="set",outcome="success",purpose="metadata"} 1
+skipper_cache_l2_operations_total{operation="set",outcome="success",purpose="response"} 13
+# HELP skipper_cache_l2_processing_errors_total L2 entry serialization failures by operation, entry purpose and processing stage; separate from client invocation outcomes.
+# TYPE skipper_cache_l2_processing_errors_total counter
+skipper_cache_l2_processing_errors_total{operation="get",purpose="metadata",stage="decode"} 1
+skipper_cache_l2_processing_errors_total{operation="get",purpose="response",stage="decode"} 2
+# HELP skipper_cache_lru_bytes Current LRU cache bytes used per route.
+# TYPE skipper_cache_lru_bytes gauge
+skipper_cache_lru_bytes{route="normal"} 1952
+skipper_cache_lru_bytes{route="rfc"} 1952
+skipper_cache_lru_bytes{route="short"} 1952
+# HELP skipper_cache_lru_capacity_bytes Configured L1 (LRU) cache capacity in bytes.
+# TYPE skipper_cache_lru_capacity_bytes gauge
+skipper_cache_lru_capacity_bytes 2.147483648e+09
+# HELP skipper_cache_lru_entries Current LRU cache entry count per route.
+# TYPE skipper_cache_lru_entries gauge
+skipper_cache_lru_entries{route="normal"} 3
+skipper_cache_lru_entries{route="rfc"} 3
+skipper_cache_lru_entries{route="short"} 3
+# HELP skipper_cache_origin_cache_control_total Origin responses by Cache-Control directive, counted once per directive per response.
+# TYPE skipper_cache_origin_cache_control_total counter
+skipper_cache_origin_cache_control_total{cache_control="max-age"} 13
+skipper_cache_origin_cache_control_total{cache_control="no-store"} 2
+skipper_cache_origin_cache_control_total{cache_control="public"} 13
+skipper_cache_origin_cache_control_total{cache_control="stale-while-revalidate"} 13
+# HELP skipper_cache_origin_duration_seconds Origin fetch duration performed by the cache filter (cold-miss coalescing and revalidation) by route, status class (2xx/3xx/4xx/5xx/error/other), and dispatch path (direct/pipeline). Direct dispatch bypasses MeasureBackend* metrics and the access log.
+# TYPE skipper_cache_origin_duration_seconds histogram
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="0.005"} 6
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="0.01"} 6
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="0.025"} 6
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="0.05"} 6
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="0.1"} 6
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="0.25"} 6
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="0.5"} 6
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="1"} 6
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="2.5"} 7
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="5"} 7
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="10"} 7
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="2xx",le="+Inf"} 7
+skipper_cache_origin_duration_seconds_sum{dispatch="direct",route="normal",status_class="2xx"} 1.009756208
+skipper_cache_origin_duration_seconds_count{dispatch="direct",route="normal",status_class="2xx"} 7
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="0.005"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="0.01"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="0.025"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="0.05"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="0.1"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="0.25"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="0.5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="1"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="2.5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="10"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="normal",status_class="5xx",le="+Inf"} 1
+skipper_cache_origin_duration_seconds_sum{dispatch="direct",route="normal",status_class="5xx"} 0.000762625
+skipper_cache_origin_duration_seconds_count{dispatch="direct",route="normal",status_class="5xx"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="0.005"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="0.01"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="0.025"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="0.05"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="0.1"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="0.25"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="0.5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="1"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="2.5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="10"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="2xx",le="+Inf"} 1
+skipper_cache_origin_duration_seconds_sum{dispatch="direct",route="short",status_class="2xx"} 0.000665709
+skipper_cache_origin_duration_seconds_count{dispatch="direct",route="short",status_class="2xx"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="0.005"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="0.01"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="0.025"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="0.05"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="0.1"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="0.25"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="0.5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="1"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="2.5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="10"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="direct",route="short",status_class="3xx",le="+Inf"} 1
+skipper_cache_origin_duration_seconds_sum{dispatch="direct",route="short",status_class="3xx"} 0.000611958
+skipper_cache_origin_duration_seconds_count{dispatch="direct",route="short",status_class="3xx"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="0.005"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="0.01"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="0.025"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="0.05"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="0.1"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="0.25"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="0.5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="1"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="2.5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="5"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="10"} 1
+skipper_cache_origin_duration_seconds_bucket{dispatch="pipeline",route="rfc",status_class="2xx",le="+Inf"} 1
+skipper_cache_origin_duration_seconds_sum{dispatch="pipeline",route="rfc",status_class="2xx"} 0.002355875
+skipper_cache_origin_duration_seconds_count{dispatch="pipeline",route="rfc",status_class="2xx"} 1
+# HELP skipper_cache_request_total External cache-filter request decisions by result (fresh/stale/origin/coalesced/bypass/cache_only_miss/error) and serving tier (l1/l2/none).
+# TYPE skipper_cache_request_total counter
+skipper_cache_request_total{result="bypass",tier="none"} 5
+skipper_cache_request_total{result="cache_only_miss",tier="none"} 1
+skipper_cache_request_total{result="coalesced",tier="none"} 9
+skipper_cache_request_total{result="error",tier="none"} 2
+skipper_cache_request_total{result="fresh",tier="l2"} 4
+skipper_cache_request_total{result="origin",tier="none"} 9
+skipper_cache_request_total{result="stale",tier="l2"} 1
+# HELP skipper_cache_result_total Total cache results by result type (hit/miss/stale) and status code class (2xx/4xx/5xx/other).
+# TYPE skipper_cache_result_total counter
+skipper_cache_result_total{code_class="2xx",result="hit"} 4
+skipper_cache_result_total{code_class="2xx",result="l2_hit"} 5
+skipper_cache_result_total{code_class="2xx",result="l2_set_fallback"} 2
+skipper_cache_result_total{code_class="2xx",result="miss"} 18
+skipper_cache_result_total{code_class="2xx",result="stale"} 1
+skipper_cache_result_total{code_class="5xx",result="miss"} 1
+skipper_cache_result_total{code_class="n/a",result="l2_get_error"} 1
+skipper_cache_result_total{code_class="n/a",result="l2_miss"} 19
+skipper_cache_result_total{code_class="n/a",result="storage_error"} 5
+skipper_cache_result_total{code_class="other",result="l2_set_fallback"} 1
+# HELP skipper_cache_route_result_total Cache results by route and result (hit/miss/stale).
+# TYPE skipper_cache_route_result_total counter
+skipper_cache_route_result_total{result="hit",route="normal"} 4
+skipper_cache_route_result_total{result="miss",route="normal"} 19
+skipper_cache_route_result_total{result="miss",route="rfc"} 1
+skipper_cache_route_result_total{result="miss",route="short"} 1
+skipper_cache_route_result_total{result="stale",route="short"} 1
+# HELP skipper_cache_route_reval_total Background revalidation outcomes by route (started/success/failed/dropped).
+# TYPE skipper_cache_route_reval_total counter
+skipper_cache_route_reval_total{outcome="started",route="short"} 1
+skipper_cache_route_reval_total{outcome="success",route="short"} 1
+# HELP skipper_cache_storage_error_total Total cache storage errors by backend (l1/l2) and operation (get/set/delete).
+# TYPE skipper_cache_storage_error_total counter
+skipper_cache_storage_error_total{backend="l2",op="delete"} 2
+skipper_cache_storage_error_total{backend="l2",op="get"} 3
+# HELP skipper_custom_duration_seconds Duration in seconds of custom metrics.
+# TYPE skipper_custom_duration_seconds histogram
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="0.005"} 6
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="0.01"} 9
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="0.025"} 9
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="0.05"} 9
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="0.1"} 9
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="0.25"} 9
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="0.5"} 9
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="1"} 9
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="2.5"} 19
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="5"} 19
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="10"} 19
+skipper_custom_duration_seconds_bucket{key="cache.coalesce_wait_duration",le="+Inf"} 19
+skipper_custom_duration_seconds_sum{key="cache.coalesce_wait_duration"} 10.117058585
+skipper_custom_duration_seconds_count{key="cache.coalesce_wait_duration"} 19
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="0.005"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="0.01"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="0.025"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="0.05"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="0.1"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="0.25"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="0.5"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="1"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="2.5"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="5"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="10"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_delete_duration",le="+Inf"} 4
+skipper_custom_duration_seconds_sum{key="cache.l2_delete_duration"} 0.005510499
+skipper_custom_duration_seconds_count{key="cache.l2_delete_duration"} 4
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="0.005"} 66
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="0.01"} 70
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="0.025"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="0.05"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="0.1"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="0.25"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="0.5"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="1"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="2.5"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="5"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="10"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_get_duration",le="+Inf"} 71
+skipper_custom_duration_seconds_sum{key="cache.l2_get_duration"} 0.13253037699999998
+skipper_custom_duration_seconds_count{key="cache.l2_get_duration"} 71
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="0.005"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="0.01"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="0.025"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="0.05"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="0.1"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="0.25"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="0.5"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="1"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="2.5"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="5"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="10"} 17
+skipper_custom_duration_seconds_bucket{key="cache.l2_set_duration",le="+Inf"} 17
+skipper_custom_duration_seconds_sum{key="cache.l2_set_duration"} 0.029614624000000006
+skipper_custom_duration_seconds_count{key="cache.l2_set_duration"} 17
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="0.005"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="0.01"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="0.025"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="0.05"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="0.1"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="0.25"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="0.5"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="1"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="2.5"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="5"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="10"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_duration",le="+Inf"} 1
+skipper_custom_duration_seconds_sum{key="cache.reval_duration"} 0.004197708
+skipper_custom_duration_seconds_count{key="cache.reval_duration"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="0.005"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="0.01"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="0.025"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="0.05"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="0.1"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="0.25"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="0.5"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="1"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="2.5"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="5"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="10"} 1
+skipper_custom_duration_seconds_bucket{key="cache.reval_wait_duration",le="+Inf"} 1
+skipper_custom_duration_seconds_sum{key="cache.reval_wait_duration"} 4.1292e-05
+skipper_custom_duration_seconds_count{key="cache.reval_wait_duration"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="0.005"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="0.01"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="0.025"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="0.05"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="0.1"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="0.25"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="0.5"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="1"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="2.5"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="5"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="10"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_all.eskipfile-watch",le="+Inf"} 1
+skipper_custom_duration_seconds_sum{key="routes.load_all.eskipfile-watch"} 0.000110375
+skipper_custom_duration_seconds_count{key="routes.load_all.eskipfile-watch"} 1
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="0.005"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="0.01"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="0.025"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="0.05"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="0.1"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="0.25"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="0.5"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="1"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="2.5"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="5"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="10"} 5
+skipper_custom_duration_seconds_bucket{key="routes.load_update.eskipfile-watch",le="+Inf"} 5
+skipper_custom_duration_seconds_sum{key="routes.load_update.eskipfile-watch"} 0.005293999
+skipper_custom_duration_seconds_count{key="routes.load_update.eskipfile-watch"} 5
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="0.005"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="0.01"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="0.025"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="0.05"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="0.1"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="0.25"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="0.5"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="1"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="2.5"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="5"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="10"} 1
+skipper_custom_duration_seconds_bucket{key="routes.update_latency",le="+Inf"} 1
+skipper_custom_duration_seconds_sum{key="routes.update_latency"} 0.000155458
+skipper_custom_duration_seconds_count{key="routes.update_latency"} 1
+# HELP skipper_custom_gauges Gauges number of custom metrics.
+# TYPE skipper_custom_gauges gauge
+skipper_custom_gauges{key="cache.lru_bytes"} 0
+skipper_custom_gauges{key="cache.reval_queue_depth"} 0
+skipper_custom_gauges{key="routes.total"} 4
+skipper_custom_gauges{key="routes.updated_timestamp"} 1.793266181e+09
+# HELP skipper_custom_total Total number of custom metrics.
+# TYPE skipper_custom_total counter
+skipper_custom_total{key="cache.hit"} 4
+skipper_custom_total{key="cache.l2_get_error"} 1
+skipper_custom_total{key="cache.l2_hit"} 5
+skipper_custom_total{key="cache.l2_miss"} 19
+skipper_custom_total{key="cache.l2_set_fallback"} 3
+skipper_custom_total{key="cache.miss"} 21
+skipper_custom_total{key="cache.reval_backend_dispatch"} 1
+skipper_custom_total{key="cache.stale"} 1
+skipper_custom_total{key="cache.storage_error"} 5
+skipper_custom_total{key="client.requests"} 32
+skipper_custom_total{key="incoming.HTTP/1.1"} 33
+skipper_custom_total{key="outgoing.HTTP/1.1"} 6
+# HELP skipper_filter_all_combined_request_duration_seconds Duration in seconds of a filter request combined by all filters.
+# TYPE skipper_filter_all_combined_request_duration_seconds histogram
+skipper_filter_all_combined_request_duration_seconds_bucket{le="0.005"} 13
+skipper_filter_all_combined_request_duration_seconds_bucket{le="0.01"} 17
+skipper_filter_all_combined_request_duration_seconds_bucket{le="0.025"} 23
+skipper_filter_all_combined_request_duration_seconds_bucket{le="0.05"} 23
+skipper_filter_all_combined_request_duration_seconds_bucket{le="0.1"} 23
+skipper_filter_all_combined_request_duration_seconds_bucket{le="0.25"} 23
+skipper_filter_all_combined_request_duration_seconds_bucket{le="0.5"} 23
+skipper_filter_all_combined_request_duration_seconds_bucket{le="1"} 23
+skipper_filter_all_combined_request_duration_seconds_bucket{le="2.5"} 33
+skipper_filter_all_combined_request_duration_seconds_bucket{le="5"} 33
+skipper_filter_all_combined_request_duration_seconds_bucket{le="10"} 33
+skipper_filter_all_combined_request_duration_seconds_bucket{le="+Inf"} 33
+skipper_filter_all_combined_request_duration_seconds_sum 10.236905914
+skipper_filter_all_combined_request_duration_seconds_count 33
+# HELP skipper_filter_all_combined_response_duration_seconds Duration in seconds of a filter response combined by all filters.
+# TYPE skipper_filter_all_combined_response_duration_seconds histogram
+skipper_filter_all_combined_response_duration_seconds_bucket{le="0.005"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="0.01"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="0.025"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="0.05"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="0.1"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="0.25"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="0.5"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="1"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="2.5"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="5"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="10"} 33
+skipper_filter_all_combined_response_duration_seconds_bucket{le="+Inf"} 33
+skipper_filter_all_combined_response_duration_seconds_sum 0.015067544000000002
+skipper_filter_all_combined_response_duration_seconds_count 33
+# HELP skipper_filter_all_request_duration_seconds Duration in seconds of a filter request by all filters.
+# TYPE skipper_filter_all_request_duration_seconds histogram
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="0.005"} 8
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="0.01"} 12
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="0.025"} 18
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="0.05"} 18
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="0.1"} 18
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="0.25"} 18
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="0.5"} 18
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="1"} 18
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="2.5"} 28
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="5"} 28
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="10"} 28
+skipper_filter_all_request_duration_seconds_bucket{route="normal",le="+Inf"} 28
+skipper_filter_all_request_duration_seconds_sum{route="normal"} 10.22600454
+skipper_filter_all_request_duration_seconds_count{route="normal"} 28
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="0.005"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="0.01"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="0.025"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="0.05"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="0.1"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="0.25"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="0.5"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="1"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="2.5"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="5"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="10"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="ready",le="+Inf"} 1
+skipper_filter_all_request_duration_seconds_sum{route="ready"} 4.042e-06
+skipper_filter_all_request_duration_seconds_count{route="ready"} 1
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="0.005"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="0.01"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="0.025"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="0.05"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="0.1"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="0.25"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="0.5"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="1"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="2.5"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="5"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="10"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="rfc",le="+Inf"} 2
+skipper_filter_all_request_duration_seconds_sum{route="rfc"} 0.005379916
+skipper_filter_all_request_duration_seconds_count{route="rfc"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="0.005"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="0.01"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="0.025"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="0.05"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="0.1"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="0.25"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="0.5"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="1"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="2.5"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="5"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="10"} 2
+skipper_filter_all_request_duration_seconds_bucket{route="short",le="+Inf"} 2
+skipper_filter_all_request_duration_seconds_sum{route="short"} 0.005517416
+skipper_filter_all_request_duration_seconds_count{route="short"} 2
+# HELP skipper_filter_all_response_duration_seconds Duration in seconds of a filter response by all filters.
+# TYPE skipper_filter_all_response_duration_seconds histogram
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="0.005"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="0.01"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="0.025"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="0.05"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="0.1"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="0.25"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="0.5"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="1"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="2.5"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="5"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="10"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="normal",le="+Inf"} 28
+skipper_filter_all_response_duration_seconds_sum{route="normal"} 0.014251793000000002
+skipper_filter_all_response_duration_seconds_count{route="normal"} 28
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="0.005"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="0.01"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="0.025"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="0.05"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="0.1"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="0.25"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="0.5"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="1"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="2.5"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="5"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="10"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="ready",le="+Inf"} 1
+skipper_filter_all_response_duration_seconds_sum{route="ready"} 1.292e-06
+skipper_filter_all_response_duration_seconds_count{route="ready"} 1
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="0.005"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="0.01"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="0.025"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="0.05"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="0.1"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="0.25"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="0.5"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="1"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="2.5"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="5"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="10"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="rfc",le="+Inf"} 2
+skipper_filter_all_response_duration_seconds_sum{route="rfc"} 0.000811292
+skipper_filter_all_response_duration_seconds_count{route="rfc"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="0.005"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="0.01"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="0.025"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="0.05"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="0.1"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="0.25"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="0.5"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="1"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="2.5"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="5"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="10"} 2
+skipper_filter_all_response_duration_seconds_bucket{route="short",le="+Inf"} 2
+skipper_filter_all_response_duration_seconds_sum{route="short"} 3.167e-06
+skipper_filter_all_response_duration_seconds_count{route="short"} 2
+# HELP skipper_filter_create_duration_seconds Duration in seconds of filter creation.
+# TYPE skipper_filter_create_duration_seconds histogram
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="0.005"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="0.01"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="0.025"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="0.05"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="0.1"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="0.25"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="0.5"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="1"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="2.5"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="5"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="10"} 3
+skipper_filter_create_duration_seconds_bucket{filter="cache",le="+Inf"} 3
+skipper_filter_create_duration_seconds_sum{filter="cache"} 8.751000000000001e-06
+skipper_filter_create_duration_seconds_count{filter="cache"} 3
+skipper_filter_create_duration_seconds_bucket{filter="status",le="0.005"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="0.01"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="0.025"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="0.05"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="0.1"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="0.25"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="0.5"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="1"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="2.5"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="5"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="10"} 1
+skipper_filter_create_duration_seconds_bucket{filter="status",le="+Inf"} 1
+skipper_filter_create_duration_seconds_sum{filter="status"} 8.3e-08
+skipper_filter_create_duration_seconds_count{filter="status"} 1
+# HELP skipper_filter_request_duration_seconds Duration in seconds of a filter request.
+# TYPE skipper_filter_request_duration_seconds histogram
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="0.005"} 12
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="0.01"} 16
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="0.025"} 22
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="0.05"} 22
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="0.1"} 22
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="0.25"} 22
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="0.5"} 22
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="1"} 22
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="2.5"} 32
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="5"} 32
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="10"} 32
+skipper_filter_request_duration_seconds_bucket{filter="cache",le="+Inf"} 32
+skipper_filter_request_duration_seconds_sum{filter="cache"} 10.236838835000002
+skipper_filter_request_duration_seconds_count{filter="cache"} 32
+skipper_filter_request_duration_seconds_bucket{filter="status",le="0.005"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="0.01"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="0.025"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="0.05"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="0.1"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="0.25"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="0.5"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="1"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="2.5"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="5"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="10"} 1
+skipper_filter_request_duration_seconds_bucket{filter="status",le="+Inf"} 1
+skipper_filter_request_duration_seconds_sum{filter="status"} 1.625e-06
+skipper_filter_request_duration_seconds_count{filter="status"} 1
+# HELP skipper_filter_response_duration_seconds Duration in seconds of a filter request.
+# TYPE skipper_filter_response_duration_seconds histogram
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="0.005"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="0.01"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="0.025"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="0.05"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="0.1"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="0.25"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="0.5"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="1"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="2.5"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="5"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="10"} 32
+skipper_filter_response_duration_seconds_bucket{filter="cache",le="+Inf"} 32
+skipper_filter_response_duration_seconds_sum{filter="cache"} 0.015012247
+skipper_filter_response_duration_seconds_count{filter="cache"} 32
+skipper_filter_response_duration_seconds_bucket{filter="status",le="0.005"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="0.01"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="0.025"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="0.05"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="0.1"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="0.25"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="0.5"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="1"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="2.5"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="5"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="10"} 1
+skipper_filter_response_duration_seconds_bucket{filter="status",le="+Inf"} 1
+skipper_filter_response_duration_seconds_sum{filter="status"} 5e-07
+skipper_filter_response_duration_seconds_count{filter="status"} 1
+# HELP skipper_proxy_total_duration_seconds Total duration in seconds of skipper latency.
+# TYPE skipper_proxy_total_duration_seconds histogram
+skipper_proxy_total_duration_seconds_bucket{le="0.005"} 33
+skipper_proxy_total_duration_seconds_bucket{le="0.01"} 33
+skipper_proxy_total_duration_seconds_bucket{le="0.025"} 33
+skipper_proxy_total_duration_seconds_bucket{le="0.05"} 33
+skipper_proxy_total_duration_seconds_bucket{le="0.1"} 33
+skipper_proxy_total_duration_seconds_bucket{le="0.25"} 33
+skipper_proxy_total_duration_seconds_bucket{le="0.5"} 33
+skipper_proxy_total_duration_seconds_bucket{le="1"} 33
+skipper_proxy_total_duration_seconds_bucket{le="2.5"} 33
+skipper_proxy_total_duration_seconds_bucket{le="5"} 33
+skipper_proxy_total_duration_seconds_bucket{le="10"} 33
+skipper_proxy_total_duration_seconds_bucket{le="+Inf"} 33
+skipper_proxy_total_duration_seconds_sum 0.003444798000000001
+skipper_proxy_total_duration_seconds_count 33
+# HELP skipper_response_duration_seconds Duration in seconds of a response.
+# TYPE skipper_response_duration_seconds histogram
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="0.005"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="0.01"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="0.025"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="0.05"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="0.1"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="0.25"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="0.5"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="1"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="2.5"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="5"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="10"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="normal",le="+Inf"} 22
+skipper_response_duration_seconds_sum{code="200",method="GET",route="normal"} 0.000754623
+skipper_response_duration_seconds_count{code="200",method="GET",route="normal"} 22
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="0.005"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="0.01"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="0.025"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="0.05"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="0.1"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="0.25"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="0.5"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="1"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="2.5"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="5"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="10"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="ready",le="+Inf"} 1
+skipper_response_duration_seconds_sum{code="200",method="GET",route="ready"} 4.7292e-05
+skipper_response_duration_seconds_count{code="200",method="GET",route="ready"} 1
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="0.005"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="0.01"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="0.025"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="0.05"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="0.1"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="0.25"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="0.5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="1"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="2.5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="10"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="rfc",le="+Inf"} 2
+skipper_response_duration_seconds_sum{code="200",method="GET",route="rfc"} 4.0792e-05
+skipper_response_duration_seconds_count{code="200",method="GET",route="rfc"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="0.005"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="0.01"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="0.025"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="0.05"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="0.1"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="0.25"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="0.5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="1"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="2.5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="10"} 2
+skipper_response_duration_seconds_bucket{code="200",method="GET",route="short",le="+Inf"} 2
+skipper_response_duration_seconds_sum{code="200",method="GET",route="short"} 4.9458e-05
+skipper_response_duration_seconds_count{code="200",method="GET",route="short"} 2
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="0.005"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="0.01"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="0.025"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="0.05"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="0.1"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="0.25"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="0.5"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="1"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="2.5"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="5"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="10"} 1
+skipper_response_duration_seconds_bucket{code="200",method="HEAD",route="normal",le="+Inf"} 1
+skipper_response_duration_seconds_sum{code="200",method="HEAD",route="normal"} 3.9167e-05
+skipper_response_duration_seconds_count{code="200",method="HEAD",route="normal"} 1
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="0.005"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="0.01"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="0.025"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="0.05"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="0.1"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="0.25"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="0.5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="1"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="2.5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="5"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="10"} 2
+skipper_response_duration_seconds_bucket{code="200",method="POST",route="normal",le="+Inf"} 2
+skipper_response_duration_seconds_sum{code="200",method="POST",route="normal"} 0.00015375000000000002
+skipper_response_duration_seconds_count{code="200",method="POST",route="normal"} 2
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="0.005"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="0.01"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="0.025"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="0.05"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="0.1"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="0.25"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="0.5"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="1"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="2.5"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="5"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="10"} 1
+skipper_response_duration_seconds_bucket{code="503",method="GET",route="normal",le="+Inf"} 1
+skipper_response_duration_seconds_sum{code="503",method="GET",route="normal"} 2.5875e-05
+skipper_response_duration_seconds_count{code="503",method="GET",route="normal"} 1
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="0.005"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="0.01"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="0.025"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="0.05"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="0.1"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="0.25"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="0.5"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="1"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="2.5"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="5"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="10"} 2
+skipper_response_duration_seconds_bucket{code="504",method="GET",route="normal",le="+Inf"} 2
+skipper_response_duration_seconds_sum{code="504",method="GET",route="normal"} 7.4709e-05
+skipper_response_duration_seconds_count{code="504",method="GET",route="normal"} 2
+# HELP skipper_response_size_bytes Size of response in bytes.
+# TYPE skipper_response_size_bytes histogram
+skipper_response_size_bytes_bucket{host="_unknownhost_",le="1"} 4
+skipper_response_size_bytes_bucket{host="_unknownhost_",le="512"} 33
+skipper_response_size_bytes_bucket{host="_unknownhost_",le="1024"} 33
+skipper_response_size_bytes_bucket{host="_unknownhost_",le="524288"} 33
+skipper_response_size_bytes_bucket{host="_unknownhost_",le="1.048576e+06"} 33
+skipper_response_size_bytes_bucket{host="_unknownhost_",le="5.36870912e+08"} 33
+skipper_response_size_bytes_bucket{host="_unknownhost_",le="1.073741824e+09"} 33
+skipper_response_size_bytes_bucket{host="_unknownhost_",le="+Inf"} 33
+skipper_response_size_bytes_sum{host="_unknownhost_"} 4360
+skipper_response_size_bytes_count{host="_unknownhost_"} 33
+# HELP skipper_route_lookup_duration_seconds Duration in seconds of a route lookup.
+# TYPE skipper_route_lookup_duration_seconds histogram
+skipper_route_lookup_duration_seconds_bucket{le="0.005"} 33
+skipper_route_lookup_duration_seconds_bucket{le="0.01"} 33
+skipper_route_lookup_duration_seconds_bucket{le="0.025"} 33
+skipper_route_lookup_duration_seconds_bucket{le="0.05"} 33
+skipper_route_lookup_duration_seconds_bucket{le="0.1"} 33
+skipper_route_lookup_duration_seconds_bucket{le="0.25"} 33
+skipper_route_lookup_duration_seconds_bucket{le="0.5"} 33
+skipper_route_lookup_duration_seconds_bucket{le="1"} 33
+skipper_route_lookup_duration_seconds_bucket{le="2.5"} 33
+skipper_route_lookup_duration_seconds_bucket{le="5"} 33
+skipper_route_lookup_duration_seconds_bucket{le="10"} 33
+skipper_route_lookup_duration_seconds_bucket{le="+Inf"} 33
+skipper_route_lookup_duration_seconds_sum 6.616900000000001e-05
+skipper_route_lookup_duration_seconds_count 33
