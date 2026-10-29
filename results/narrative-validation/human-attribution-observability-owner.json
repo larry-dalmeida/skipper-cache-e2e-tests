@@ -1,0 +1,55 @@
+{
+  "old_base": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+  "new_base": "cb8ac7e00d29bf8c578e5578dc57c462af6689ac",
+  "old_tip": "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1",
+  "new_tip": "e7786e047b92f5eae3ca19c56c2f2a24aae273fb",
+  "tree": "8cb148960b33580aaa26f016125edf0c437dd22f",
+  "mapping": [
+    {
+      "old": "cde1fe54857df8fd6bac530c8d4729dcb21b6faf",
+      "new": "7ca826b07e3c21c98cec05e0b1b63173ed27acf8",
+      "tree": "ba499d8f4c8195faf3c27b91f8b72678da7e7e6e",
+      "message_change": [
+        "Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>"
+      ]
+    },
+    {
+      "old": "5e1c72b46510f2cb03562897dc9aa521e076cc0a",
+      "new": "a502f86d436d8e6959703ebc3a1739263a9aef33",
+      "tree": "34695f11ce6fee6a511da0e0cac70c9917d4a2e5",
+      "message_change": [
+        "Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>"
+      ]
+    },
+    {
+      "old": "b6c7c49c17f8081062c696bd78d7b860f3bedcd7",
+      "new": "68b59382eeac2f21927812b532792969dee72495",
+      "tree": "a2c6907c47c7783ec1865966ab95d1138a55cd85",
+      "message_change": [
+        "Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>"
+      ]
+    },
+    {
+      "old": "32019ad83867e9ff701fcda2f1a1e93885a45506",
+      "new": "3cc0d8e57a02267b94bc15ef082c5b63d307d7d4",
+      "tree": "c596a9ffb67bea37fde112544ce0602f0855f975",
+      "message_change": [
+        "Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>"
+      ]
+    },
+    {
+      "old": "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1",
+      "new": "e7786e047b92f5eae3ca19c56c2f2a24aae273fb",
+      "tree": "8cb148960b33580aaa26f016125edf0c437dd22f",
+      "message_change": [
+        "Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>"
+      ]
+    }
+  ],
+  "all_per_commit_trees_identical": true,
+  "all_messages_only_remove_ai_coauthor": true,
+  "timestamps_and_human_identities_preserved": true,
+  "final_diff_empty": true,
+  "clean": true,
+  "pushed": false
+}

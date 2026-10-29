@@ -1,0 +1,215 @@
+{
+  "status": "PASS",
+  "scope": "Independent exact local Git fetches; metadata-only AI co-author removal from both five-commit layers.",
+  "layers": [
+    {
+      "layer": "correctness",
+      "old_tip": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+      "new_tip": "cb8ac7e00d29bf8c578e5578dc57c462af6689ac",
+      "tree": "485e8a3e6d73a667ab060d3dca73903a378647eb",
+      "count": 5,
+      "commits": [
+        {
+          "old_sha": "8caa8f3eebb6176d536b00b90ad4881aaf847bc9",
+          "new_sha": "78a9bf85d15c06bb3d8a74555779ed7eece421f7",
+          "tree": "0c1ed2a5a1e58c1b0c008e49863f134745b4dcf2",
+          "subject": "fix(cache): normalize origin dispatch and preserve follower bodies",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T10:51:51+01:00",
+            "commit_date": "2026-10-29T10:51:51+01:00",
+            "message": "fix(cache): normalize origin dispatch and preserve follower bodies\n\nShare validated direct-versus-pipeline dispatch for cold misses and refreshes. Preserve transformed paths, outgoing Host and independent follower response bodies; reject Vary wildcard caching and sharing.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        },
+        {
+          "old_sha": "3cd458c79c743aca316173b0ab7c620866c3ddc6",
+          "new_sha": "d10650af3b973cfa5695631ebf6e2b1f607d2616",
+          "tree": "96f0f386c75fe4e4d7100de68e73e0ddc36383d2",
+          "subject": "fix(cache): isolate Vary variants and preserve 304 representations",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T10:52:52+01:00",
+            "commit_date": "2026-10-29T10:52:52+01:00",
+            "message": "fix(cache): isolate Vary variants and preserve 304 representations\n\nUse variant-aware storage for cold misses, response processing and refreshes. Carry base keys through revalidation, enforce all Vary field lines for followers and retain cached bodies while merging conditional responses.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        },
+        {
+          "old_sha": "87e782b06a1c326973efe1ba41f10c24858218b3",
+          "new_sha": "b308eefa0dfcc721a561c9a0508d244491c53abd",
+          "tree": "3c185be6f02f5fe44e1f5085637e38a85e3de177",
+          "subject": "fix(cache): retain last-good responses across failed refreshes",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T10:53:42+01:00",
+            "commit_date": "2026-10-29T10:53:42+01:00",
+            "message": "fix(cache): retain last-good responses across failed refreshes\n\nPreserve eligible variants and original SIE timestamps on transport errors, incomplete bodies and HTTP 500/502/503/504, including inner loopback response processing. Recheck eligibility after fetch and skip queued refreshes superseded by newer fresh variants.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        },
+        {
+          "old_sha": "1fcfc607ebf1b0b3d2403f81b6aa1e7785259cd9",
+          "new_sha": "bdd9dc6b6ee1b5b9d8bea7ae0e0858e6baa545fc",
+          "tree": "d7b4f7918d9ae9f8242650306cf0c0fdd0b47e7b",
+          "subject": "fix(cache): honor backend phase timeouts for origin fetches",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T10:54:17+01:00",
+            "commit_date": "2026-10-29T10:54:17+01:00",
+            "message": "fix(cache): honor backend phase timeouts for origin fetches\n\nApply configured dial, TLS, response-header and expect-continue timeouts to the cache-origin transport without imposing a blanket request or body deadline. Cover timeout mapping, stale response preservation and recovery.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        },
+        {
+          "old_sha": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+          "new_sha": "cb8ac7e00d29bf8c578e5578dc57c462af6689ac",
+          "tree": "485e8a3e6d73a667ab060d3dca73903a378647eb",
+          "subject": "fix(cache): consult L2 after L1 freshness expires",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T10:54:56+01:00",
+            "commit_date": "2026-10-29T10:54:56+01:00",
+            "message": "fix(cache): consult L2 after L1 freshness expires\n\nRequire positive-TTL L1 entries to remain within their freshness deadline before bypassing shared L2. Preserve zero-TTL semantics and stale retention, with freshness boundaries, fresh-L2 precedence, no-origin request regressions and benchmarks.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        }
+      ]
+    },
+    {
+      "layer": "observability",
+      "old_tip": "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1",
+      "new_tip": "e7786e047b92f5eae3ca19c56c2f2a24aae273fb",
+      "tree": "8cb148960b33580aaa26f016125edf0c437dd22f",
+      "count": 5,
+      "commits": [
+        {
+          "old_sha": "cde1fe54857df8fd6bac530c8d4729dcb21b6faf",
+          "new_sha": "7ca826b07e3c21c98cec05e0b1b63173ed27acf8",
+          "tree": "ba499d8f4c8195faf3c27b91f8b72678da7e7e6e",
+          "subject": "feat: expose cache occupancy and route outcomes",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T10:58:08+01:00",
+            "commit_date": "2026-10-29T10:58:08+01:00",
+            "message": "feat: expose cache occupancy and route outcomes\n\nExpose process L1 occupancy, per-route cache results, and first-hit latency with focused metrics tests and operational guidance.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        },
+        {
+          "old_sha": "5e1c72b46510f2cb03562897dc9aa521e076cc0a",
+          "new_sha": "a502f86d436d8e6959703ebc3a1739263a9aef33",
+          "tree": "34695f11ce6fee6a511da0e0cac70c9917d4a2e5",
+          "subject": "feat: measure cache origin fetches and refresh outcomes",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T10:58:39+01:00",
+            "commit_date": "2026-10-29T10:58:39+01:00",
+            "message": "feat: measure cache origin fetches and refresh outcomes\n\nMeasure cache-owned origin dispatches, bounded Cache-Control directives, and background refresh outcomes without replay double counting; document and exercise transport, storage, and response failures.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        },
+        {
+          "old_sha": "b6c7c49c17f8081062c696bd78d7b860f3bedcd7",
+          "new_sha": "68b59382eeac2f21927812b532792969dee72495",
+          "tree": "a2c6907c47c7783ec1865966ab95d1138a55cd85",
+          "subject": "feat: count external clients without cache replay",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T10:59:22+01:00",
+            "commit_date": "2026-10-29T11:45:46+01:00",
+            "message": "feat: count external clients without cache replay\n\nCount external client arrivals independently of cache replay, propagate authenticated internal-request context, and cover proxy, healthcheck, redirect, and marker boundaries.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        },
+        {
+          "old_sha": "32019ad83867e9ff701fcda2f1a1e93885a45506",
+          "new_sha": "3cc0d8e57a02267b94bc15ef082c5b63d307d7d4",
+          "tree": "c596a9ffb67bea37fde112544ce0602f0855f975",
+          "subject": "feat: attribute cache reads and L2 operations",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T11:00:49+01:00",
+            "commit_date": "2026-10-29T11:45:46+01:00",
+            "message": "feat: attribute cache reads and L2 operations\n\nCarry cache-read provenance and typed response/metadata purposes through storage, observe client calls separately from serialization failures, and cover forwarding, silent reads, and actual Valkey StorageAPI behavior.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        },
+        {
+          "old_sha": "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1",
+          "new_sha": "e7786e047b92f5eae3ca19c56c2f2a24aae273fb",
+          "tree": "8cb148960b33580aaa26f016125edf0c437dd22f",
+          "subject": "feat: record terminal cache decisions by serving tier",
+          "metadata": {
+            "author": "Larry D Almeida",
+            "author_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "committer": "Larry D Almeida",
+            "committer_email": "20266078+larry-dalmeida@users.noreply.github.com",
+            "author_date": "2026-10-29T11:04:39+01:00",
+            "commit_date": "2026-10-29T11:46:04+01:00",
+            "message": "feat: record terminal cache decisions by serving tier\n\nEmit one bounded terminal decision per external cache-filter request, retaining lookup-failure precedence and actual serving-tier provenance across coalescing, stale fallback, and internal replay; document request denominators and verify Prometheus output.\n\nSigned-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          },
+          "signed_off_by_preserved": [
+            "Signed-off-by: Larry D Almeida <20266078+larry-dalmeida@users.noreply.github.com>"
+          ],
+          "only_ai_trailer_removed": true
+        }
+      ]
+    }
+  ],
+  "foundation_unchanged": "9e7271a6bf11679ca2709843792f0c3185e1cd9c"
+}

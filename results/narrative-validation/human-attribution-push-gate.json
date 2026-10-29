@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "scope": "Metadata-only AI co-author removal from both source PR narratives; independent exact local fetch/tree/identity checks and actual new-SHA critical runtime.",
+  "lower": {
+    "sha": "cb8ac7e00d29bf8c578e5578dc57c462af6689ac",
+    "baseline_sha": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+    "tree": "485e8a3e6d73a667ab060d3dca73903a378647eb",
+    "commit_count": 5,
+    "actual_build_l1_coalescing": "PASS",
+    "l1_report": "correctness-cb8ac7e-l1.json",
+    "coalescing_report": "correctness-cb8ac7e-coalescing.json"
+  },
+  "upper": {
+    "sha": "e7786e047b92f5eae3ca19c56c2f2a24aae273fb",
+    "baseline_sha": "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1",
+    "tree": "8cb148960b33580aaa26f016125edf0c437dd22f",
+    "commit_count": 5,
+    "actual_build_l1_coalescing": "PASS",
+    "actual_integrated_metric_cases": 24,
+    "metric_report": "observability-e7786e0-metrics.json",
+    "wire_monitor": "observability-e7786e0-metrics-monitor.log"
+  },
+  "independent_all_ten_commit_proof": "human-attribution-trees.json",
+  "all_ten_corresponding_trees_equal": true,
+  "all_human_author_committer_identities_dates_signoffs_preserved": true,
+  "only_ai_coauthor_lines_removed": true,
+  "foundation_unchanged": "9e7271a6bf11679ca2709843792f0c3185e1cd9c",
+  "source_owner_report": "human-attribution-observability-owner.json",
+  "harness_units": {
+    "status": "PASS",
+    "count": 172,
+    "log": "human-attribution-unit-tests.log"
+  },
+  "reused_full_behaviour_evidence": {
+    "reason": "Every corresponding tree and final tree byte-identical; no full behavioural workload rerun requested.",
+    "previous_joint_gate": "joint-push-gate.json",
+    "previous_upper_jwt_gate": "observability-3c14f75-test-only-gate.json",
+    "producer_baselines": {
+      "correctness": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+      "observability": "3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1"
+    }
+  },
+  "correctness_only_screenshots": {
+    "producer_sha": "f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec",
+    "metadata_equivalent_sha": "cb8ac7e00d29bf8c578e5578dc57c462af6689ac",
+    "manifest": "correctness-f17089f-panel-captures.json",
+    "panels": [
+      60,
+      19,
+      34
+    ],
+    "upper_only_counter_panels_used": false,
+    "new_skipper_workload": false
+  },
+  "cleanup": {
+    "grafana_prometheus_ports_closed": [
+      32889,
+      56056
+    ],
+    "owned_headless_profile_processes": 0,
+    "replay_resources": "all owned processes stopped and Grafana container removed"
+  },
+  "source_push_at_validation": "Unpushed exact local candidates; source owners await parent-controlled lease push.",
+  "limitations": [
+    "No full-source shortcheck rerun; earlier Docker-fixture failures and lack of clean-foundation comparison remain explicit.",
+    "No production or exhaustive/24-hour retention claim."
+  ]
+}

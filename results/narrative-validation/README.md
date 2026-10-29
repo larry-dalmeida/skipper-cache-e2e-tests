@@ -174,6 +174,64 @@ pre-existing**. The attributed [owner validation](jwt-owner/jwt-fix-validation.j
 [original JWT failure](jwt-owner/jwt-before-fix.log) and
 [final full-shortcheck log](jwt-owner/jwt-fix-shortcheck.log) retain the evidence.
 
+## Human-only attribution revision
+
+The user subsequently requested removal of AI co-author trailers from both
+five-commit source narratives. The new correctness tip is
+`cb8ac7e00d29bf8c578e5578dc57c462af6689ac`; the new upper tip is
+`e7786e047b92f5eae3ca19c56c2f2a24aae273fb`.
+Independent local fetches verify **all ten corresponding commit trees** are
+unchanged, not just the final trees. Larry's author/committer identities,
+author/commit dates and human Signed-off-by trailers are preserved.
+Each message changes only by removing its AI co-author line. The foundation
+is untouched, each layer still contains five commits, and the upper layer
+is based on the new correctness tip.
+
+[`human-attribution-trees.json`](human-attribution-trees.json) records every
+old/new commit pair, tree, subject and checked metadata.
+[`human-attribution-push-gate.json`](human-attribution-push-gate.json) links
+actual new-SHA builds/L1/coalescing for both tips, the upper 24-case metric
+matrix and the newly rerun **172-test harness baseline**. Full earlier
+behaviour evidence is reused only because all producer/test/documentation
+bytes are identical; it is not mislabelled as a new full workload run.
+
+### Correctness commit story and panel evidence
+
+| Commit | Story |
+|---|---|
+| `78a9bf85d15c06bb3d8a74555779ed7eece421f7` | Normalise origin dispatch and preserve coalesced follower bodies |
+| `d10650af3b973cfa5695631ebf6e2b1f607d2616` | Isolate Vary variants and preserve representations across 304 responses |
+| `b308eefa0dfcc721a561c9a0508d244491c53abd` | Keep the last-good response when refresh fails |
+| `bdd9dc6b6ee1b5b9d8bea7ae0e0858e6baa545fc` | Honour configured backend phase timeouts for cache-origin fetches |
+| `cb8ac7e00d29bf8c578e5578dc57c462af6689ac` | Consult shared L2 once L1 freshness expires |
+
+These are **actual correctness-only f170 producer screenshots**, with exact
+tree equivalence to the new cb8 tip, captured by replaying the retained lower
+Prometheus TSDB. They are not upper-stack illustrations. The historical window
+is **2026-10-29 10:01:52.547 to 10:03:13.034 UTC**.
+
+| Supported legacy panel | Correctness-only screenshot |
+|---|---|
+| 60: Cache evictions, instance `eviction` | [PNG](screenshots/f17089f-cache-evictions.png) |
+| 19: Refresh errors / dropped jobs, instance `queue` | [PNG](screenshots/f17089f-refresh-drops.png) |
+| 34: Refresh queue depth, actual maximum 256 | [PNG](screenshots/f17089f-refresh-queue-depth.png) |
+
+The existing lower workload independently observed 196 real evictions,
+3 overflow drops, a queue depth of 256 and 257 successful conditional
+refreshes. Panel screenshots illustrate these exercised legacy series;
+they are not stand-alone proofs of every commit's correctness. Use the
+L1/coalescing reports and source tests for the corresponding exact assertions.
+Panel 34 provides the third direct queue-saturation view. No panel 7/44
+`client.requests`, upper request/tier counter or upper screenshot is used
+to imply correctness-only metric support.
+
+[`correctness-f17089f-panel-captures.json`](correctness-f17089f-panel-captures.json)
+records original producer SHA, metadata-equivalent SHA, historical bounds,
+PNG dimensions/checksums, unchanged PromQL and finite positive query responses.
+Only private Grafana legend tables/decimal presentation changed; source
+dashboards and metric samples did not. The owned Grafana/native-Prometheus
+replay and isolated headless Chrome processes were stopped after capture.
+
 ## Fresh-clone verification commands
 
 These commands use the public harness without the shared minikube stack,
@@ -211,28 +269,28 @@ docker pull grafana/grafana-oss@sha256:a0f881232a6fb71a0554a47d0fe2203b6888fe77f
 make test
 ```
 
-Correctness layer, from that same directory/shell:
+Correctness layer at the human-attribution tip, from that same directory/shell:
 
 ```bash
 git clone --filter=blob:none --no-checkout https://github.com/zalando/skipper.git .runtime/skipper-lower
-git -C .runtime/skipper-lower fetch origin f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec
-git -C .runtime/skipper-lower checkout --detach f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec
-python3 verify_l1_freshness.py --checkout .runtime/skipper-lower --sha f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec --output .runtime/lower-l1
+git -C .runtime/skipper-lower fetch origin cb8ac7e00d29bf8c578e5578dc57c462af6689ac
+git -C .runtime/skipper-lower checkout --detach cb8ac7e00d29bf8c578e5578dc57c462af6689ac
+python3 verify_l1_freshness.py --checkout .runtime/skipper-lower --sha cb8ac7e00d29bf8c578e5578dc57c462af6689ac --output .runtime/lower-l1
 python3 verify_candidate_behaviour.py --l1-result .runtime/lower-l1/result.json --output .runtime/lower-coalescing
-python3 verify_cache_remaining.py --checkout .runtime/skipper-lower --sha f17089f2ef5bab0e8ce46d2dfd23ed6049c817ec --mode correctness --prometheus-binary "$PROM" --output .runtime/lower-remaining
+python3 verify_cache_remaining.py --checkout .runtime/skipper-lower --sha cb8ac7e00d29bf8c578e5578dc57c462af6689ac --mode correctness --prometheus-binary "$PROM" --output .runtime/lower-remaining
 ```
 
 Final upper layer, from that same directory/shell:
 
 ```bash
 git clone --filter=blob:none --no-checkout https://github.com/zalando/skipper.git .runtime/skipper-upper
-git -C .runtime/skipper-upper fetch origin 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1
-git -C .runtime/skipper-upper checkout --detach 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1
-python3 verify_l1_freshness.py --checkout .runtime/skipper-upper --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --output .runtime/upper-l1
+git -C .runtime/skipper-upper fetch origin e7786e047b92f5eae3ca19c56c2f2a24aae273fb
+git -C .runtime/skipper-upper checkout --detach e7786e047b92f5eae3ca19c56c2f2a24aae273fb
+python3 verify_l1_freshness.py --checkout .runtime/skipper-upper --sha e7786e047b92f5eae3ca19c56c2f2a24aae273fb --output .runtime/upper-l1
 python3 verify_candidate_behaviour.py --l1-result .runtime/upper-l1/result.json --output .runtime/upper-coalescing
-python3 verify_cache_observability.py --checkout .runtime/skipper-upper --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --mode integrated --output .runtime/upper-metrics
-python3 verify_cache_dashboards.py --checkout .runtime/skipper-upper --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --prometheus-binary "$PROM" --output .runtime/upper-dashboards
-python3 verify_cache_remaining.py --checkout .runtime/skipper-upper --sha 3c14f755ab15f551dc3c1a5e2a1c83b6a3eaebf1 --prometheus-binary "$PROM" --output .runtime/upper-remaining --grafana
+python3 verify_cache_observability.py --checkout .runtime/skipper-upper --sha e7786e047b92f5eae3ca19c56c2f2a24aae273fb --mode integrated --output .runtime/upper-metrics
+python3 verify_cache_dashboards.py --checkout .runtime/skipper-upper --sha e7786e047b92f5eae3ca19c56c2f2a24aae273fb --prometheus-binary "$PROM" --output .runtime/upper-dashboards
+python3 verify_cache_remaining.py --checkout .runtime/skipper-upper --sha e7786e047b92f5eae3ca19c56c2f2a24aae273fb --prometheus-binary "$PROM" --output .runtime/upper-remaining --grafana
 (cd .runtime/skipper-upper && go test -race -count=1 ./filters/auth -run '^TestJwtMetrics$')
 ```
 
