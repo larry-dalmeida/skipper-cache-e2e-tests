@@ -1,0 +1,190 @@
+TMPDIR="/Users/lalmeida/Developer/zalando/repositories/copilot-worktrees/skipper-cache-e2e-tests/larry-almeida-zse-psychic-waddle/.runtime/test-scratch" python3 -m unittest discover -v
+test_dead_record_removed (test_bootstrap.BootstrapTests) ... ok
+test_dirty_checkout_rejected_before_startup (test_bootstrap.BootstrapTests) ... ok
+test_go_toolchain_must_meet_checkout_directive (test_bootstrap.BootstrapTests) ... ok
+test_live_supervisor_reused (test_bootstrap.BootstrapTests) ... Reusing origin supervisor
+ok
+test_matching_sha_does_not_restart (test_bootstrap.BootstrapTests) ... urls
+ok
+test_missing_dependency_clear_error (test_bootstrap.BootstrapTests) ... ok
+test_new_sha_restarts_skipper_only (test_bootstrap.BootstrapTests) ... urls
+ok
+test_orphan_refused (test_bootstrap.BootstrapTests) ... ok
+test_pid_reuse_refused (test_bootstrap.BootstrapTests) ... ok
+test_setup_starts_only_a_stopped_minikube_profile (test_bootstrap.BootstrapTests) ... ok
+test_smoke_rejects_failures_or_missing_requests (test_bootstrap.BootstrapTests) ... Smoke PASS: 10 requests, 0 failures
+ok
+test_start_failure_reports_log_without_waiting (test_bootstrap.BootstrapTests) ... ok
+test_verification_runs_both_checks_and_reports_failure (test_bootstrap.BootstrapTests) ... ok
+test_absence_does_not_invent_storage_counters (test_cache_observability.CacheObservabilityOracles) ... ok
+test_changes_detects_new_series_and_preserves_old_ones (test_cache_observability.CacheObservabilityOracles) ... ok
+test_commandstats_preserves_acl_rejections_separate_from_calls (test_cache_observability.CacheObservabilityOracles) ... ok
+test_delete_absent_key_is_success_not_clean_get_miss (test_cache_observability.CacheObservabilityOracles) ... ok
+test_monitor_ignores_control_commands_and_decodes_keys (test_cache_observability.CacheObservabilityOracles) ... ok
+test_request_labels_are_canonical_and_missing_series_not_zeroed (test_cache_observability.CacheObservabilityOracles) ... ok
+test_wire_oracle_tracks_existence_and_metadata_independently (test_cache_observability.CacheObservabilityOracles) ... ok
+test_fragmented_resp_is_not_a_wire_attempt (test_cache_remaining.RemainingAcceptanceOracles) ... ok
+test_label_selection_does_not_replace_missing_with_zero (test_cache_remaining.RemainingAcceptanceOracles) ... ok
+test_malformed_resp_is_explicit_failure (test_cache_remaining.RemainingAcceptanceOracles) ... ok
+test_no_samples_zero_nan_inf_are_not_success (test_cache_remaining.RemainingAcceptanceOracles) ... ok
+test_pipelined_resp_preserves_the_next_command (test_cache_remaining.RemainingAcceptanceOracles) ... ok
+test_positive_query_must_include_exact_exercised_series (test_cache_remaining.RemainingAcceptanceOracles) ... ok
+test_scalar_requires_observed_single_sample (test_cache_remaining.RemainingAcceptanceOracles) ... ok
+test_check_unit_runs_all_offline_suites (test_cachectl.CachectlTests) ... ok
+test_check_verify_passes_through_arguments (test_cachectl.CachectlTests) ... ok
+test_fault_origin_down_scales_mock_backend_in_pinned_context (test_cachectl.CachectlTests) ... ok
+test_fault_valkey_up_scales_then_waits_for_rollout (test_cachectl.CachectlTests) ... ok
+test_load_starts_locust_supervisor (test_cachectl.CachectlTests) ... ok
+test_logs_starts_log_shipper_supervisor (test_cachectl.CachectlTests) ... ok
+test_skipper_restart_stops_then_starts_with_checkout (test_cachectl.CachectlTests) ... ok
+test_stack_down_uses_teardown_not_namespace_delete (test_cachectl.CachectlTests) ... ok
+test_unknown_fault_target_is_rejected_by_argparse (test_cachectl.CachectlTests) ... usage: python3 -m unittest fault [-h] {origin,valkey} {down,up}
+python3 -m unittest fault: error: argument target: invalid choice: 'database' (choose from 'origin', 'valkey')
+ok
+test_boost_raises_share_of_boosted_families_only (test_catalogue.Picking) ... ok
+test_families_lists_every_family_once (test_catalogue.Picking) ... ok
+test_pick_follows_weights (test_catalogue.Picking) ... ok
+test_committed_routes_file_matches_catalogue (test_catalogue.Routes) ... ok
+test_every_entry_is_served_by_exactly_one_route (test_catalogue.Routes) ... ok
+test_fallback_route_is_first (test_catalogue.Routes) ... ok
+test_routes_are_unique_per_family_and_locale (test_catalogue.Routes) ... ok
+test_contentful_weights_match_snapshot_minus_exclusions (test_catalogue.Snapshot) ... ok
+test_excluded_external_fi_is_not_in_catalogue (test_catalogue.Snapshot) ... ok
+test_shop_endpoints_exist_for_every_footer_locale (test_catalogue.Snapshot) ... ok
+test_shop_traffic_is_the_configured_share (test_catalogue.Snapshot) ... ok
+test_no_grafana_url_returns_false (test_chaos.AnnotateTest) ... chaos: no Grafana URL; annotation skipped
+ok
+test_unreachable_grafana_warns_and_returns_false (test_chaos.AnnotateTest) ... chaos: annotation not posted (<urlopen error [Errno 61] Connection refused>); continuing
+ok
+test_report_includes_fault_timeline_when_present (test_chaos.FaultTimelineReportTest) ... ok
+test_report_omits_fault_section_without_faults_json (test_chaos.FaultTimelineReportTest) ... ok
+test_action_failure_is_recorded_and_run_continues (test_chaos.RunScheduleTest) ... 10:48:30 chaos origin-503: down
+10:48:30 chaos origin-503 failed: boom
+10:48:30 chaos origin-200: up
+ok
+test_restore_runs_even_when_a_step_raises_outside_actions (test_chaos.RunScheduleTest) ... 10:48:30 chaos origin-503: down
+ok
+test_stop_before_first_fault_skips_steps_but_restores (test_chaos.RunScheduleTest) ... ok
+test_writes_faults_json_with_actions_and_restore (test_chaos.RunScheduleTest) ... 10:48:30 chaos origin-503: down
+10:48:30 chaos origin-200: up
+ok
+test_base_duration_uses_declared_offsets (test_chaos.ScheduleTest) ... ok
+test_every_scenario_action_has_a_kind (test_chaos.ScheduleTest) ... ok
+test_offsets_scale_with_duration (test_chaos.ScheduleTest) ... ok
+test_rejects_fault_past_duration (test_chaos.ScheduleTest) ... ok
+test_rejects_unknown_scenario_and_bad_duration (test_chaos.ScheduleTest) ... ok
+test_ratio_units_and_amplification_semantics_are_preserved (test_client_dashboard.ClientDashboardContract) ... ok
+test_refresh_and_shared_l1_dimensions_are_not_double_counted (test_client_dashboard.ClientDashboardContract) ... ok
+test_universal_client_rates_and_denominators_exclude_listener_replays (test_client_dashboard.ClientDashboardContract) ... ok
+test_bad_status_rejected (test_harness.HarnessTests) ... ok
+test_origin_amplification_fails (test_harness.HarnessTests) ... ok
+test_request_failure_is_not_discarded (test_harness.HarnessTests) ... ok
+test_success (test_harness.HarnessTests) ... ok
+test_wrong_path_or_query_rejected (test_harness.HarnessTests) ... ok
+test_configuration_sends_real_delay_and_cache_lifetime (test_harness.OriginControlTests) ... ok
+test_counter_uses_filtered_control_events (test_harness.OriginControlTests) ... ok
+test_custom_all_without_explicit_all_value (test_harness.VerifyMetricQueries) ... ok
+test_dashboard_all_values_and_builtins (test_harness.VerifyMetricQueries) ... ok
+test_direct_and_grafana_must_both_pass (test_harness.VerifyMetricQueries) ... ok
+test_error_panels_zero_only_from_real_observed_traffic (test_harness.VerifyMetricQueries) ... ok
+test_every_dashboard_query_expands_without_leftover_variables (test_harness.VerifyMetricQueries) ... ok
+test_explicit_regex_values_escaped_for_promql (test_harness.VerifyMetricQueries) ... ok
+test_histogram_accepts_active_series_among_inactive_nan (test_harness.VerifyMetricQueries) ... ok
+test_missing_event_allowlist_is_scenario_specific (test_harness.VerifyMetricQueries) ... ok
+test_non_histogram_nonfinite_and_down_scrapes_remain_failures (test_harness.VerifyMetricQueries) ... ok
+test_promql_capture_group_is_not_a_variable (test_harness.VerifyMetricQueries) ... ok
+test_route_cache_panels_use_route_metrics_and_derive_display_family (test_harness.VerifyMetricQueries) ... ok
+test_route_refresh_outcomes_include_failed_samples (test_harness.VerifyMetricQueries) ... ok
+test_unresolved_variables_fail_instead_of_matching_nothing (test_harness.VerifyMetricQueries) ... ok
+test_invalid_retry_window_rejected_before_network_access (test_harness.VerifyMetricsUrls) ... ok
+test_stack_urls_come_from_runtime_urls_file (test_harness.VerifyMetricsUrls) ... ok
+test_stack_urls_default_without_urls_file (test_harness.VerifyMetricsUrls) ... ok
+test_correct_body_with_extra_origin_request_is_failure (test_l1_freshness.L1FreshnessAssertions) ... ok
+test_fresh_shared_hit_passes (test_l1_freshness.L1FreshnessAssertions) ... ok
+test_metric_delta_handles_absent_counters (test_l1_freshness.L1FreshnessAssertions) ... ok
+test_metrics_use_existing_custom_counter_format (test_l1_freshness.L1FreshnessAssertions) ... ok
+test_old_body_and_miss_are_failures (test_l1_freshness.L1FreshnessAssertions) ... ok
+test_retained_l1_504_is_failure (test_l1_freshness.L1FreshnessAssertions) ... ok
+test_ceiling_below_minimum_is_rejected (test_locust.CohortTargets) ... ok
+test_targets_stay_in_range_and_under_ceiling (test_locust.CohortTargets) ... ok
+test_targets_vary_across_draws (test_locust.CohortTargets) ... ok
+test_failure_ratio_latches_above_threshold (test_locust.Guard) ... ok
+test_failure_ratio_needs_minimum_samples (test_locust.Guard) ... ok
+test_identity_mismatch_latches_immediately (test_locust.Guard) ... ok
+test_latch_survives_window_reset (test_locust.Guard) ... ok
+test_success_only_run_never_latches (test_locust.Guard) ... ok
+test_trip_message_names_request_and_response (test_locust.Guard) ... ok
+test_trip_message_without_response_body (test_locust.Guard) ... ok
+test_end_without_begin_is_ignored (test_locust.Ledger) ... ok
+test_window_totals_and_history_bound (test_locust.Ledger) ... ok
+test_endless_never_expires (test_locust.Scenarios) ... ok
+test_named_scenarios_are_valid (test_locust.Scenarios) ... ok
+test_negative_duration_is_rejected (test_locust.Scenarios) ... ok
+test_timed_run_expires_at_duration (test_locust.Scenarios) ... ok
+test_stat_names_are_cohort_by_family_not_per_path (test_locust.StatNames) ... ok
+test_case_parameter_is_ignored_for_identity (test_locust.Validation) ... ok
+test_expected_error_scenarios_are_status_checked (test_locust.Validation) ... ok
+test_failure_category_maps_known_and_unknown (test_locust.Validation) ... ok
+test_head_is_status_only (test_locust.Validation) ... ok
+test_non_200_is_status (test_locust.Validation) ... ok
+test_non_json_is_body (test_locust.Validation) ... ok
+test_not_modified_passes_only_when_revalidated (test_locust.Validation) ... ok
+test_options_bounds (test_locust.Validation) ... ok
+test_post_fixture_is_identity_checked (test_locust.Validation) ... ok
+test_query_entry_passes (test_locust.Validation) ... ok
+test_valid_echo_passes (test_locust.Validation) ... ok
+test_wrong_cohort_language_is_identity (test_locust.Validation) ... ok
+test_wrong_host_is_identity (test_locust.Validation) ... ok
+test_wrong_path_is_identity (test_locust.Validation) ... ok
+test_wrong_query_is_identity (test_locust.Validation) ... ok
+test_wrong_token_class_is_identity (test_locust.Validation) ... ok
+test_cache_control_per_family (test_origin_content.RetailContentTest) ... ok
+test_contentful_envelope_and_locale_keys (test_origin_content.RetailContentTest) ... ok
+test_contentful_paths_cover_measured_snapshot (test_origin_content.RetailContentTest) ... ok
+test_different_urls_yield_different_bodies (test_origin_content.RetailContentTest) ... ok
+test_etag_is_quoted_sha256_of_body (test_origin_content.RetailContentTest) ... ok
+test_every_endpoint_family_is_known (test_origin_content.RetailContentTest) ... ok
+test_footer_locale_key_follows_path (test_origin_content.RetailContentTest) ... ok
+test_includes_resolve_item_links (test_origin_content.RetailContentTest) ... ok
+test_mutation_is_small_no_store_and_echoes_request (test_origin_content.RetailContentTest) ... ok
+test_mutation_rejects_unsafe_sku (test_origin_content.RetailContentTest) ... ok
+test_negative_family_is_500 (test_origin_content.RetailContentTest) ... ok
+test_no_image_or_static_families (test_origin_content.RetailContentTest) ... ok
+test_query_order_does_not_change_output (test_origin_content.RetailContentTest) ... ok
+test_retail_mode_import_succeeds (test_origin_content.RetailContentTest) ... ok
+test_same_input_yields_identical_bytes_and_etag (test_origin_content.RetailContentTest) ... ok
+test_sizes_within_target_range (test_origin_content.RetailContentTest) ... ok
+test_spaces_2mb_is_deterministic_and_normal_size_unchanged (test_origin_content.RetailContentTest) ... ok
+test_spaces_2mb_variant_selected_by_query (test_origin_content.RetailContentTest) ... ok
+test_vary_only_on_locale_paths (test_origin_content.RetailContentTest) ... ok
+test_version_changes_body (test_origin_content.RetailContentTest) ... ok
+test_report_failure_is_swallowed (test_report.FinishRun) ... ok
+test_stamps_end_and_writes_report (test_report.FinishRun) ... ok
+test_base_parsed_from_urls_file (test_report.Grafana) ... ok
+test_links_carry_run_time_range (test_report.Grafana) ... ok
+test_missing_base_skips_links_with_note (test_report.Grafana) ... ok
+test_missing_screenshots_note (test_report.Grafana) ... ok
+test_render_uses_run_start_and_end_epoch_ms (test_report.Grafana) ... ok
+test_screenshots_embedded_when_present (test_report.Grafana) ... ok
+test_clean_or_missing_log_is_not_aborted (test_report.GuardTrip) ... ok
+test_guard_trip_is_reported_as_aborted (test_report.GuardTrip) ... ok
+test_run_locust_fails_when_guard_aborted_the_run (test_report.GuardTrip) ... ok
+test_run_locust_propagates_process_failure (test_report.GuardTrip) ... ok
+test_run_locust_succeeds_without_guard_trip (test_report.GuardTrip) ... ok
+test_empty_csvs_render_none_recorded (test_report.MissingFiles) ... ok
+test_missing_csvs_render_notes (test_report.MissingFiles) ... ok
+test_missing_run_json_still_renders (test_report.MissingFiles) ... ok
+test_zero_requests_has_no_failure_percentage (test_report.MissingFiles) ... ok
+test_aggregated_row_drives_summary (test_report.Parsing) ... ok
+test_endpoints_sorted_by_request_count_and_exclude_aggregated (test_report.Parsing) ... ok
+test_failures_and_exceptions_are_listed (test_report.Parsing) ... ok
+test_markdown_table_layout_and_escaping (test_report.Table) ... ok
+test_number_handles_na (test_report.Table) ... ok
+test_duration_format (test_report.Window) ... ok
+test_endless_run_without_end_has_no_range (test_report.Window) ... ok
+test_legacy_timed_run_uses_planned_end (test_report.Window) ... ok
+
+----------------------------------------------------------------------
+Ran 170 tests in 2.142s
+
+OK

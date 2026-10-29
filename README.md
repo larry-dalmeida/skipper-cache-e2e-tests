@@ -43,7 +43,235 @@ make setup SKIPPER_CHECKOUT=/path/to/clean/skipper
 `make all SCENARIO=smoke SKIPPER_CHECKOUT=...` remains supported; unlike
 `make verify`, it runs only the chosen workload, not the two verifiers.
 
+## Focused L1 freshness regression
+
+`make l1-freshness SKIPPER_CHECKOUT=/path/to/clean/skipper` builds the exact
+upstream revision pinned in `verify_l1_freshness.py` and starts **two native
+Skipper processes**, the existing controlled Python origin, and a disposable
+Valkey Docker container on dynamic loopback ports. It does not use or change
+minikube, the main stack, production, or an existing Valkey. Requires Python,
+Go, Git and a running Docker daemon; no Locust dependencies are needed.
+
+A warms version A in L1; write-around instance B verifies the shared value.
+After A's 2-second warm TTL plus 1-second SWR (well inside 30-second SIE
+retention), B explicitly refreshes L2 to version B. B confirms a fresh shared
+HIT with no origin request. A must then serve **200 / B / HIT / zero extra
+origin calls**, both for `only-if-cached` and a normal request. The bounded
+wait is derived from a confirmed warm hit; A receives no intervening SWR
+requests. A dedicated uncached readiness route does not prime the fixture.
+
+The verifier exits **1 for a regression**, **2 for setup/infrastructure errors**,
+and 0 only for the intended correct behaviour. It is not an expected-failure
+test or skipped reproduction. Logs, commands, binary build information,
+image digest, raw L2 entry, counters, bodies and status evidence are retained
+in `.runtime/l1-freshness/`; processes and container are cleaned up on exit.
+`--sha` permits an explicitly pinned alternative clean checkout; `--output`
+keeps repeated runs separate. The `only-if-cached` probe isolates the L1 lookup
+from upstream cold-coalescing behaviour; the normal probe also records the
+coalescing-error metric if that separate issue is encountered.
+
+### Recorded comparison (29 October 2026)
+
+The regression **reproduces on both revisions**; later dispatch fixes in
+[zalando/skipper#4387](https://github.com/zalando/skipper/pull/4387) do **not**
+address this L1 lookup defect. Setup/control assertions succeeded, not skipped.
+
+| Build | Exact source revision | Result |
+|---|---|---|
+| Latest upstream HEAD at investigation, `v0.28.56` | `2237f1e885a2efab21a524f8d96e8c87d58bbf69` | FAIL, exit 1 |
+| Open PR 4387 head, `v0.28.51-0.20261026193401-d767f6362226` | `d767f6362226c6260e4288120e21136a3102cb26` | FAIL, exit 1 |
+
+| Probe after B's confirmed fresh shared HIT | Expected | Actual on both builds |
+|---|---|---|
+| A, `only-if-cached` | 200 / B / HIT / 0 origin calls | 504 / empty body / MISS / 0 origin calls |
+| A, normal GET | 200 / B / HIT / 0 origin calls | 200 / B / MISS / **1 extra origin call** |
+
+Each run made **3 total origin requests instead of 2** (prime A, refresh B,
+unnecessary A fetch). A's first failing probe records `cache.l1_hit +1` and
+no L2 hit, despite a raw fresh B entry in Valkey. No STALE response is
+expected or observed: the old L1 entry is deliberately **past SWR**, retained
+only by SIE. Baseline also increments `cache.coalesce_error` on the prime
+and final normal request, then falls through to the ordinary backend. PR
+4387 removes that observed error, but still fetches origin unnecessarily.
+The first probe never enters coalesce, independently proving the lookup defect.
+
+Both use unmodified native macOS/arm64 Skipper builds, Go's selected
+`go1.27.3` toolchain, and isolated Linux/arm64 Valkey 8.1.1 containers pinned to
+`sha256:6a57d58c0a37cf7acc3045ac0fd6dd91be339774106ab4d9ca088013a096a99f`.
+There is **no Skipper container image** in these runs. Full binary hashes,
+build information, runner/Docker versions, commands, fixture events, payloads,
+raw L2 entries and metric deltas are in
+[`upstream-head.json`](results/l1-freshness/upstream-head.json) and
+[`pr4387-head.json`](results/l1-freshness/pr4387-head.json).
+
+Exact comparison commands, using the two clean isolated source checkouts:
+
+```bash
+python3 verify_l1_freshness.py --checkout .runtime/skipper-l1-freshness --output .runtime/l1-freshness-baseline
+python3 verify_l1_freshness.py --checkout .runtime/skipper-l1-freshness-pr4387 --sha d767f6362226c6260e4288120e21136a3102cb26 --output .runtime/l1-freshness-pr4387
+```
+
+PR 4387 was open/unmerged, based on `larry-almeida-zse-cache-timeouts-pr`
+at `7e48ec0fb570d5e26b9ad551ec7a9d25dfef209d`, not main. Its head is not
+contained in the measured upstream HEAD: common ancestor
+`1f6cc38b924956fb790da60fa67084010d8506e7`, with 7 upstream-only and 26
+PR-only commits. This compares distinct builds, not identical merged code.
+
+The smallest justified upstream fix is to replace `!entry.IsStale(now)` in
+the L1-first lookup with an **explicit within-TTL freshness check**. `IsStale`
+is SWR-window membership, not the complement of freshness. Keep SIE retention
+and SWR semantics intact; do not globally redefine `IsStale` or evict SIE
+fallback entries to mask the issue. The source default L1 warm TTL is 60s;
+this reproduction deliberately shortens it to 2s. These local runs establish
+the defect, not its occurrence in production.
+
+### Correctness candidate validation (29 October 2026)
+
+The **unchanged** focused L1 regression passes against committed correctness
+candidate `2702aa036eda2dc3b7eeabc17b95a1086ca6b985`, based on
+`9e7271a6bf11679ca2709843792f0c3185e1cd9c`. Both A probes now return
+**200 / B / HIT / zero extra origin calls**, with **2 total origin requests**.
+The first probe records an L2 hit; the following normal GET records an L1 hit
+on the newly warmed B. This fixes the specific previously reproduced defect.
+
+```bash
+python3 verify_l1_freshness.py --checkout .runtime/skipper-l1-freshness-candidate2702 --sha 2702aa036eda2dc3b7eeabc17b95a1086ca6b985 --output .runtime/l1-freshness-candidate2702
+```
+
+The native binary reports
+`v0.28.51-0.20261029081926-2702aa036eda`, runtime `go1.27.3`, SHA-256
+`8e9e717af5b8bac2475b620f486cc0593a8a16ec17c3f8a24f2fcb063ad886bf`.
+The source checkout remained clean. Runner/image provenance and exact outcomes
+are recorded in [`candidate2702-head.json`](results/l1-freshness/candidate2702-head.json).
+
+The existing, unmodified `verify.py` behavioural suite also passes using this
+same hash-verified binary, a new loopback-only Valkey container, and a fresh
+controlled origin. An isolated launcher at
+`.runtime/verify_candidate_behaviour.py` supplied dynamic ports and cleaned up
+its resources:
+
+```bash
+python3 .runtime/verify_candidate_behaviour.py --l1-result .runtime/l1-freshness-candidate2702/result.json --output .runtime/behaviour-candidate2702
+```
+
+Cold plus warm requires exactly **1 origin call**; a synchronized **10-request
+cold burst plus warm** also requires exactly **1**; three sequential
+`Vary: *` requests require exactly **3**. All cases passed HTTP 200, exact
+path/query and applicable body equality checks. Exact `verify.py` invocation,
+route and binary provenance are preserved in
+[`candidate2702-coalescing-provenance.json`](results/l1-freshness/candidate2702-coalescing-provenance.json);
+case results are in
+[`candidate2702-coalescing.json`](results/l1-freshness/candidate2702-coalescing.json).
+This bounded validation does not cover every SIE/Vary combination, distributed
+coalescing, long-running load, or the future observability dashboard contract.
+No candidate source, production resources, or existing test expectations changed.
+
+### Observability and client-only dashboard acceptance
+
+Final observability head **`99f94588825535c5cd2dfea7da95b88550a94d2b` passes**
+bounded local Prometheus acceptance, including real direct/pipeline success,
+503 and disconnect samples. The native Skipper binary reports
+`v0.28.51-0.20261029084459-99f945888255`, Go `1.27.3`; its SHA-256 is
+`017ca6d9e1efb87d7b3c294fbaa16828bde1a32a4bb4c693de59179035f3b137`.
+Native Prometheus 2.55.1 directly scraped loopback listeners every second.
+Its official release archive was checked against the release SHA256SUMS;
+binary SHA-256 is
+`fe3091bf20675955bddd2f0ccb86b674e331ba492ea749b7dc7c281b797d1fc3`.
+Valkey remained a fresh, digest-pinned disposable container.
+
+The companion changes in `dashboards/cache-performance.json` are limited to
+panels **44, 7, 48, 50 and 55**. Client RPS remains universal, using
+`skipper_custom_total{key="client.requests"}`, not cache outcome counts.
+Non-cache, uncacheable, failed and no-route requests count once; authenticated
+cache listener replays and requests explicitly marked by `healthcheck()` do
+not. An arbitrary health-like URL is not implicitly excluded. The deployed
+dashboard and Skipper build must both be updated to use this new contract;
+this work does not publish an additional e2e-repository PR or change Grafana.
+
+Observed accounting: **41 external client requests**, versus **55 listener
+requests** (41 external + 13 internal pipeline requests + 1 explicit
+healthcheck). Five separate client-counter probes covered non-cache 200,
+uncacheable 200, backend 503, no-route 404 and a forged
+`X-Cache-Revalidate: 1` header; each incremented the client counter exactly
+once. Before traffic, the initialized client counter yielded a real zero RPS,
+but zero-denominator offload/ratio queries and the unobserved first-hit gauge
+returned **no samples**, not synthetic healthy zeros.
+
+Twelve real background refreshes produced **12 started = 4 success + 8
+failed**. Started and terminal outcomes remain separate plotted series, not
+24 attempts. All six exercised family/outcome rates were positive, and all
+five direct/pipeline status-class latency groups had finite quantiles.
+Direct disconnects were `error`; pipeline disconnects became `5xx` at the
+listener. Origin histograms measure dispatch through response headers, not
+body transfer, and pipeline observations include listener/filter overhead.
+The 28 real origin calls included four disconnects. Each of the four configured
+Cache-Control directives counted 20 cache-dispatched HTTP responses, and
+`no-store` counted once; overlapping directive counters are not summed as a
+response denominator. Non-cache origin calls do not emit cache-dispatch metrics.
+
+All **44 dashboard target queries executed** against actual emitted series:
+43 passed and the unexercised eviction panel was explicitly **NOT EXERCISED**.
+One singleton uncacheable histogram had no observed increment between scrapes,
+so its unused-family quantile remained NaN and is separately recorded, not
+treated as zero. Shared process L1 snapshots still use `max by (instance)`,
+not a sum over replicated route labels. Origin latency uses seconds, gauges
+use bytes/entries, rates use requests or operations per second, and offload
+and fetch/client panels use 0..1 ratio units. The final offload and fetch/client
+values were 0.3282347 and 0.6717653 at the same evaluation timestamp.
+Their numerator is **all-caller origin traffic**, including refreshes; they
+are not cache hit ratio or route-attributed offload. Different origin and
+selected Skipper populations can also change the interpretation.
+
+Exact acceptance command:
+
+```bash
+python3 .runtime/verify_observability_acceptance.py --checkout .runtime/skipper-observability99f9 --sha 99f94588825535c5cd2dfea7da95b88550a94d2b --output .runtime/observability99f9-final
+```
+
+The exact scratch launcher is preserved as
+[`acceptance-launcher.py.txt`](results/observability/acceptance-launcher.py.txt)
+(restore it under `.runtime/` to rerun). The report with exact queries,
+responses, commands, hashes, counter probes and gaps is
+[`99f9-final-acceptance.json`](results/observability/99f9-final-acceptance.json).
+Raw before/after Skipper and origin expositions are alongside it. Earlier
+`26bb35f7` observations are **superseded**, not final dashboard acceptance:
+the first run exposed the listener-denominator defect and lazy-counter
+sampling limitations; later attempts encountered real local Valkey/query/
+Prometheus-readiness infrastructure errors. Those error reports are retained.
+
+This acceptance does **not** prove Grafana rendering or datasource-proxy
+behaviour, eviction/queue-drop load, or the real retail locale taxonomy.
+It used no production resources, did not edit the candidate source, and
+cleaned up its owned processes and containers.
+
 ## Requirements and scope
+
+The focused follow-up does not require the shared minikube stack:
+
+```bash
+python3 verify_cache_observability.py --checkout /path/to/clean/skipper --sha EXACT_SHA --mode integrated --output .runtime/accuracy
+python3 verify_cache_dashboards.py --checkout /path/to/clean/skipper --sha EXACT_SHA --output .runtime/dashboards
+python3 verify_cache_remaining.py --checkout /path/to/clean/skipper --sha EXACT_SHA --output .runtime/remaining --grafana
+```
+
+These launchers use owned processes, dynamic loopback ports and disposable
+containers, with two-second Valkey dial/connection budgets. The dashboard
+launchers additionally require native Prometheus (`--prometheus-binary`);
+the recorded version is 2.55.1. `--grafana` starts a disposable loopback-only
+Grafana 11.3.0 with anonymous Admin access for importing the local dashboard;
+it never connects to or modifies the shared Grafana. Services are removed
+on exit. `--ui-hold-seconds 180` temporarily holds that owned instance for
+browser inspection; creating `OUTPUT/browser-release` releases it early.
+
+[PR 4392/4393 accuracy evidence](results/pr439x/README.md) records independent
+source-head comparisons and integrated request/storage classifications.
+[Remaining-coverage evidence](results/remaining-coverage/README.md) adds actual
+capacity eviction, saturated refresh-queue drops, L1 stale/SIE behaviour,
+network disconnect/recovery and local Grafana proxy/UI execution. It also
+links the separately executed direct StorageAPI encode/unknown-purpose cases.
+Historical NOT EXERCISED entries above describe those earlier workloads;
+the follow-up does not rewrite them as if they were originally exercised.
+No finite suite establishes every cache behaviour or production equivalence.
 
 - Python **3.9+**, Make, Bash, Git, curl, kubectl, minikube and Docker with its
   daemon running and a working minikube driver. Images must be downloadable or cached.

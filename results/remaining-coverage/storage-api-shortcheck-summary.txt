@@ -1,0 +1,22 @@
+Implementation-child full source shortcheck: FAIL, not a globally green claim.
+Candidate: ff7e9b03545203567dc40969b5b47d1da4f5760a
+Original log SHA-256:
+c7223a942a6f5807f242990fe2a5215ebcfb9c61f82bab3e65c102443a0c0c6e
+
+Observed failure excerpts:
+--- FAIL: TestConcurrentKubernetesClusterStateAccessWithRemoteRedis
+--- FAIL: TestConcurrentKubernetesClusterStateAccess
+--- FAIL: TestConcurrentKubernetesClusterStateAccessWithRemoteValkey
+--- FAIL: TestConcurrentKubernetesClusterStateAccessValkey
+--- FAIL: TestValkeyAddrUpdater
+Failed to get redis/valkey test network: rootless Docker not found, failed to create Docker provider
+--- FAIL: TestMockETCD
+Failed to start mocketcd: failed to start etcd container: get provider: rootless Docker not found, failed to create Docker provider
+--- FAIL: TestJwtMetrics
+Subcases include ignores_401_response, ignores_403_response, ignores_404_response,
+missing-token, invalid-token-type, invalid-token, missing-issuer, invalid-issuer,
+invalid-claims_with_one_claim_key and further issuer/claims cases.
+
+The 1.8MB unrelated full-suite log remains in the implementation session artifact
+storage-api-shortcheck.log. Only these focused failure excerpts are published;
+the independently successful StorageAPI repeat-race log is published in full.

@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 1s
+scrape_configs:
+  - job_name: skipper-local
+    static_configs:
+      - targets: ['127.0.0.1:65450']
+        labels: {run_id: acceptance, instance: candidate}
+  - job_name: mock-origin
+    static_configs:
+      - targets: ['127.0.0.1:65448']
+        labels: {run_id: acceptance, instance: origin}

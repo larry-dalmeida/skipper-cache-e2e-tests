@@ -5,7 +5,7 @@ PY := $(VENV)/bin/python
 # Clean Skipper checkout to build and run, e.g. make all SKIPPER_CHECKOUT=~/src/skipper
 SKIPPER_CHECKOUT ?=
 
-.PHONY: all setup verify coalescing test venv stack start load runs report urls stop chaos
+.PHONY: all setup verify coalescing l1-freshness test venv stack start load runs report urls stop chaos
 
 all: setup
 	$(MAKE) load SCENARIO=$(SCENARIO)
@@ -16,6 +16,10 @@ setup verify:
 
 coalescing: venv
 	$(PY) verify.py --label coalescing --sha "$$(cat .runtime/skipper.sha)" --output .runtime/coalescing.json
+
+l1-freshness:
+	@test -n "$(SKIPPER_CHECKOUT)" || { echo "Set SKIPPER_CHECKOUT=/path/to/clean/skipper"; exit 1; }
+	python3 verify_l1_freshness.py --checkout "$(SKIPPER_CHECKOUT)"
 
 test:
 	@mkdir -p $(RUNTIME)/test-scratch

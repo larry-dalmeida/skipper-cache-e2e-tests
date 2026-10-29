@@ -1,0 +1,46 @@
+{
+  "candidate": "ff7e9b03545203567dc40969b5b47d1da4f5760a",
+  "tree": "d434f896192040f858775198bac7850cc66a9bfb",
+  "parent": "372b07b4f73fd500182bf8f960fb7e2d5ee51639",
+  "branch": "larry-almeida-zse-cache-observability-consolidation",
+  "pushed": true,
+  "worktree_clean_after_push": true,
+  "delta": "Tests only: filters/cache/l2_storage_api_test.go, 165 added lines. No runtime or documentation changes.",
+  "coverage_classification": "Direct Storage API integration, not public HTTP. Invalid year 10000 cannot be produced by normal proxy timestamps. Missing/invalid purpose exercises direct API context guards.",
+  "fixture": {
+    "image": "valkey/valkey:8.1.1-alpine@sha256:6a57d58c0a37cf7acc3045ac0fd6dd91be339774106ab4d9ca088013a096a99f",
+    "container": "skipper-storage-api-d2348fe5",
+    "listener": "127.0.0.1:32861",
+    "removed": true,
+    "persistence": false,
+    "dial_and_connection_budgets_seconds": 2
+  },
+  "runtime_command": "SKIPPER_TEST_OWNED_VALKEY_ADDR=127.0.0.1:32861 go test -race -v -count=5 ./filters/cache -run '^TestValkeyStorage_StorageAPIObservability$'",
+  "runtime_result": "PASS, seven subcases repeated five times",
+  "encode": {
+    "purposes": ["unknown", "response", "metadata"],
+    "per_case_processing_error_count": 1,
+    "valkey_INFO_commandstats_set_get_del_delta": [0, 0, 0],
+    "operation_metric_samples": 0,
+    "set_duration_samples": 0,
+    "l1_fallback": false,
+    "returned_error": true
+  },
+  "unknown_purpose": {
+    "contexts": ["absent", "explicit unknown", "invalid value", "wrong type"],
+    "per_case_valkey_INFO_commandstats_set_get_del_delta": [1, 3, 1],
+    "per_case_prometheus": {"set_success": 1, "get_success": 2, "get_miss": 1, "delete_success": 1},
+    "per_case_duration_observations_set_get_delete": [1, 3, 1],
+    "silent_get_visible": true,
+    "payload_and_deleted_absence_verified": true
+  },
+  "validation": {
+    "make_fmt": "PASS",
+    "make_lint": "PASS",
+    "cache_and_metrics_short_race_excluding_other_Docker_Valkey_fixtures": "PASS",
+    "make_shortcheck": "FAIL: known unavailable testcontainers Docker provider/etcd fixtures and unrelated TestJwtMetrics; not claimed globally green"
+  },
+  "logs": ["storage-api-runtime.log", "storage-api-lint.log", "storage-api-shortcheck.log"],
+  "remaining_owned_elsewhere": ["eviction", "refresh queue drop", "Valkey partition and recovery", "optional local Grafana UI"],
+  "narrative_rewrite": "Authorized, not started; waiting for remaining e2e coverage gate and new correctness local tip. This exact tree is latest baseline to preserve."
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "command": "get",
+    "key": "vary:7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": true,
+    "time": 1793267231.929991
+  },
+  {
+    "command": "get",
+    "key": "7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": true,
+    "time": 1793267231.933711
+  },
+  {
+    "command": "get",
+    "key": "7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": true,
+    "time": 1793267231.9363682
+  },
+  {
+    "command": "set",
+    "key": "7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": true,
+    "time": 1793267231.938027
+  },
+  {
+    "command": "get",
+    "key": "vary:7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": false,
+    "time": 1793267231.9433951
+  },
+  {
+    "command": "get",
+    "key": "7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": false,
+    "time": 1793267231.9436631
+  },
+  {
+    "command": "get",
+    "key": "vary:a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": false,
+    "time": 1793267231.9502
+  },
+  {
+    "command": "get",
+    "key": "a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": false,
+    "time": 1793267231.9503949
+  },
+  {
+    "command": "get",
+    "key": "a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": false,
+    "time": 1793267231.9522402
+  },
+  {
+    "command": "set",
+    "key": "a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": false,
+    "time": 1793267231.9546912
+  },
+  {
+    "command": "get",
+    "key": "vary:a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": false,
+    "time": 1793267231.959549
+  },
+  {
+    "command": "get",
+    "key": "vary:7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": false,
+    "time": 1793267231.965997
+  },
+  {
+    "command": "del",
+    "key": "7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": false,
+    "time": 1793267231.968538
+  },
+  {
+    "command": "del",
+    "key": "vary:7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": false,
+    "time": 1793267231.9705899
+  },
+  {
+    "command": "get",
+    "key": "vary:7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": true,
+    "time": 1793267231.97763
+  },
+  {
+    "command": "get",
+    "key": "7a8ee2e6c636d7e0efa7e690c7d0363bbd7a1ce4c5fe60c9d547012ee57c28bb",
+    "forwarded": true,
+    "time": 1793267231.978497
+  },
+  {
+    "command": "get",
+    "key": "vary:a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": true,
+    "time": 1793267231.988554
+  },
+  {
+    "command": "set",
+    "key": "a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": true,
+    "time": 1793267231.992824
+  },
+  {
+    "command": "get",
+    "key": "vary:a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": true,
+    "time": 1793267232.062166
+  },
+  {
+    "command": "get",
+    "key": "a0c31b5e0ad10c875267316f09286809ac4c5edd23b067c7f940de2d1a0b69f2",
+    "forwarded": true,
+    "time": 1793267232.0647192
+  }
+]

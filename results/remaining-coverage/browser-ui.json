@@ -1,0 +1,25 @@
+{
+  "sha": "372b07b4f73fd500182bf8f960fb7e2d5ee51639",
+  "status": "PASS",
+  "method": "Copilot browser canvas read_page, screenshot_page, and same-origin datasource proxy fetch",
+  "grafana_version": "11.3.0",
+  "dashboard": "cache-performance-local",
+  "dashboard_page_title": "Cache Operations - Dashboards - Grafana",
+  "full_dashboard_observed": "Loaded Client RPS, cache ratios and all four Skipper scrape targets OK. Missing origin scrape/traffic is explicit because this pressure workload provisions only Skipper scrape jobs.",
+  "panel_id": 60,
+  "panel_title": "Cache evictions",
+  "panel_observation": "Screenshot visually confirmed eviction timeseries with positive ops/s followed by zero after bounded pressure ended.",
+  "dom_text": "Cache evictions\neviction\n",
+  "canvas_elements": 1,
+  "browser_proxy_http_status": 200,
+  "browser_proxy_query": "sum by(instance)(rate(skipper_custom_total{key=\"cache.lru_eviction\"}[1m]))",
+  "browser_proxy_range_seconds": 300,
+  "browser_proxy_step_seconds": 5,
+  "browser_proxy_series": {
+    "instance": "eviction",
+    "finite_points": 26,
+    "positive_points": 12,
+    "maximum": 1.8316666666666668
+  },
+  "limitations": "Visual check covers the dashboard shell and eviction panel, not every panel, Loki/Tempo links or production Grafana. Screenshot is retained in conversation tool evidence; this durable record captures the observed result."
+}

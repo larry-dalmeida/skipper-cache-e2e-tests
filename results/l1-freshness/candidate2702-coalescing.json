@@ -1,0 +1,33 @@
+{
+  "label": "correctness-candidate2702",
+  "skipper_sha": "2702aa036eda2dc3b7eeabc17b95a1086ca6b985",
+  "utc": "2026-10-29T08:21:22Z",
+  "run_id": "b54897887ea84c1f9756df6ddb35a98e",
+  "cases": [
+    {
+      "name": "single cold then warm",
+      "status": "PASS",
+      "responses": 2,
+      "origin_calls": 1,
+      "http_status": 200,
+      "body_path_query": "matched"
+    },
+    {
+      "name": "synchronized 10-request cold burst then warm",
+      "status": "PASS",
+      "concurrent_responses": 10,
+      "origin_cold": 1,
+      "origin_after_warm": 1,
+      "http_status": 200,
+      "body_path_query": "matched"
+    },
+    {
+      "name": "Vary star never cached",
+      "status": "PASS",
+      "responses": 3,
+      "origin_calls": 3,
+      "http_status": 200
+    }
+  ],
+  "success": true
+}
